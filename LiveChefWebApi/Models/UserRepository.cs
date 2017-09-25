@@ -13,8 +13,8 @@ namespace LiveChefWebApi.Models
 
         public UserRepository()
         {
-            Add(new User { UserID = 1, Username = "anali", FirstName = "Anabel Li", LastName = "Kečkeš" });
-            Add(new User { UserID = 2, Username = "rćosić",FirstName = "Ratko", LastName = "Ćosić"});
+            Add(new User { UserID = 1, Username = "ak", Password="123", FirstName = "Anabel Li", LastName = "Kečkeš" });
+            Add(new User { UserID = 2, Username = "rc", Password = "123", FirstName = "Ratko", LastName = "Ćosić" });
         }
 
         public User Add(User item)
