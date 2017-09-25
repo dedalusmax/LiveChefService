@@ -16,7 +16,7 @@ namespace LiveChefWebApi.Models
             Add(new User { UserID = 1, Username = "ak", Password="123", FirstName = "Anabel Li", LastName = "Kečkeš" });
             Add(new User { UserID = 2, Username = "rc", Password = "123", FirstName = "Ratko", LastName = "Ćosić" });
         }
-
+        //TODO autentifikacija
         public User Add(User item)
         {
             item.UserID = idCounter++;

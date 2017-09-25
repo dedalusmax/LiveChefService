@@ -11,20 +11,18 @@ namespace LiveChefWebApi.Controllers
 {
     public class CookingController : ApiController
     {
-        static readonly ICookingRepo repository = new CookingRepository();
-
         [HttpGet]
         [ActionName("GetAll")]
         public IEnumerable<Cooking> GetAll()
         {
-            return repository.GetAll();
+            return WebApiApplication.CookingRepository.GetAll();
         }
 
         [HttpPost]
         [ActionName("Post")]
         public HttpResponseMessage Post(Cooking item)
         {
-            item = repository.Add(item);
+            item = WebApiApplication.CookingRepository.Add(item);
 
             var serializer = new JavaScriptSerializer();
             var responseJson = serializer.Serialize(item);

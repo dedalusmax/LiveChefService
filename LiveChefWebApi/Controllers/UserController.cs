@@ -11,27 +11,25 @@ namespace LiveChefWebApi.Controllers
 {
     public class UserController : ApiController
     {
-        static readonly IUserRepo repository = new UserRepository();
-
         [HttpGet]
         [ActionName("GetAll")]
         public IEnumerable<User> GetAll()
         {
-            return repository.GetAll();
+            return WebApiApplication.UserRepository.GetAll();
         }
 
         [HttpGet]
         [ActionName("Get")]
         public User Get(int userId)
         {
-            return repository.Get(userId);
+            return WebApiApplication.UserRepository.Get(userId);
         }
 
         [HttpPost]
         [ActionName("Login")]        
         public HttpResponseMessage Login(User item)
         {
-            item = repository.Add(item);
+            item = WebApiApplication.UserRepository.Add(item);
 
             var serializer = new JavaScriptSerializer();
             var responseJson = serializer.Serialize(item);

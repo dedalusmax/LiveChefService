@@ -3,9 +3,25 @@
 <head>
     <meta charset="utf-8" />
     <title></title>
+    <script src="Scripts/jquery-3.2.1.min.js"></script>
+    <script src="Scripts/jquery.signalR-2.2.2.min.js"></script>
+    <script src="signalr/hubs"></script>
+    <script src="app/index.js"></script>
 </head>
 <body>
     <h1>LiveChefAPI</h1>
+    <div id="container">
+        <label for="Username">Username:</label>
+        <input type="text" placeholder="Username" />
+        <label for="Dishname">DishName:</label>
+        <input type="text" placeholder="DishName" />
+        <label for="Status">Status:</label>
+        <input type="text" placeholder="Started, Ongoing, Need Help, Finished" />
+        <input type="button" id="sendCooking" value="New Cooking"/>
+    </div>
+    <hr />
+    <ul id="cookings">
+    </ul>
 
 </body>
 </html>
