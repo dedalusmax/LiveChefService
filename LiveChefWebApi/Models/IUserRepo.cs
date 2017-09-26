@@ -11,5 +11,6 @@ namespace LiveChefWebApi.Models
         IEnumerable<User> GetAll();
         User Add(User item);
         User Get(int id);
+        void Change(User item);
     }
 }
