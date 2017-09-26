@@ -24,10 +24,17 @@ namespace LiveChefWebApi.Models
             return item;
         }
 
+        public void Change(User item)
+        {
+            User found = this.users.Find(f => f.UserID == item.UserID);
+            found = item;
+        }
+
         public User Get(int userId)
         {
             return this.users.Find(f => f.UserID == userId);
         }
+
         public IEnumerable<User> GetAll()
         {
             return users;

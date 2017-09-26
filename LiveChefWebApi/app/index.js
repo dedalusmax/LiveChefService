@@ -1,26 +1,40 @@
-﻿$(document).ready(function () {
+﻿var logEl;
 
+$(document).ready(function () {
+
+    logEl = $("#log");
     var hub = $.connection.chefHub;
 
     hub.client.cookingAdded = function (cooking) {
+        log('New cooking added: ' + cooking.DishName);
+    };
 
+    hub.client.userLoggedIn = function (user) {
+        log('User logged-in: ' + user.Username);
     };
 
     // hub.server.send(message);
 
     hub.client.cookingsUpdated = function (cookings) {
 
-        //$("#cookings").remove();
-
         cookings.forEach(function (cooking) {
-            $("#cookings").append('<li>' + cooking.DishName + '</li>');
+            log('Cooking updated: ' + cooking.DishName);
         });
     }
 
     $.connection.hub.start().done(function () {
+        $("#sendCooking").click(function () {
+            var username = $("#username").val();
+            var dishname = $("#dishname").val();
+            var status = $("#status").val();
+            var data = { Username: username, DishName: dishname, Status: status };
 
-
-
+            hub.server.addCooking(data);
+        })
     });
-
 });
+
+function log(message) {
+
+    logEl.append('<li>' + message + '</li>');
+}

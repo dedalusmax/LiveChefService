@@ -23,6 +23,7 @@ namespace LiveChefWebApi.Models
 
         public Recipe Add(Recipe item)
         {
+            item.Id = idCounter++;
             recipes.Add(item);
             return item;
         }

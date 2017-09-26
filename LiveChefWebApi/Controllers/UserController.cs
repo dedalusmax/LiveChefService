@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using LiveChefWebApi.Models;
 using System.Web.Script.Serialization;
+using Microsoft.AspNet.SignalR;
 
 namespace LiveChefWebApi.Controllers
 {
@@ -29,13 +30,30 @@ namespace LiveChefWebApi.Controllers
         [ActionName("Login")]        
         public HttpResponseMessage Login(User item)
         {
-            item = WebApiApplication.UserRepository.Add(item);
+            if (CheckCredentials(item.Username, item.Password))
+            {
+                item.IsLoggedIn = true;
+                WebApiApplication.UserRepository.Change(item);
 
-            var serializer = new JavaScriptSerializer();
-            var responseJson = serializer.Serialize(item);
-            var response = Request.CreateResponse(HttpStatusCode.Created, responseJson);
-            return response;
+                IHubContext context = GlobalHost.ConnectionManager.GetHubContext<ChefHub>();
+                context.Clients.All.userLoggedIn(item);
 
+                var serializer = new JavaScriptSerializer();
+                var responseJson = serializer.Serialize(item);
+                var response = Request.CreateResponse(HttpStatusCode.OK, responseJson);
+                return response;
+            }
+            else
+            {
+                var response = Request.CreateResponse(HttpStatusCode.Forbidden, "Your username and/or password is incorrect!");
+                return response;
+            }          
+        }
+
+        private bool CheckCredentials(string username, string password)
+        {
+            User found = WebApiApplication.UserRepository.GetAll().Where(u => u.Username == username && u.Password == password).FirstOrDefault();
+            return (found != null);
         }
     }
 }
