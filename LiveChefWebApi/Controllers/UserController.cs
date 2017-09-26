@@ -39,7 +39,7 @@ namespace LiveChefWebApi.Controllers
                 context.Clients.All.userLoggedIn(item);
 
                 var serializer = new JavaScriptSerializer();
-                var responseJson = serializer.Serialize(item);
+                var responseJson = serializer.ConvertToType<User>(item);
                 var response = Request.CreateResponse(HttpStatusCode.OK, responseJson);
                 return response;
             }
