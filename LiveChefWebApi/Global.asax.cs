@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LiveChefWebApi.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -9,6 +10,9 @@ namespace LiveChefWebApi
 {
     public class WebApiApplication : System.Web.HttpApplication
     {
+        internal static readonly ICookingRepo CookingRepository = new CookingRepository();
+        internal static readonly IUserRepo UserRepository = new UserRepository();
+
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
