@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 
-namespace LiveChefWebApi.Models
+namespace LiveChefService.Models
 {
     public class UserRepository : IUserRepo
     {
@@ -13,10 +13,9 @@ namespace LiveChefWebApi.Models
 
         public UserRepository()
         {
-            Add(new User { UserID = 1, Username = "ak", Password="123", FirstName = "Anabel Li", LastName = "Kečkeš" });
-            Add(new User { UserID = 2, Username = "rc", Password = "123", FirstName = "Ratko", LastName = "Ćosić" });
+            Add(new User { UserID = 1, Username = "ak", Password = "123", IsLoggedIn = false, IsGuest = false });
+            Add(new User { UserID = 2, Username = "rc", Password = "123", IsLoggedIn = false, IsGuest = false });
         }
-        //TODO autentifikacija
         public User Add(User item)
         {
             item.UserID = idCounter++;
@@ -38,6 +37,10 @@ namespace LiveChefWebApi.Models
         public IEnumerable<User> GetAll()
         {
             return users;
+        }
+        public void Remove(int id)
+        {
+            users.RemoveAll(u => u.UserID == id);
         }
     }
 }

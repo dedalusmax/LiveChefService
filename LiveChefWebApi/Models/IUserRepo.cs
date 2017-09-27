@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LiveChefWebApi.Models
+namespace LiveChefService.Models
 {
     interface IUserRepo
     {
@@ -12,5 +12,6 @@ namespace LiveChefWebApi.Models
         User Add(User item);
         User Get(int id);
         void Change(User item);
+        void Remove(int id);
     }
 }

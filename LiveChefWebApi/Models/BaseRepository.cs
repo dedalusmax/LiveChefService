@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace LiveChefWebApi.Models
+namespace LiveChefService.Models
 {
     public class BaseRepository<T>
     {
@@ -21,10 +21,10 @@ namespace LiveChefWebApi.Models
         //    return this.items.Find(f => f.Id == cookingId);
         //}
 
-        public IEnumerable<T> GetAll()
-        {
-            return items;
-        }
+        //public IEnumerable<T> GetAll()
+        //{
+        //    return items;
+        //}
 
         //public Cooking Remove(int id)
         //{
