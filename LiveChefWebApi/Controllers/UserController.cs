@@ -27,42 +27,26 @@ namespace LiveChefService.Controllers
         }
 
         [HttpPost]
-        [ActionName("Login")]        
+        [ActionName("Login")]
         public HttpResponseMessage Login(User item)
         {
             IHubContext context = GlobalHost.ConnectionManager.GetHubContext<ChefHub>();
 
-            if (item.IsGuest)
-            {
-                item.IsLoggedIn = true;
-                item.Username = "Guest";
-
-                WebApiApplication.UserRepository.Add(item);
-                context.Clients.All.userLoggedIn(item);
-
-                var serializer = new JavaScriptSerializer();
-                var responseJson = serializer.ConvertToType<User>(item);
-                var response = Request.CreateResponse(HttpStatusCode.OK, responseJson);
-                return response;
-            }
 
             if (CheckCredentials(item.Username, item.Password))
             {
                 item.IsLoggedIn = true;
                 WebApiApplication.UserRepository.Change(item);
-                
+
                 context.Clients.All.userLoggedIn(item);
 
-                var serializer = new JavaScriptSerializer();
-                var responseJson = serializer.ConvertToType<User>(item);
-                var response = Request.CreateResponse(HttpStatusCode.OK, responseJson);
-                return response;
+                return PrepareResponse(item);
             }
             else
             {
                 var response = Request.CreateResponse(HttpStatusCode.Forbidden, "Your username and/or password is incorrect!");
                 return response;
-            }          
+            }
         }
         private bool CheckCredentials(string username, string password)
         {
@@ -71,11 +55,27 @@ namespace LiveChefService.Controllers
         }
 
         [HttpPost]
+        [ActionName("LoginAsGuest")]
+        public HttpResponseMessage LoginAsGuest(User item)
+        {
+            IHubContext context = GlobalHost.ConnectionManager.GetHubContext<ChefHub>();
+            item.IsLoggedIn = true;
+            item.IsGuest = true;
+
+            WebApiApplication.UserRepository.Add(item);
+            context.Clients.All.userLoggedIn(item);
+
+            return PrepareResponse(item);
+
+        }
+
+        [HttpPost]
         [ActionName("Logout")]
         public HttpResponseMessage Logout(User item)
         {
-            
-            if (LogoutUser(item.Username, item.Password, item.IsLoggedIn))
+
+            //TODO deskriptvnije ime i prebaciti metodu 
+            if (LogoutUser(item.Username, item.Password))
             {
                 item.IsLoggedIn = false;
                 WebApiApplication.UserRepository.Change(item);
@@ -83,22 +83,25 @@ namespace LiveChefService.Controllers
                 IHubContext context = GlobalHost.ConnectionManager.GetHubContext<ChefHub>();
                 context.Clients.All.userLoggedOut(item);
 
-                var serializer = new JavaScriptSerializer();
-                var responseJson = serializer.ConvertToType<User>(item);
-                var response = Request.CreateResponse(HttpStatusCode.OK, responseJson);
-                return response;
+                return PrepareResponse(item);
             }
             else
             {
-                var response = Request.CreateResponse(HttpStatusCode.Forbidden, "Your username and/or password is incorrect!");
+                var response = Request.CreateResponse(HttpStatusCode.NotFound, "User doesn't exist");
                 return response;
             }
         }
-        private bool LogoutUser(string username, string password, bool loggedIn)
+        private bool LogoutUser(string username, string password)
         {
             User found = WebApiApplication.UserRepository.GetAll().Where(u => u.Username == username && u.Password == password).FirstOrDefault();
             return (found != null);
         }
-
+        private HttpResponseMessage PrepareResponse(User item)
+        {
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            User responseJson = serializer.ConvertToType<User>(item);
+            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK, responseJson);
+            return response;
+        }
     }
 }
