@@ -110,6 +110,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\models\cooking.view-model.js" />
+    <Content Include="app\models\login.view-model.js" />
+    <Content Include="app\services\ajax.service.js" />
+    <Content Include="app\models\main.view-model.js" />
     <Content Include="app\index.js" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -149,6 +153,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\BaseRepository.cs" />
     <Compile Include="Models\Cooking.cs" />
     <Compile Include="Models\CookingRepository.cs" />
     <Compile Include="Models\ICookingRepo.cs" />
@@ -193,7 +198,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>64436</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/LiveChefWebApi</IISUrl>
+          <IISUrl>http://localhost/LiveChefService</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

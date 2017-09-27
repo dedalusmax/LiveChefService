@@ -19,12 +19,6 @@ namespace LiveChefWebApi
                 routeTemplate: "api/{controller}/{action}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
-            config.Routes.MapHttpRoute(
-                name: "LoginRoute",
-                routeTemplate: "api/users/login/{action}/{id}",
-                defaults: new { id = RouteParameter.Optional }
-            );
-
         }
     }
 }

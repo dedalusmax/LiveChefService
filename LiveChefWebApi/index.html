@@ -3,13 +3,45 @@
 <head>
     <meta charset="utf-8" />
     <title></title>
+    <!-- 3rd party scripts  -->
     <script src="Scripts/jquery-3.2.1.min.js"></script>
     <script src="Scripts/jquery.signalR-2.2.2.min.js"></script>
+    <script src="Scripts/knockout-3.4.2.js"></script>
+
+    <!--Bootstrap-->
+    <link rel="stylesheet" href="Content/bootstrap.min.css" />
+    <script src="Scripts/bootstrap.js"></script>
+
+    <!-- necessary for SignalR -->
     <script src="signalr/hubs"></script>
+
+    <!-- application scripts -->
+    <script src="app/services/ajax.service.js"></script>
+    <script src="app/models/main.view-model.js"></script>
+    <script src="app/models/login.view-model.js"></script>
+    <script src="app/models/cooking.view-model.js"></script>
     <script src="app/index.js"></script>
 </head>
-<body>
-    <h1>LiveChefAPI</h1>
+<body class="container-fluid">
+    <div id="loginScreen" data-bind="with: login" >
+
+        <input type="text" data-bind="value: userName" />
+        <input type="text" data-bind="value: password" />
+        <input type="button" value="Login" data-bind="click: loginUser" />
+
+
+
+
+
+    </div>
+
+    <div id="mainScreen" class="hide" data-bind="">
+        <p>Kaj ima</p>
+
+
+    </div>
+
+    <!--<h1>LiveChefAPI</h1>
     <div id="container">
         <label for="Username">Username:</label>
         <input type="text" id="username" placeholder="Username" />
@@ -20,10 +52,8 @@
         <input type="button" id="sendCooking" value="New Cooking"/>
     </div>
     <hr />
-
-
     <ul id="log">
-    </ul>
+    </ul>-->
 
 </body>
 </html>

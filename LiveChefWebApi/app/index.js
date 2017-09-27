@@ -2,6 +2,9 @@
 
 $(document).ready(function () {
 
+    ko.applyBindings(new MainViewModel());
+    //return;
+
     logEl = $("#log");
     var hub = $.connection.chefHub;
 
@@ -13,14 +16,12 @@ $(document).ready(function () {
         log('User logged-in: ' + user.Username);
     };
 
-    // hub.server.send(message);
-
     hub.client.cookingsUpdated = function (cookings) {
 
         cookings.forEach(function (cooking) {
             log('Cooking updated: ' + cooking.DishName);
         });
-    }
+    };
 
     $.connection.hub.start().done(function () {
         $("#sendCooking").click(function () {
@@ -30,7 +31,7 @@ $(document).ready(function () {
             var data = { Username: username, DishName: dishname, Status: status };
 
             hub.server.addCooking(data);
-        })
+        });
     });
 });
 
