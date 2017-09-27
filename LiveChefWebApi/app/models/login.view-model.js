@@ -1,26 +1,28 @@
-﻿var LoginViewModel = function (element) {
+﻿var LoginViewModel = function (parent) {
     var self = this;
+    self.parent = parent;
 
-    self.userName = ko.observable();
-    self.password = ko.observable();
-  //  self.showMainScreen = ko.observable(false);
-    self.loginFailed = ko.observable(false);
+    self.userName = ko.observable('');
+    self.password = ko.observable('');
+     
+    self.error = ko.observable(null);
 
     self.loginUser = function () {
-        AjaxService.loginUser(self.userName(), self.password(),
-            function (response) {
-                var data = response;
-                self.showScreen(Screen.Main);
-                self.loginFailed(true);
-                console.log("response: " + data.Username);
-            },
-            function (error) {
-                console.log("Error");
-                self.loginFailed(true);
-            });
+        ajax.login(self.userName(), self.password(), self.loginSucceeded.bind(self), self.loginFailed.bind(self));
     };
 
     self.loginAsGuest = function () {
-        self.showScreen(Screen.Main);
+        ajax.loginAsGuest(self.loginSucceeded.bind(self), self.loginFailed.bind(self));
     };
 }
+
+LoginViewModel.prototype.loginSucceeded = function () {
+    var self = this;
+    self.parent.showScreen(Screen.Main);
+    self.error(null);
+};
+
+LoginViewModel.prototype.loginFailed = function (error) {
+    var self = this;
+    self.error(error.responseText);
+};

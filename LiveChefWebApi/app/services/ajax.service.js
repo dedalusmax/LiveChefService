@@ -1,13 +1,30 @@
-﻿var baseUri = 'api/user/login';
+﻿var baseUri = 'api/';
 
-var AjaxService = function () {
+var ajax = function () {
     var self = this;
 
     self.login = function (username, password, successCallback, errorCallback) {
 
         var data = { Username: username, Password: password };
         var header = $.ajax({
-            url: baseUri,
+            url: baseUri + 'user/login',
+            type: 'POST',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(data),
+            success: successCallback,
+            error: errorCallback
+            //error: function (error) {
+            //    alert(error);
+            //}
+        });
+    };
+
+    self.loginAsGuest = function (successCallback, errorCallback) {
+
+        var data = { };
+        var header = $.ajax({
+            url: baseUri + 'user/loginAsGuest',
             type: 'POST',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -16,7 +33,9 @@ var AjaxService = function () {
             error: errorCallback
         });
     };
+
     return {
-        loginUser: login
+        login: login,
+        loginAsGuest: loginAsGuest
     };
 }();
