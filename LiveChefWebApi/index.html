@@ -23,19 +23,15 @@
     <script src="app/index.js"></script>
 </head>
 <body class="container-fluid">
-    <div id="loginScreen" data-bind="with: login" >
+    <div data-bind="with: login, visible: showScreen() == Screen.Login" >
 
         <input type="text" data-bind="value: userName" />
         <input type="text" data-bind="value: password" />
         <input type="button" value="Login" data-bind="click: loginUser" />
 
-
-
-
-
     </div>
 
-    <div id="mainScreen" class="hide" data-bind="">
+    <div data-bind="visible: showScreen() == Screen.Main">
         <p>Kaj ima</p>
 
 

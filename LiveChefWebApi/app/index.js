@@ -1,8 +1,10 @@
 ﻿var logEl;
+var root;
 
 $(document).ready(function () {
 
-    ko.applyBindings(new MainViewModel());
+    root = new MainViewModel();
+    ko.applyBindings(root);
     //return;
 
     logEl = $("#log");

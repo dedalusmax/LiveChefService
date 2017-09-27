@@ -1,8 +1,16 @@
-﻿var MainViewModel = function () {
+﻿var Screen = {
+    Login: 1,
+    Main: 2,
+    Cooking: 3
+};
+
+var MainViewModel = function () {
     self = this;
 
-    self.login = ko.observable(new LoginViewModel());
+    self.showScreen = ko.observable(Screen.Login);
 
+    self.login = ko.observable(new LoginViewModel());
+    self.newCooking = ko.observable(new CookingViewModel());
 
     
 };

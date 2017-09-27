@@ -1,4 +1,4 @@
-﻿var LoginViewModel = function () {
+﻿var LoginViewModel = function (element) {
     var self = this;
 
     self.userName = ko.observable();
