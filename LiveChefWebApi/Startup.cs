@@ -1,4 +1,6 @@
-﻿using Microsoft.Owin;
+﻿using Microsoft.AspNet.SignalR;
+using Microsoft.Owin;
+using Microsoft.Owin.Cors;
 using Owin;
 
 [assembly: OwinStartup(typeof(LiveChefWebApi.Startup))]
@@ -9,8 +11,14 @@ namespace LiveChefWebApi
     {
         public void Configuration(IAppBuilder app)
         {
-            app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
-            app.MapSignalR();
+            app.UseCors(CorsOptions.AllowAll);
+
+            var hubConfiguration = new HubConfiguration();
+            hubConfiguration.EnableDetailedErrors = true;
+            hubConfiguration.EnableJavaScriptProxies = true;
+            hubConfiguration.EnableJSONP = true;
+
+            app.MapSignalR("/signalr", hubConfiguration);
         }
     }
 }
