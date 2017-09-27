@@ -28,9 +28,8 @@
     <script src="app/index.js"></script>
 </head>
 <body class="container-fluid">
-    <div data-bind="with: login, visible: showScreen() == Screen.Login">
+    <div data-bind="with: login, visible: showScreen() == Screen.Login" class="login-component img-responsive">
 
-        <div class="login-component img-responsive">
             <div class="center">
                 <img class="logo img-responsive animated rotateIn" src="./Content/images/chef.png" id="logo">
                 <form class="form-horizontal animated fadeIn" role="form" id="form" (ngSubmit)="onSubmit()">
@@ -72,7 +71,6 @@
                     </div>
                 </form>
             </div>
-        </div>
 
         <!--<input type="text" data-bind="value: userName" />
         <input type="text" data-bind="value: password" />
@@ -80,9 +78,28 @@
 
     </div>
 
-    <div data-bind="visible: showScreen() == Screen.Main">
-        <p>Kaj ima</p>
+    <div data-bind="with: cookings, visible: showScreen() == Screen.Main" class="main-component">
+       
 
+        <div class="header">
+            <img class="logo img-responsive" src="./Content/images/chef.png" id="logo">
+            <p>
+                Cooking
+            </p>
+        </div>
+
+        <div class="list-group" id="list-tab">
+            <a class="list-group-item list-group-item-action" data-bind="foreach: cookingData">
+                <img class="userImage img-responsive" src="./Content/images/small-logo.png" id="logo">
+                <h3 data-bind="value: cookingData.DishName()">
+                    
+                    <small data-bind="value: cookingData.Status()"> </small>
+                </h3>
+                <h5 data-bind="value: cookingData.Username()"> </h5>
+            </a>
+        </div>
+
+        <div class="footer"></div>
 
         <!--<div class="main-component">
 

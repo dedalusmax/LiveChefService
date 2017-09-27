@@ -10,7 +10,7 @@ var MainViewModel = function () {
     self.showScreen = ko.observable(Screen.Login);
 
     self.login = ko.observable(new LoginViewModel(self));
-    self.newCooking = ko.observable(new CookingViewModel());
+    self.cookings = ko.observable(new CookingViewModel(self));
 
     
 };
