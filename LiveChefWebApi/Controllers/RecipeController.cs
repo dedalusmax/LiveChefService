@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Web.Http;
-using LiveChefWebApi.Models;
+using LiveChefService.Models;
 
-namespace LiveChefWebApi.Controllers
+namespace LiveChefService.Controllers
 {
     public class RecipeController : ApiController
     {

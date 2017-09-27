@@ -1,9 +1,9 @@
 ﻿using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartup(typeof(LiveChefWebApi.Startup))]
+[assembly: OwinStartup(typeof(LiveChefService.Startup))]
 
-namespace LiveChefWebApi
+namespace LiveChefService
 {
     public class Startup
     {
