@@ -5,36 +5,27 @@ $(document).ready(function () {
 
     root = new MainViewModel();
     ko.applyBindings(root);
-    //return;
 
-    logEl = $("#log");
-    var hub = $.connection.chefHub;
+    //connector.userLoggedIn = function (user) {
+    //    log('User logged-in: ' + user.Username);
+    //};
 
-    hub.client.cookingAdded = function (cooking) {
-        log('New cooking added: ' + cooking.DishName);
-    };
+    //connector.cookingsUpdated = function (cookings) {
 
-    hub.client.userLoggedIn = function (user) {
+    //    cookings.forEach(function (cooking) {
+    //        log('Cooking updated: ' + cooking.DishName);
+    //    });
+    //};
+
+    //connector.cookingAdded = function (cooking) {
+    //    log('New cooking added: ' + cooking.DishName);
+    //};
+
+    connector.subscribe('userLoggedIn', function (user) {
         log('User logged-in: ' + user.Username);
-    };
-
-    hub.client.cookingsUpdated = function (cookings) {
-
-        cookings.forEach(function (cooking) {
-            log('Cooking updated: ' + cooking.DishName);
-        });
-    };
-
-    $.connection.hub.start().done(function () {
-        $("#sendCooking").click(function () {
-            var username = $("#username").val();
-            var dishname = $("#dishname").val();
-            var status = $("#status").val();
-            var data = { Username: username, DishName: dishname, Status: status };
-
-            hub.server.addCooking(data);
-        });
     });
+
+    connector.init();
 });
 
 function log(message) {
