@@ -160,6 +160,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Service\Models\IModel.cs" />
+    <Compile Include="Service\Models\Ingredient.cs" />
     <Compile Include="Service\Repositories\BaseRepository.cs" />
     <Compile Include="Service\Models\Cooking.cs" />
     <Compile Include="Service\Repositories\CookingRepository.cs" />
