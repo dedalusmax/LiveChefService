@@ -1,12 +1,11 @@
-﻿using System;
+﻿using LiveChefService.Models;
+using Microsoft.AspNet.SignalR;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using LiveChefService.Models;
 using System.Web.Script.Serialization;
-using Microsoft.AspNet.SignalR;
 
 namespace LiveChefService.Controllers
 {
@@ -68,12 +67,12 @@ namespace LiveChefService.Controllers
         [ActionName("Logout")]
         public HttpResponseMessage Logout(User user)
         {
-            User found = WebApiApplication.UserRepository.GetAll().Where(u => u.UserID == user.UserID).FirstOrDefault();
+            User found = WebApiApplication.UserRepository.GetAll().Where(u => u.Id == user.Id).FirstOrDefault();
             if (found != null)
             {
                 if (found.IsGuest)
                 {
-                    WebApiApplication.UserRepository.Remove(user.UserID);
+                    WebApiApplication.UserRepository.Remove(user.Id);
                 }
                 else
                 {
