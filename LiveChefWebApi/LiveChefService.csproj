@@ -1,4 +1,5 @@
-﻿<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -12,8 +13,8 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LiveChefWebApi</RootNamespace>
-    <AssemblyName>LiveChefWebApi</AssemblyName>
+    <RootNamespace>LiveChefService</RootNamespace>
+    <AssemblyName>LiveChefService</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
@@ -23,6 +24,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -110,11 +112,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\models\cooking.view-model.js" />
+    <Content Include="app\models\login.view-model.js" />
+    <Content Include="app\models\root.view-model.js" />
+    <Content Include="app\services\ajax.service.js" />
+    <Content Include="app\models\main.view-model.js" />
     <Content Include="app\index.js" />
+    <Content Include="app\services\signalr.service.js" />
+    <Content Include="app\services\tools.service.js" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\styles.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="index.html" />
@@ -141,25 +151,24 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Hubs\ChefHub.cs" />
-    <Compile Include="Controllers\CookingController.cs" />
-    <Compile Include="Controllers\RecipeController.cs" />
-    <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Service\Configuration\WebApiConfig.cs" />
+    <Compile Include="Service\Hubs\ChefHub.cs" />
+    <Compile Include="Service\Controllers\CookingController.cs" />
+    <Compile Include="Service\Controllers\RecipeController.cs" />
+    <Compile Include="Service\Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Cooking.cs" />
-    <Compile Include="Models\CookingRepository.cs" />
-    <Compile Include="Models\ICookingRepo.cs" />
-    <Compile Include="Models\IRecipeRepo.cs" />
-    <Compile Include="Models\IUserRepo.cs" />
-    <Compile Include="Models\Recipe.cs" />
-    <Compile Include="Models\RecipeRepository.cs" />
-    <Compile Include="Models\User.cs" />
-    <Compile Include="Models\UserRepository.cs" />
+    <Compile Include="Service\Models\IModel.cs" />
+    <Compile Include="Service\Repositories\BaseRepository.cs" />
+    <Compile Include="Service\Models\Cooking.cs" />
+    <Compile Include="Service\Repositories\CookingRepository.cs" />
+    <Compile Include="Service\Models\Recipe.cs" />
+    <Compile Include="Service\Repositories\RecipeRepository.cs" />
+    <Compile Include="Service\Models\User.cs" />
+    <Compile Include="Service\Repositories\UserRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Startup.cs" />
+    <Compile Include="Service\Configuration\Startup.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
@@ -175,9 +184,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -193,7 +200,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>64436</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/LiveChefWebApi</IISUrl>
+          <IISUrl>http://localhost/LiveChefService</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

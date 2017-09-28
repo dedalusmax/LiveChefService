@@ -3,9 +3,9 @@ using Microsoft.Owin;
 using Microsoft.Owin.Cors;
 using Owin;
 
-[assembly: OwinStartup(typeof(LiveChefWebApi.Startup))]
+[assembly: OwinStartup(typeof(LiveChefService.Startup))]
 
-namespace LiveChefWebApi
+namespace LiveChefService
 {
     public class Startup
     {

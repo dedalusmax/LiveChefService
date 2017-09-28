@@ -1,12 +1,8 @@
-﻿using Microsoft.AspNet.SignalR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using LiveChefService.Models;
+using Microsoft.AspNet.SignalR;
 using System.Threading.Tasks;
-using LiveChefWebApi.Models;
 
-namespace LiveChefWebApi
+namespace LiveChefService
 {
     public class ChefHub : Hub
     {
@@ -19,6 +15,10 @@ namespace LiveChefWebApi
         internal void SendUserLoggedIn(User user)
         {
             this.Clients.All.userLoggedIn(user);
+        }
+        internal void SendUserLoggedOut(User user)
+        {
+            this.Clients.All.userLoggedOut(user);
         }
 
         public override Task OnConnected()

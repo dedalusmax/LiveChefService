@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace LiveChefWebApi.Models
+﻿namespace LiveChefService.Models
 {
     public enum CookingStatus
     {
@@ -13,7 +8,7 @@ namespace LiveChefWebApi.Models
         Finished
     }
 
-    public class Cooking
+    public class Cooking : IModel
     {
         public int Id { get; set; }
         public string Username { get; set; }

@@ -1,25 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.Web.Http;
-using LiveChefWebApi.Models;
+using LiveChefService.Models;
 
-namespace LiveChefWebApi.Controllers
+namespace LiveChefService.Controllers
 {
     public class RecipeController : ApiController
     {
-        static readonly IRecipeRepo repository = new RecipeRepository();
-
         [HttpGet]
         [ActionName("GetAll")]
         public IEnumerable<Recipe> GetAll()
         {
-            return repository.GetAll();
+            return WebApiApplication.RecipeRepository.GetAll();
         }
 
         [HttpGet]
         [ActionName("Get")]
         public Recipe Get(int recipeId)
         {
-            return repository.Get(recipeId);
+            return WebApiApplication.RecipeRepository.Get(recipeId);
         }
 
     }
