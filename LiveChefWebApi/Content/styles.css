@@ -140,6 +140,8 @@
 .container-fluid {
     padding-right: 0;
     padding-left: 0;
+}
+.main-component .container {
     background-image: url(./images/main-background.png);
     background-size: cover;
     width: 100%;
