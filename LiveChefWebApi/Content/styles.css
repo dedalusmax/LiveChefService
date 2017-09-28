@@ -75,6 +75,7 @@
         font-size: 50px;
     }
 
+
     .login-component form {
         margin: 0px;
     }
@@ -119,9 +120,9 @@
             font-size: 30px;
         }
 
-        .login-component .logo {
-            width: 250px;
-        }
+    .login-component .logo {
+        width: 250px;
+    }
 }
 
 @media (min-width: 992px) {
@@ -141,6 +142,7 @@
     padding-right: 0;
     padding-left: 0;
 }
+
 .main-component .container {
     background-image: url(./images/main-background.png);
     background-size: cover;
@@ -155,10 +157,12 @@
     color: white;
     font-size: 50px;
     margin-bottom: 10px;
+    display: list-item;
 }
 
 .main-component .title {
     float: left;
+    font-size: 40px;
 }
 
 .main-component .logo {
@@ -174,11 +178,17 @@
 }
 
 .main-component .logout-button {
-    margin-left: 60%;
+    /*margin-left: 50%;*/
+    float: right;
+    margin-top: 20px;
+    margin-right: 20px;
 }
 
 .main-component .return-button {
-    margin-left: 60%;
+    /*margin-left: 60%;*/
+    float: right;
+    margin-top: 20px;
+    margin-right: 20px;
 }
 
 .main-component .red {
@@ -220,6 +230,16 @@
     margin: 0;
     background-color: darkslategray;
     position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 2rem;
+}
+
+.main-component .footer-new-cooking {
+    margin: 0;
+    background-color: darkslategray;
+    position: inherit;
     right: 0;
     bottom: 0;
     left: 0;
