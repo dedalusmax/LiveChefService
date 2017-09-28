@@ -3,49 +3,38 @@
 var ajax = function () {
     var self = this;
 
-    self.login = function (username, password, successCallback, errorCallback) {
+    var sendRequest = function (uri, type, data, successCallback, errorCallback) {
 
-        var data = { Username: username, Password: password };
-        var header = $.ajax({
-            url: baseUri + 'user/login',
-            type: 'POST',
+        $.ajax({
+            url: uri,
+            type: type,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             data: JSON.stringify(data),
-            success: successCallback,
+            success: function (response) {
+                var model = JSON.parse(response);
+                successCallback.call(this, model);
+            },
             error: errorCallback
-            //error: function (error) {
-            //    alert(error);
-            //}
         });
+    }
+
+    self.login = function (username, password, successCallback, errorCallback) {
+
+        var data = { Username: username, Password: password };
+        sendRequest(baseUri + 'user/login', 'POST', data, successCallback, errorCallback);
     };
 
     self.loginAsGuest = function (successCallback, errorCallback) {
 
-        var data = { };
-        var header = $.ajax({
-            url: baseUri + 'user/loginAsGuest',
-            type: 'POST',
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            data: JSON.stringify(data),
-            success: successCallback,
-            error: errorCallback
-        });
+        var data = {};
+        sendRequest(baseUri + 'user/loginAsGuest', 'POST', data, successCallback, errorCallback);
     };
 
     self.logout = function (user, successCallback, errorCallback) {
 
         var data = user;
-        var header = $.ajax({
-            url: baseUri + 'user/logout',
-            type: 'POST',
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            data: JSON.stringify(data),
-            success: successCallback,
-            error: errorCallback
-        });
+        sendRequest(baseUri + 'user/logout', 'POST', data, successCallback, errorCallback);
     };
 
     return {

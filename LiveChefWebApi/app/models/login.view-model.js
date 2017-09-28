@@ -25,5 +25,5 @@ LoginViewModel.prototype.loginSucceeded = function (user) {
 
 LoginViewModel.prototype.loginFailed = function (error) {
     var self = this;
-    self.error(error.responseText);
+    self.error(error.responseJSON);
 };
