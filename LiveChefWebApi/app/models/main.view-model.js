@@ -16,11 +16,11 @@
     var hub = $.connection.chefHub;
 
     hub.client.cookingAdded = function (cooking) {
-        console.log('New cooking added: ' + cooking.DishName);
+        console.log('New cooking added: ' + cooking.dishName);
     };
 
     hub.client.userLoggedIn = function (user) {
-        console.log('User logged-in: ' + user.Username);
+        console.log('User logged-in: ' + user.username);
     };
 
     hub.client.usersUpdated = function (users) {
@@ -33,7 +33,7 @@
     hub.client.cookingsUpdated = function (cookings) {
 
         cookings.forEach(function (cooking) {
-            console.log('Cooking updated: ' + cooking.DishName);
+            console.log('Cooking updated: ' + cooking.dishName);
         });
     }
 
