@@ -138,8 +138,14 @@
 }
 
 .container-fluid {
-     padding-right: 0; 
-     padding-left: 0; 
+    padding-right: 0;
+    padding-left: 0;
+    background-image: url(./images/main-background.png);
+    background-size: cover;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    background-repeat: no-repeat;
 }
 
 .main-component .header {
@@ -149,7 +155,7 @@
     margin-bottom: 10px;
 }
 
-.main-component .title{
+.main-component .title {
     float: left;
 }
 
@@ -165,13 +171,14 @@
     padding: 10px;
 }
 
-.main-component .logout-button{
-    margin-left: 70%;
-}
-
-.main-component .return-button{
+.main-component .logout-button {
     margin-left: 60%;
 }
+
+.main-component .return-button {
+    margin-left: 60%;
+}
+
 .main-component .red {
     color: red;
 }
@@ -194,16 +201,19 @@
     margin-top: 10px;
     margin-bottom: 10px;
 }
-.main-component .userLogin{
+
+.main-component .userLogin {
     float: right;
     font-size: 15px;
     margin-right: 25px;
     margin-top: 25px;
 }
-.main-component .add-button{
+
+.main-component .add-button {
     width: 3%;
     margin: 10px;
 }
+
 .main-component .footer {
     margin: 0;
     background-color: darkslategray;
@@ -212,4 +222,8 @@
     bottom: 0;
     left: 0;
     padding: 2rem;
+}
+
+.main-component form {
+    margin-top: 10%;
 }

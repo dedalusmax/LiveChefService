@@ -89,12 +89,12 @@
         <img class="add-button img-responsive" src="./Content/images/addNew.png" data-bind="click: addNewCooking">
 
         <div class="list-group" id="list-tab" data-bind="foreach: cookings, click: cookingDetails.bind(cookings)">
-                <a class="list-group-item list-group-item-action">
-                    <h5 data-bind="text: chef.displayName"> </h5>
-                    <img class="userImage img-responsive" src="./Content/images/small-logo.png" id="logo">
-                    <h3 data-bind="text: dish.name"> </h3>
-                    <small data-bind="text: status, css: { green: status ==  'Started', red: status == 'NeedHelp' }"> </small>
-                </a>
+            <a class="list-group-item list-group-item-action">
+                <h5 data-bind="text: chef.displayName"> </h5>
+                <img class="userImage img-responsive" src="./Content/images/small-logo.png" id="logo">
+                <h3 data-bind="text: dish.name"> </h3>
+                <small data-bind="text: status, css: { green: status ==  1, red: status == 3 }"> </small>
+            </a>
         </div>
 
         <div class="footer">
@@ -132,7 +132,7 @@
                     <p class="card-text">screen</p>
                     <video width="520" height="340" controls></video>
                     <p class="card-text"><small class="text-muted">Started 3 mins ago</small></p>
-                    
+
                 </div>
             </div>
         </div>
@@ -148,15 +148,14 @@
         <div class="container">
             <form>
                 <div class="form-group row">
-                    <label for="recipeName" class="col-sm-2 col-form-label">Name of new recipe</label>
+                    <label for="recipeName" class="col-sm-2 col-form-label">Name of recipe</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="recipeName" placeholder="Name">
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="ingredients" class="col-sm-2 col-form-label">Ingredients</label>
-                    <div class="col-sm-10">
-                        <textarea type="text" class="form-control" id="ingredients" placeholder="Ingredients"></textarea>
+                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="recipeName">
+                            <option selected>Choose...</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -165,39 +164,62 @@
                         <input type="number" class="form-control" id="duration" placeholder="Duration">
                     </div>
                 </div>
-                <fieldset class="form-group">
-                    <div class="row">
-                        <legend class="col-form-legend col-sm-4">Cooking food weight</legend>
-                        <div class="col-sm-10">
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
-                                    Easy
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
-                                    Medium
-                                </label>
-                            </div>
-                            <div class="form-check disabled">
-                                <label class="form-check-label">
-                                    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="option3" disabled>
-                                    Hard
-                                </label>
-                            </div>
-                        </div>
+                <div class="form-group row">
+                    <label for="ingredients" class="col-sm-2 col-form-label">Ingredients</label>
+                    <div class="col-sm-10">
+                        <textarea type="text" class="form-control" id="ingredients" placeholder="Ingredients" rows="4"></textarea>
                     </div>
-                </fieldset>                
+                </div>
+                <div class="form-group row">
+                    <label for="difficultyLevel" class="col-sm-2 col-form-label">Difficulty level</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="duration" placeholder="Difficulty level">
+                    </div>
+                </div>
                 <div class="form-group row">
                     <div class="col-sm-10">
-                        <button type="submit" class="btn btn-primary">Start cooking</button>
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox"> Use audio
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-10">
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox"> Use video
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-10">
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox"> Use chat
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-10">
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox"> I need help
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-10">
+                        <button type="submit" class="btn btn-primary btn-lg" data-bind="click:startCooking">Start cooking</button>
                     </div>
                 </div>
             </form>
         </div>
-        
+
         <div class="footer"></div>
     </div>
 
