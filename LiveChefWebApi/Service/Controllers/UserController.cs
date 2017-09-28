@@ -1,11 +1,12 @@
 ﻿using LiveChefService.Models;
 using Microsoft.AspNet.SignalR;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using System.Web.Script.Serialization;
 
 namespace LiveChefService.Controllers
 {
@@ -34,6 +35,12 @@ namespace LiveChefService.Controllers
             User found = WebApiApplication.UserRepository.GetAll().Where(u => u.Username == item.Username && u.Password == item.Password).FirstOrDefault();
             if (found != null)
             {
+                if (found.IsLoggedIn)
+                {
+                    HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Forbidden, "User is already logged in!");
+                    return response;
+                }
+
                 found.IsLoggedIn = true;
                 WebApiApplication.UserRepository.Change(found);
 
@@ -43,7 +50,7 @@ namespace LiveChefService.Controllers
             }
             else
             {
-                var response = Request.CreateResponse(HttpStatusCode.Forbidden, "Your username and/or password is incorrect!");
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Forbidden, "Your username and/or password is incorrect!");
                 return response;
             }
         }
@@ -87,15 +94,20 @@ namespace LiveChefService.Controllers
             }
             else
             {
-                var response = Request.CreateResponse(HttpStatusCode.NotFound, "User doesn't exist");
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.NotFound, "User doesn't exist");
                 return response;
             }
         }
 
         private HttpResponseMessage PrepareResponse<T>(T item)
         {
-            JavaScriptSerializer serializer = new JavaScriptSerializer();
-            T responseJson = serializer.ConvertToType<T>(item);
+            var jsonSettings = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
+
+            string responseJson = JsonConvert.SerializeObject(item, jsonSettings);
+
             HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK, responseJson);
             return response;
         }

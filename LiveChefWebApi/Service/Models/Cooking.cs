@@ -11,8 +11,8 @@
     public class Cooking : IModel
     {
         public int Id { get; set; }
-        public string Username { get; set; }
-        public string DishName { get; set; }
+        public User Chef { get; set; }
+        public Recipe Dish { get; set; }
         public CookingStatus Status { get; set; }
     }
 }

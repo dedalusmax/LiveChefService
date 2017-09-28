@@ -23,10 +23,10 @@ namespace LiveChefService
 
         public override Task OnConnected()
         {
+            this.Clients.Caller.usersUpdated(WebApiApplication.UserRepository.GetActiveUsers());
             this.Clients.Caller.cookingsUpdated(WebApiApplication.CookingRepository.GetAll());
 
             return base.OnConnected();
         }
-
     }
 }

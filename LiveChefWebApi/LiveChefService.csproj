@@ -114,6 +114,7 @@
   <ItemGroup>
     <Content Include="app\models\cooking.view-model.js" />
     <Content Include="app\models\login.view-model.js" />
+    <Content Include="app\models\new-cooking.view-model.js" />
     <Content Include="app\models\root.view-model.js" />
     <Content Include="app\services\ajax.service.js" />
     <Content Include="app\models\main.view-model.js" />
@@ -154,6 +155,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Service\Configuration\SignalRContractResolver.cs" />
     <Compile Include="Service\Configuration\WebApiConfig.cs" />
     <Compile Include="Service\Hubs\ChefHub.cs" />
     <Compile Include="Service\Controllers\CookingController.cs" />
@@ -163,6 +165,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Service\Models\IModel.cs" />
+    <Compile Include="Service\Models\Ingredient.cs" />
     <Compile Include="Service\Repositories\BaseRepository.cs" />
     <Compile Include="Service\Models\Cooking.cs" />
     <Compile Include="Service\Repositories\CookingRepository.cs" />

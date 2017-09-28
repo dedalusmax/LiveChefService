@@ -1,10 +1,20 @@
-﻿namespace LiveChefService.Models
+﻿using System.Collections.Generic;
+
+namespace LiveChefService.Models
 {
+    public enum Difficulty
+    {
+        Beginner = 1,
+        Intermediate,
+        Advanced
+    }
     public class Recipe : IModel
     {
         public int Id { get; set; }
-        public string Ingredients { get; set; }
-        public int Quantity { get; set; }
-        public string QuantityType { get; set; }
+        public string Name { get; set; }
+        public Difficulty DifficultyLevel { get; set; }
+
+        public int Time { get; set; }
+        public List<Ingredient> Ingredients { get; set; }
     }
 }
