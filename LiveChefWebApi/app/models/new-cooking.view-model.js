@@ -4,7 +4,6 @@
 
 
     self.returnToMain = function () {
-        self.parent.showScreen(Screen.Main);
+        root.showScreen(Screen.Main);
     };
-
 };

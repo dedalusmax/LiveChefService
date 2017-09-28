@@ -115,7 +115,6 @@
     <Content Include="app\models\cooking.view-model.js" />
     <Content Include="app\models\login.view-model.js" />
     <Content Include="app\models\new-cooking.view-model.js" />
-    <Content Include="app\models\newCooking.view-model.js" />
     <Content Include="app\models\root.view-model.js" />
     <Content Include="app\services\ajax.service.js" />
     <Content Include="app\models\main.view-model.js" />

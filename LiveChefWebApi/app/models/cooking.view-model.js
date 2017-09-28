@@ -8,7 +8,7 @@
     self.recipeDetails = ko.observable("recipe details")
 
     self.returnToMain = function () {
-        self.parent.showScreen(Screen.Main);
+        root.showScreen(Screen.Main);
     };
 
 };

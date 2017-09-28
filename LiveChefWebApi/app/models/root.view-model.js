@@ -15,16 +15,11 @@ var RootViewModel = function () {
     self.showScreen = function (screen) {
         if (self.activeScreen() != screen) {
             self.activeScreen(screen);
-            switch (screen) {
-                case Screen.Main:
-                    self.main(new MainViewModel(self));
-                    break;
-            }
         }
     };
 
     self.login = ko.observable(new LoginViewModel(self));
     self.main = ko.observable();
-    self.cooking = ko.observable(new CookingViewModel(self));
-  //  self.newCooking = ko.observable(new NewCookingViewModel(self));
+    self.cooking = ko.observable();
+    self.newCooking = ko.observable();
 };

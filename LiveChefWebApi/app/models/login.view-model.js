@@ -19,6 +19,7 @@
 LoginViewModel.prototype.loginSucceeded = function (user) {
     var self = this;
     self.parent.user = user;
+    self.parent.main(new MainViewModel(self.parent));
     self.parent.showScreen(Screen.Main);
     self.error(null);
 };

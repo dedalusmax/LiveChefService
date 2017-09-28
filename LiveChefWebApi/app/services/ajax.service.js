@@ -12,8 +12,8 @@ var ajax = function () {
             dataType: "json",
             data: JSON.stringify(data),
             success: function (response) {
-              //  var model = JSON.parse(response);
-                successCallback.call(this, response);
+                var model = JSON.parse(response);
+                successCallback.call(this, model);
             },
             error: errorCallback
         });
