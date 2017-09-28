@@ -32,26 +32,21 @@ namespace LiveChefService.Controllers
         {
             IHubContext context = GlobalHost.ConnectionManager.GetHubContext<ChefHub>();
 
-
-            if (CheckCredentials(item.Username, item.Password))
+            User found = WebApiApplication.UserRepository.GetAll().Where(u => u.Username == item.Username && u.Password == item.Password).FirstOrDefault();
+            if (found != null)
             {
-                item.IsLoggedIn = true;
-                WebApiApplication.UserRepository.Change(item);
+                found.IsLoggedIn = true;
+                WebApiApplication.UserRepository.Change(found);
 
-                context.Clients.All.userLoggedIn(item);
+                context.Clients.All.userLoggedIn(found);
 
-                return PrepareResponse(item);
+                return PrepareResponse<User>(found);
             }
             else
             {
                 var response = Request.CreateResponse(HttpStatusCode.Forbidden, "Your username and/or password is incorrect!");
                 return response;
             }
-        }
-        private bool CheckCredentials(string username, string password)
-        {
-            User found = WebApiApplication.UserRepository.GetAll().Where(u => u.Username == username && u.Password == password).FirstOrDefault();
-            return (found != null);
         }
 
         [HttpPost]
@@ -71,19 +66,25 @@ namespace LiveChefService.Controllers
 
         [HttpPost]
         [ActionName("Logout")]
-        public HttpResponseMessage Logout(User item)
+        public HttpResponseMessage Logout(User user)
         {
-
-            //TODO deskriptvnije ime i prebaciti metodu 
-            if (LogoutUser(item.Username, item.Password))
+            User found = WebApiApplication.UserRepository.GetAll().Where(u => u.UserID == user.UserID).FirstOrDefault();
+            if (found != null)
             {
-                item.IsLoggedIn = false;
-                WebApiApplication.UserRepository.Change(item);
+                if (found.IsGuest)
+                {
+                    WebApiApplication.UserRepository.Remove(user.UserID);
+                }
+                else
+                {
+                    found.IsLoggedIn = false;
+                    WebApiApplication.UserRepository.Change(found);
+                }
 
                 IHubContext context = GlobalHost.ConnectionManager.GetHubContext<ChefHub>();
-                context.Clients.All.userLoggedOut(item);
+                context.Clients.All.userLoggedOut(found);
 
-                return PrepareResponse(item);
+                return PrepareResponse<User>(found);
             }
             else
             {
@@ -91,15 +92,11 @@ namespace LiveChefService.Controllers
                 return response;
             }
         }
-        private bool LogoutUser(string username, string password)
-        {
-            User found = WebApiApplication.UserRepository.GetAll().Where(u => u.Username == username && u.Password == password).FirstOrDefault();
-            return (found != null);
-        }
-        private HttpResponseMessage PrepareResponse(User item)
+
+        private HttpResponseMessage PrepareResponse<T>(T item)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();
-            User responseJson = serializer.ConvertToType<User>(item);
+            T responseJson = serializer.ConvertToType<T>(item);
             HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK, responseJson);
             return response;
         }

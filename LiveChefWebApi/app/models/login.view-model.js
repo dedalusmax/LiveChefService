@@ -16,8 +16,9 @@
     };
 }
 
-LoginViewModel.prototype.loginSucceeded = function () {
+LoginViewModel.prototype.loginSucceeded = function (user) {
     var self = this;
+    self.parent.user = user;
     self.parent.showScreen(Screen.Main);
     self.error(null);
 };

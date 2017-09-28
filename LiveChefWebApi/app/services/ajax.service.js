@@ -34,8 +34,23 @@ var ajax = function () {
         });
     };
 
+    self.logout = function (user, successCallback, errorCallback) {
+
+        var data = user;
+        var header = $.ajax({
+            url: baseUri + 'user/logout',
+            type: 'POST',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(data),
+            success: successCallback,
+            error: errorCallback
+        });
+    };
+
     return {
         login: login,
-        loginAsGuest: loginAsGuest
+        loginAsGuest: loginAsGuest,
+        logout: logout
     };
 }();

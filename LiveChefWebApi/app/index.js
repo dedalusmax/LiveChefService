@@ -2,6 +2,6 @@
 
 $(document).ready(function () {
 
-    root = new MainViewModel();
+    root = new RootViewModel();
     ko.applyBindings(root);
 });
