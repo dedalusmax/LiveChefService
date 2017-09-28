@@ -9,25 +9,44 @@
         { DishName: 'Baked potatoes', Id: 4, Status: 'NeedHelp', Username: 'Barica' }
     ]);
 
-    connector.subscribe('userLoggedIn', function (user) {
-        console.log('User logged-in: ' + user.Username);
-    });
-
-    connector.subscribe('cookingsUpdated', function (cookings) {
-        cookings.forEach(function (cooking) {
-            console.log('Cooking updated: ' + cooking.DishName);
-        });
-    });
-
-    connector.init();
-
     self.logout = function () {
         ajax.logout(self.parent.user, self.logoutSucceeded.bind(self));
     };
+
+    var hub = $.connection.chefHub;
+
+    hub.client.cookingAdded = function (cooking) {
+        console.log('New cooking added: ' + cooking.DishName);
+    };
+
+    hub.client.userLoggedIn = function (user) {
+        console.log('User logged-in: ' + user.Username);
+    };
+
+    hub.client.usersUpdated = function (users) {
+
+        users.forEach(function (user) {
+            console.log('User updated: ' + user.displayName);
+        });
+    }
+
+    hub.client.cookingsUpdated = function (cookings) {
+
+        cookings.forEach(function (cooking) {
+            console.log('Cooking updated: ' + cooking.DishName);
+        });
+    }
+
+    var connection = $.hubConnection();
+    connection.logging = true;
+
+    $.connection.hub.start().done(function () {
+        //hub.server.getData();
+    });
 };
 
 MainViewModel.prototype.logoutSucceeded = function (user) {
     var self = this;
-    self.parent.user = null;
-    self.parent.showScreen(Screen.Login);
+    $.connection.hub.stop();
+    location.reload();
 };

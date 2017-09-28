@@ -7,5 +7,7 @@ $(document).ready(function () {
 });
 
 window.onunload = function () {
-    ajax.logout(root.user);
+    if (root.user) {
+        ajax.logout(root.user);
+    }
 }
