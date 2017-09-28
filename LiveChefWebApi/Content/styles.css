@@ -120,11 +120,15 @@
             font-size: 30px;
         }
 
-    .login-component .logo {
-        width: 250px;
+        .login-component .logo {
+            width: 250px;
+        }
+
+    .main-component .add-button {
+        width: 10% !important;
+        padding-top: 10px;
     }
 }
-
 @media (min-width: 992px) {
     .login-component form {
         width: 30%;
