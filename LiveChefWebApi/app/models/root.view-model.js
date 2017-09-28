@@ -7,6 +7,8 @@
 var RootViewModel = function () {
     self = this;
 
+    self.user = null;
+
     self.activeScreen = ko.observable(Screen.Login);
 
     self.showScreen = function (screen) {
