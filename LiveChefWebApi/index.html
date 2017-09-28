@@ -90,9 +90,9 @@
 
         <div class="list-group" id="list-tab" data-bind="foreach: cookings, click: cookingDetails.bind(cookings)">
                 <a class="list-group-item list-group-item-action">
-                    <h5 data-bind="text: username"> </h5>
+                    <h5 data-bind="text: chef.displayName"> </h5>
                     <img class="userImage img-responsive" src="./Content/images/small-logo.png" id="logo">
-                    <h3 data-bind="text: dishName"> </h3>
+                    <h3 data-bind="text: dish.name"> </h3>
                     <small data-bind="text: status, css: { green: status ==  'Started', red: status == 'NeedHelp' }"> </small>
                 </a>
         </div>

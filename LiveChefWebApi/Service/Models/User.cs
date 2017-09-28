@@ -6,7 +6,6 @@
         public string Username { get; set; }
         public string DisplayName { get; set; }
         public string Password { get; set; }
-        public string DisplayName { get; set; }
         public bool IsLoggedIn { get; set; }
         public bool IsGuest { get; set; }
     }
