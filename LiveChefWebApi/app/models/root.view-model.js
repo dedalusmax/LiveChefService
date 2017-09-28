@@ -1,11 +1,14 @@
 ﻿var Screen = {
     Login: 1,
     Main: 2,
-    Cooking: 3
+    Cooking: 3,
+    NewCooking: 4
 };
 
 var RootViewModel = function () {
     self = this;
+
+    self.user = null;
 
     self.activeScreen = ko.observable(Screen.Login);
 
@@ -22,4 +25,6 @@ var RootViewModel = function () {
 
     self.login = ko.observable(new LoginViewModel(self));
     self.main = ko.observable();
+    self.cooking = ko.observable(new CookingViewModel(self));
+  //  self.newCooking = ko.observable(new NewCookingViewModel(self));
 };

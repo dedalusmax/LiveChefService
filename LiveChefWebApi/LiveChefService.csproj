@@ -114,6 +114,8 @@
   <ItemGroup>
     <Content Include="app\models\cooking.view-model.js" />
     <Content Include="app\models\login.view-model.js" />
+    <Content Include="app\models\new-cooking.view-model.js" />
+    <Content Include="app\models\newCooking.view-model.js" />
     <Content Include="app\models\root.view-model.js" />
     <Content Include="app\services\ajax.service.js" />
     <Content Include="app\models\main.view-model.js" />
@@ -124,6 +126,9 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\images\backgroundImage.jpg" />
+    <Content Include="Content\images\chef.png" />
+    <Content Include="Content\images\small-logo.png" />
     <Content Include="Content\styles.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -151,6 +156,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Service\Configuration\SignalRContractResolver.cs" />
     <Compile Include="Service\Configuration\WebApiConfig.cs" />
     <Compile Include="Service\Hubs\ChefHub.cs" />
     <Compile Include="Service\Controllers\CookingController.cs" />

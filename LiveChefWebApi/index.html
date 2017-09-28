@@ -80,49 +80,74 @@
 
         <div class="header">
             <img class="logo img-responsive" src="./Content/images/chef.png" id="logo">
-            <p>
-                Cooking
-            </p>
-            <button data-bind="click: logout">Logout</button>
+            <div class="userLogin" data-bind="text: userName"></div>
+            <button class="btn btn-default logout-button" data-bind="click: logout">Login as another user</button>
+            <p class="title" data-bind="text: cookingTitle"> </p>
         </div>
 
-        <div class="list-group" id="list-tab">
-            <a class="list-group-item list-group-item-action" data-bind="foreach: cookingData">
-                <img class="userImage img-responsive" src="./Content/images/small-logo.png" id="logo">
-                <h3 data-bind="value: DishName">
+        <img class="add-button img-responsive" src="./Content/images/addNew.png" data-bind="click: addNewCooking">
 
-                    <small data-bind="value: Status"> </small>
-                </h3>
-                <h5 data-bind="value: Username"> </h5>
-            </a>
-        </div>
-
-        <div class="footer"></div>
-
-        <!--<div class="main-component">
-
-            <div class="header">
-                <img class="logo img-responsive" src="./assets/chef.png" id="logo">
-                <p>
-                    Cooking
-                </p>
-            </div>
-
-            <div class="list-group" id="list-tab" *ngFor="let item of items">
-                <a class="list-group-item list-group-item-action" id="{{item.Id}}" href="#list-{{item.Id}}">
-                    <img class="userImage img-responsive" src="./assets/small-logo.png" id="logo">
-                    <h3>
-                        {{item.DishName}}
-                        <small [ngClass]="{'red': item.Status == 'NeedHelp', 'green': item.Status == 'Started'}"> {{item.Status}}</small>
-                    </h3>
-                    <h5>{{item.Username}}</h5>
+        <div class="list-group" id="list-tab" data-bind="foreach: cookingData, click: cookingDetails.bind(cookingData)">
+                <a class="list-group-item list-group-item-action">
+                    <h5 data-bind="text: Username"> </h5>
+                    <img class="userImage img-responsive" src="./Content/images/small-logo.png" id="logo">
+                    <h3 data-bind="text: DishName"> </h3>
+                    <small data-bind="text: Status, css: { green: Status ==  'Started', red: Status == 'NeedHelp' }"> </small>
                 </a>
-            </div>
+        </div>
 
-            <div class="footer"></div>
-        </div>-->
+        <div class="footer">
+            <button class="btn">
+                Guests <span class="badge badge-secondary">9</span>
+                <span class="sr-only">unread messages</span>
+            </button>
+        </div>
 
     </div>
+
+    <div data-bind="with: cooking, visible: activeScreen() == Screen.Cooking" class="main-component">
+
+        <div class="header">
+            <img class="logo img-responsive" src="./Content/images/chef.png" id="logo">
+            <button class="btn btn-default return-button" data-bind="click: returnToMain">Return</button>
+            <p class="title" data-bind="text: cookingDetailsTitle"> </p>
+        </div>
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-header">
+                    Recipe details
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title" data-bind="text: recipeName"></h3>
+                    <p class="card-text" data-bind="text: recipeDetails"></p>
+                    <a href="#" class="btn btn-danger">Need help!</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Look what is cooking</h4>
+                    <p class="card-text">screen</p>
+                    <video width="520" height="340" controls></video>
+                    <p class="card-text"><small class="text-muted">Started 3 mins ago</small></p>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="footer"></div>
+    </div>
+
+    <!--<div data-bind="with:newCooking, visible: activeScreen() == Screen.NewCooking" class="main-component">
+        <div class="header">
+            <img class="logo img-responsive" src="./Content/images/chef.png" id="logo">
+            <button class="btn btn-default return-button" data-bind="click: returnToMain">Return</button>
+            <p class="title" data-bind="text: cookingDetailsTitle"> </p>
+        </div>
+        <p>add new..</p>
+        
+        <div class="footer"></div>
+    </div>-->
 
 </body>
 </html>
