@@ -86,7 +86,7 @@
             <p class="title">Live Chef</p>
         </div>
 
-        <img class="add-button img-responsive" src="./Content/images/addNew.png" data-bind="click: addNewCooking">
+        <img class="add-button img-responsive" src="./Content/images/addNew.png" data-bind="click: addNewCooking, visible: displayName != 'Guest' ">
 
         <div class="list-group" id="list-tab" data-bind="foreach: cookings, click: cookingDetails.bind(cookings)">
             <a class="list-group-item list-group-item-action">
