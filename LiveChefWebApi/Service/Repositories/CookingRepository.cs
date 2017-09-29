@@ -98,7 +98,15 @@ namespace LiveChefService.Models
 
             
             newDish.Ingredients = ingredients;
-            Add(new Cooking { Id = 4, Chef = newChef, Status = CookingStatus.NeedHelp, Dish = newDish });
+            Add(new Cooking { Id = 4, Chef = newChef, Status = CookingStatus.Finished, Dish = newDish });
+        }
+        public IEnumerable<Cooking> GetActiveCookings()
+        {
+            return this.items.FindAll(c => c.Status != CookingStatus.Finished);
+        }
+        public IEnumerable<Cooking> GetFinishedCookings()
+        {
+            return this.items.FindAll(c => c.Status == CookingStatus.Finished);
         }
     }
 }

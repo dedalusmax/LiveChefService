@@ -24,21 +24,39 @@ namespace LiveChefService
             this.Clients.All.cookingRemoved(item);
         }
 
-        internal void SendUserLoggedIn(User user)
+        public void GetAllRecipes()
         {
-            this.Clients.All.userLoggedIn(user);
-        }
-        internal void SendUserLoggedOut(User user)
-        {
-            this.Clients.All.userLoggedOut(user);
+            this.Clients.Caller.getAllRecipes(WebApiApplication.CookingRepository.GetAll());
         }
 
+        public void GetRecipe(Recipe item)
+        {
+            this.Clients.Caller.getRecipe(WebApiApplication.RecipeRepository.Get(item.Id));
+        }
+        
+        public void AddNewRecipe(Recipe item)
+        {
+            this.Clients.Caller.addRecipe(WebApiApplication.RecipeRepository.Add(item));
+        }
+
+        // stored cookings
+        public void GetStoredCookings()
+        {
+            this.Clients.Caller.getStoredCookings(WebApiApplication.CookingRepository.GetFinishedCookings());
+        }
         public override Task OnConnected()
         {
             this.Clients.Caller.usersInitiated(WebApiApplication.UserRepository.GetActiveUsers());
-            this.Clients.Caller.cookingsInitiated(WebApiApplication.CookingRepository.GetAll());
+
+            this.Clients.Caller.cookingsInitiated(WebApiApplication.CookingRepository.GetActiveCookings());
 
             return base.OnConnected();
+        }
+
+        // disconnected
+        public override Task OnDisconnected(bool stopCalled)
+        {
+            return base.OnDisconnected(stopCalled);
         }
     }
 }
