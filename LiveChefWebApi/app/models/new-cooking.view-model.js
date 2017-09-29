@@ -4,10 +4,11 @@ var NewCookingViewModel = function (parent) {
     var self = this;
     self.parent = parent;
 
+    self.cookie = '';
 
     self.useMicrophone = ko.observable(false)
     self.useCamera = ko.observable(false);
-
+    self.useChat = ko.observable(false);
 
     self.returnToMain = function () {
         root.showScreen(Screen.Main);
@@ -118,12 +119,26 @@ var NewCookingViewModel = function (parent) {
             }
             var audioSource = audioInputSelect.value;
             var videoSource = videoSelect.value;
-            var constraints = {
-                audio: { deviceId: audioSource ? { exact: audioSource } : undefined },
-                video: { deviceId: videoSource ? { exact: videoSource } : undefined }
-            };
-            navigator.mediaDevices.getUserMedia(constraints).
-                then(gotStream).then(gotDevices).catch(handleError);
+            //var constraints = {
+            //    audio: { deviceId: audioSource ? { exact: audioSource } : undefined },
+            //    video: { deviceId: videoSource ? { exact: videoSource } : undefined }
+            //};
+
+            var audio, video;
+
+            if (self.useMicrophone() == true) {
+                audio = "audio="+ audioSource + ";";
+            }
+
+            if (self.useCamera() == true) {
+                video = "video=" + videoSource + ";";
+            }
+            document.cookie = audio + video;
+            console.log("cookie: new-cooking: " + document.cookie);
+
+            self.cookie = document.cookie;
+            //navigator.mediaDevices.getUserMedia(constraints).
+            //    then(gotStream).then(gotDevices).catch(handleError);
         }
 
         audioInputSelect.onchange = start;

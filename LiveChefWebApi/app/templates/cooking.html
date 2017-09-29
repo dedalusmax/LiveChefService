@@ -17,16 +17,19 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-6">
+    <div class="col-sm-6" data-bind="visible: videoSource() !=  null">
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Look what is cooking</h4>
                 <p class="card-text">screen</p>
-                <video width="520" height="340" controls></video>
+                <video width="520" height="340" controls autoplay id="video"></video>
                 <p class="card-text"><small class="text-muted">Started 3 mins ago</small></p>
 
             </div>
         </div>
+    </div>
+    <div data-bind="visible: useChat() ==  true">
+        <textarea row:6></textarea>
     </div>
     <div class="footer"></div>
 </div>
