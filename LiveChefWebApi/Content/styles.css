@@ -148,12 +148,12 @@
 }
 
 .main-component .container {
-    background-image: url(./images/main-background.png);
+    /*background-image: url(./images/main-background.png);
     background-size: cover;
     width: 100%;
     bottom: 0;
     left: 0;
-    background-repeat: no-repeat;
+    background-repeat: no-repeat;*/
 }
 
 .main-component .header {
