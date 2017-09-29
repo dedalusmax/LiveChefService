@@ -3,6 +3,10 @@ $primary-color: #A70343;
 $border-color: rgba(0, 0, 0, 0.3);
 $hover-color: #67203c;
 $disabled-color: #c899ac;
+$panel-color: #fefafa;
+$highlight-color: #ffd800;
+
+// bootstrap overrides:
 
 .btn-primary {
     background-color: $primary-color;
@@ -29,6 +33,43 @@ $disabled-color: #c899ac;
     }
 }
 
+// animations:
+
+@keyframes popeye {
+    0% {
+        opacity: 0;
+        transform: rotate(180deg);
+    }
+
+    100% {
+        opacity: 1;
+        transform: rotate(0);
+    }
+}
+
+@keyframes slide {
+    0% {
+        opacity: 0;
+        margin-top: initial;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes hot {
+    100% {
+        color: $highlight-color;
+        //font-size: larger;
+    }
+}
+
+.container-fluid {
+    padding-right: 0;
+    padding-left: 0;
+}
+
 .login-component {
     background-image: url("./images/backgroundImage.jpg");
     text-align: center;
@@ -39,16 +80,61 @@ $disabled-color: #c899ac;
     left: 0;
     position: fixed;
 
-    .title {
-        padding-top: 5px;
-        font-family: cursive;
+    .col-sm-offset-2 {
+        margin-left: 0px;
+    }
+
+    .center {
+        margin: 0 auto;
+        position: relative;
+        left: 50%;
+        top: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+
+    .logo {
+        width: 388px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        animation: 1s ease-out 0s 1 popeye;
+    }
+
+    form {
+        background-color: $panel-color;
+        margin-top: -30px;
+        border-radius: 10px;
+        border: 1px solid $border-color;
+        -webkit-box-shadow: 0px 0px 8px $border-color;
+        -moz-box-shadow: 0px 0px 8px $border-color;
+        box-shadow: 0px 0px 8px $border-color;
+        width: 30%;
+        display: inline-block;
+        animation: 1s alternate slide;
+    }
+
+    h1 {
         font-size: 70px;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
         color: $primary-color;
-        text-shadow: 2px 2px 5px black;
+        text-shadow: 2px 2px 5px $border-color;
         margin-top: -40px;
+        margin-bottom: 0;
         position: relative;
         z-index: 1;
         font-weight: bold;
+
+        :first-child {
+            animation: infinite 0.5s alternate-reverse hot;
+        }
+    }
+
+    h3 {
+        font-stretch: condensed;
+        color: $primary-color;
+        text-shadow: 2px 2px 5px $border-color;
+        margin-top: 0;
     }
 
     button {
@@ -58,237 +144,152 @@ $disabled-color: #c899ac;
         font-size: 15px;
     }
 
-    .logo {
-        width: 388px;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    form {
-        background-color: white;
-        margin-top: -30px;
-        border-radius: 10px;
-        border: 1px solid #999;
-        border: inset 1px solid #333;
-        -webkit-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
-        -moz-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
-        box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
-        width: 800px;
-    }
-
-    h3 .subtitle {
-        font-size: 20px;
-        font-family: cursive;
-        text-shadow: 2px 2px 5px #BF82A4;
-        margin-top: 10px;
-    }
-
     .alert {
         display: inline-block;
         margin-top: 10px;
     }
+}
 
-    #logo {
-        animation-duration: 1s;
-        animation-delay: 0s;
+.main-component {
+    .container {
+        background-image: url(./images/main-background.png);
+        background-size: cover;
+        width: 100%;
+        bottom: 0;
+        left: 0;
+        background-repeat: no-repeat;
     }
 
-    #form {
-        animation-duration: 1s;
-        animation-delay: 0s;
+    .header {
+        background-color: darkslategray;
+        color: white;
+        font-size: 50px;
+        margin-bottom: 10px;
+        display: list-item;
+    }
+
+    .title {
+        float: left;
+        font-size: 40px;
+    }
+
+    .logo {
+        width: 60px;
+        float: left;
+        margin: 5px 15px;
+    }
+
+    .userImage {
+        width: 80px;
+        float: left;
+        padding: 10px;
+    }
+
+    .logout-button {
+        /*margin-left: 50%;*/
+        float: right;
+        margin-top: 20px;
+        margin-right: 20px;
+    }
+
+    .return-button {
+        /*margin-left: 60%;*/
+        float: right;
+        margin-top: 20px;
+        margin-right: 20px;
+    }
+
+    .red {
+        color: red;
+    }
+
+    .green {
+        color: green;
+    }
+
+    .list-group-item {
+        padding: 5px 5px;
+        margin: 10px;
+    }
+
+    h5 {
+        padding-left: 25px;
+        margin-bottom: 0;
+    }
+
+    h3 {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .userLogin {
+        float: right;
+        font-size: 15px;
+        margin-right: 25px;
+        margin-top: 25px;
+    }
+
+    .add-button {
+        width: 3%;
+        margin: 10px;
+    }
+
+    .footer {
+        margin: 0;
+        background-color: darkslategray;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        padding: 2rem;
+    }
+
+    .footer-new-cooking {
+        margin: 0;
+        background-color: darkslategray;
+        position: inherit;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        padding: 2rem;
+    }
+
+    form {
+        margin-top: 10%;
     }
 }
 
-$medium-device-width: 992px;
-
 /* Medium devices (tablets, 768px and up) */
+$medium-device-width: 768px;
 
 @media (max-width: $medium-device-width) {
 
-    .login-component .title {
-        font-size: 50px;
-    }
-
-
-    .login-component form {
-        margin: 0px;
-    }
-
-    .login-component button {
-        width: 60%;
-    }
-}
-
-/* Medium devices (tablets, 768px and up) */
-
-@media (min-width: 768px) {
-    .login-component .col-sm-offset-2 {
-        margin-left: 0px;
-    }
-
-    .login-component .center {
-        margin: 0 auto;
-        position: relative;
-        left: 50%;
-        top: 50%;
-        -webkit-transform: translate(-50%, -50%);
-        transform: translate(-50%, -50%);
-    }
-}
-
-/* small  - Landscape phones */
-@media (max-width: 768px) {
     .login-component {
         background-image: none;
+
+        .logo {
+            width: 80%;
+        }
+
+        h1 {
+            font-size: 30px;
+        }
+
+        form {
+            margin: 0px;
+            border: none;
+            box-shadow: none;
+        }
+
+        button {
+            width: 100%;
+        }
     }
 
-    .login-component form {
-        margin-left: 40px;
-        margin-right: 40px;
-        border: none;
-        box-shadow: none;
+    .main-component {
+        .add-button {
+            width: 10% !important;
+            padding-top: 10px;
+        }
     }
-
-    .login-component button {
-        width: 100%;
-    }
-
-    .login-component .title {
-        font-size: 30px;
-    }
-
-    .login-component .logo {
-        width: 250px;
-    }
-
-    .main-component .add-button {
-        width: 10% !important;
-        padding-top: 10px;
-    }
-}
-
-@media (min-width: 992px) {
-    .login-component form {
-        width: 30%;
-        display: inline-block;
-    }
-}
-
-@media (min-width: 1200px) {
-    .login-component .logo {
-        padding-top: 5px;
-    }
-}
-
-.container-fluid {
-    padding-right: 0;
-    padding-left: 0;
-}
-
-.main-component .container {
-    background-image: url(./images/main-background.png);
-    background-size: cover;
-    width: 100%;
-    bottom: 0;
-    left: 0;
-    background-repeat: no-repeat;
-}
-
-.main-component .header {
-    background-color: darkslategray;
-    color: white;
-    font-size: 50px;
-    margin-bottom: 10px;
-    display: list-item;
-}
-
-.main-component .title {
-    float: left;
-    font-size: 40px;
-}
-
-.main-component .logo {
-    width: 60px;
-    float: left;
-    margin: 5px 15px;
-}
-
-.main-component .userImage {
-    width: 80px;
-    float: left;
-    padding: 10px;
-}
-
-.main-component .logout-button {
-    /*margin-left: 50%;*/
-    float: right;
-    margin-top: 20px;
-    margin-right: 20px;
-}
-
-.main-component .return-button {
-    /*margin-left: 60%;*/
-    float: right;
-    margin-top: 20px;
-    margin-right: 20px;
-}
-
-.main-component .red {
-    color: red;
-}
-
-.main-component .green {
-    color: green;
-}
-
-.main-component .list-group-item {
-    padding: 5px 5px;
-    margin: 10px;
-}
-
-.main-component h5 {
-    padding-left: 25px;
-    margin-bottom: 0;
-}
-
-.main-component h3 {
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
-.main-component .userLogin {
-    float: right;
-    font-size: 15px;
-    margin-right: 25px;
-    margin-top: 25px;
-}
-
-.main-component .add-button {
-    width: 3%;
-    margin: 10px;
-}
-
-.main-component .footer {
-    margin: 0;
-    background-color: darkslategray;
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    padding: 2rem;
-}
-
-.main-component .footer-new-cooking {
-    margin: 0;
-    background-color: darkslategray;
-    position: inherit;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    padding: 2rem;
-}
-
-.main-component form {
-    margin-top: 10%;
 }
