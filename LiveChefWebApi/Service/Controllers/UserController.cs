@@ -62,6 +62,7 @@ namespace LiveChefService.Controllers
             IHubContext context = GlobalHost.ConnectionManager.GetHubContext<ChefHub>();
             item.IsLoggedIn = true;
             item.IsGuest = true;
+            item.DisplayName = "Guest";
 
             WebApiApplication.UserRepository.Add(item);
             context.Clients.All.userLoggedIn(item);

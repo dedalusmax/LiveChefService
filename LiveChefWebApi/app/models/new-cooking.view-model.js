@@ -18,6 +18,17 @@ var NewCookingViewModel = function (parent) {
         root.showScreen(Screen.Cooking);
     };
 
+   var hub = $.connection.chefHub;
+
+    self.recipes = ko.observableArray(); 
+
+    hub.server.getAllRecipes().done(function (recipes) {
+        recipes.forEach(function (recipe) {
+            self.recipes.push(recipe);
+            console.log("Recipe: " + recipe );
+        });
+    });
+
     $(document).ready(function () {
         var videoElement = document.querySelector('video');
         var audioInputSelect = document.querySelector('select#audioSource');

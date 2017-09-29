@@ -1,5 +1,6 @@
 ﻿using LiveChefService.Models;
 using Microsoft.AspNet.SignalR;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LiveChefService
@@ -24,9 +25,9 @@ namespace LiveChefService
             this.Clients.All.cookingRemoved(item);
         }
 
-        public void GetAllRecipes()
+        public IEnumerable<Recipe> GetAllRecipes()
         {
-            this.Clients.Caller.getAllRecipes(WebApiApplication.CookingRepository.GetAll());
+            return WebApiApplication.RecipeRepository.GetAll();
         }
 
         public void GetRecipe(Recipe item)
@@ -49,7 +50,7 @@ namespace LiveChefService
             this.Clients.Caller.usersInitiated(WebApiApplication.UserRepository.GetActiveUsers());
 
             this.Clients.Caller.cookingsInitiated(WebApiApplication.CookingRepository.GetActiveCookings());
-
+            
             return base.OnConnected();
         }
 
