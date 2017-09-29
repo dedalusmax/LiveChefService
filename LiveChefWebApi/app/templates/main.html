@@ -1,28 +1,111 @@
 ﻿<div data-bind="with: main" class="main-component">
 
-    <div class="header">
-        <img class="logo img-responsive" src="./Content/images/chef.png" id="logo">
-        <div class="userLogin" data-bind="text: parent.user.displayName"></div>
-        <p class="title">Live Chef</p>
-        <button class="btn btn-default logout-button" data-bind="click: logout">Login as another user</button>
-    </div>
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <p class="navbar-brand">Live Chef</p>
+                <!--<a class="navbar-brand" href="#">
+                    <img class="logo" src="./Content/images/chef.png">
+                </a>
+                <h1>
+                    <span>Live</span>
+                    <span>Chef</span>
+                </h1>-->
+            </div>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Live Cooking!</a></li>
+                <li><a href="#">Fine Recipes</a></li>
+                <li><a href="#">Recorded cookings</a></li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li data-bind="click: logout"><a href="#"><span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp;Logout</a></li>
+            </ul>
+            <p class="navbar-text navbar-right" data-bind="text: 'Welcome ' + parent.user.displayName"></p>
+            <form class="navbar-form navbar-right" role="search">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search food">
+                    <div class="input-group-btn">
+                        <button class="btn btn-default" type="submit">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </nav>
 
     <img class="add-button img-responsive" src="./Content/images/addNew.png" data-bind="click: addNewCooking, visible: !parent.user.isGuest">
 
-    <div class="list-group" id="list-tab" data-bind="foreach: cookings, click: cookingDetails.bind(cookings)">
+    <!--<div class="list-group" id="list-tab" data-bind="foreach: cookings, click: cookingDetails.bind(cookings)">
         <a class="list-group-item list-group-item-action">
             <h5 data-bind="text: chef.displayName"> </h5>
             <img class="userImage img-responsive" src="./Content/images/small-logo.png" id="logo">
             <h3 data-bind="text: dish.name"> </h3>
             <small data-bind="text: status, css: { green: status ==  1, red: status == 3 }"> </small>
         </a>
-    </div>
+    </div>-->
 
-    <div class="footer">
-        <button class="btn">
-            Guests <span class="badge badge-secondary">9</span>
-            <span class="sr-only">unread messages</span>
-        </button>
-    </div>
+    <!--<div class="card-deck" data-bind="foreach: cookings, click: cookingDetails.bind(cookings)">
+        <div class="card">
+            <img class="card-img-top" src="./Content/images/page1-img1.jpg" alt="Card image cap">
+            <div class="card-block">
+                <h4 class="card-title" data-bind="text: dish.name"></h4>
+                <h5 data-bind="text: chef.displayName"> </h5>
+                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+            </div>
+            <p class="card-footer"><small class="text-muted" data-bind="text: chef.displayName"></small></p>
+        </div>
+    </div>-->
 
-</div>
+        <div class="card-deck">
+            <div class="card">
+                <img class="card-img-top" src="./Content/images/page1-img1.jpg" alt="Card image cap">
+                <div class="card-block">
+                    <h4 class="card-title">Card title</h4>
+                    <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                </div>
+                <p class="card-footer"><small class="text-muted">Last updated 3 mins ago</small></p>
+            </div>
+            <div class="card">
+                <img class="card-img-top" src="./Content/images/page1-img2.jpg" alt="Card image cap">
+                <div class="card-block">
+                    <h4 class="card-title">Card title</h4>
+                    <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                </div>
+                <p class="card-footer"><small class="text-muted">Last updated 3 mins ago</small></p>
+            </div>
+            <div class="card">
+                <img class="card-img-top" src="./Content/images/page1-img3.jpg" alt="Card image cap">
+                <div class="card-block">
+                    <h4 class="card-title">Card title</h4>
+                    <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                </div>
+                <p class="card-footer"><small class="text-muted">Last updated 3 mins ago</small></p>
+            </div>
+            <div class="card">
+                <img class="card-img-top" src="./Content/images/page1-img4.jpg" alt="Card image cap">
+                <div class="card-block">
+                    <h4 class="card-title">Card title</h4>
+                    <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                </div>
+                <p class="card-footer"><small class="text-muted">Last updated 3 mins ago</small></p>
+            </div>
+            <div class="card">
+                <img class="card-img-top" src="">
+                <div class="card-block">
+                    <h4 class="card-title">Card title</h4>
+                    <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                </div>
+                <p class="card-footer"><small class="text-muted">Last updated 3 mins ago</small></p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <button class="btn">
+                Guests <span class="badge badge-secondary">9</span>
+                <span class="sr-only">unread messages</span>
+            </button>
+        </div>
+
+    </div>
