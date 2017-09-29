@@ -12,6 +12,18 @@ namespace LiveChefService
             this.Clients.All.cookingAdded(item);
         }
 
+        public void UpdateCooking(Cooking item)
+        {
+            WebApiApplication.CookingRepository.Change(item);
+            this.Clients.All.cookingUpdated(item);
+        }
+
+        public void RemoveCooking(Cooking item)
+        {
+            WebApiApplication.CookingRepository.Remove(item.Id);
+            this.Clients.All.cookingRemoved(item);
+        }
+
         internal void SendUserLoggedIn(User user)
         {
             this.Clients.All.userLoggedIn(user);
@@ -23,8 +35,8 @@ namespace LiveChefService
 
         public override Task OnConnected()
         {
-            this.Clients.Caller.usersUpdated(WebApiApplication.UserRepository.GetActiveUsers());
-            this.Clients.Caller.cookingsUpdated(WebApiApplication.CookingRepository.GetAll());
+            this.Clients.Caller.usersInitiated(WebApiApplication.UserRepository.GetActiveUsers());
+            this.Clients.Caller.cookingsInitiated(WebApiApplication.CookingRepository.GetAll());
 
             return base.OnConnected();
         }

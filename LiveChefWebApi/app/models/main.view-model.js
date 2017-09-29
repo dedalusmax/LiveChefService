@@ -31,14 +31,14 @@
         console.log('User logged-in: ' + user.username);
     };
 
-    hub.client.usersUpdated = function (users) {
+    hub.client.usersInitiated = function (users) {
 
         users.forEach(function (user) {
             console.log('User updated: ' + user.displayName);
         });
     }
 
-    hub.client.cookingsUpdated = function (cookings) {
+    hub.client.cookingsInitiated = function (cookings) {
         cookings.forEach(function (cooking) {
             self.cookings.push(cooking);
             console.log('Cooking updated: ' + cooking.dishName);
