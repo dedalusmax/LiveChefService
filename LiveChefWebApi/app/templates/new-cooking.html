@@ -40,32 +40,33 @@
                 <div class="col-sm-10">
                     <div class="form-check">
                         <label class="form-check-label">
-                            <input class="form-check-input" type="checkbox"> Use microphone
+                            <input class="form-check-input" type="checkbox" data-bind="checked: useMicrophone"> Use microphone
                         </label>
                     </div>
                 </div>
             </div>
-            <div class="select">
-                <label for="audioSource">Audio input source: </label><select id="audioSource"></select>
+            <div class="select" data-bind="visible: useMicrophone() == true">
+                <label for="audioSource" class="col-sm-2">Audio input source: </label>
+                <select id="audioSource" class="col-sm-10"></select>
             </div>
-            <div class="select">
-                <label for="audioOutput">Audio output destination: </label><select id="audioOutput"></select>
+            <div class="select" data-bind="visible: useMicrophone() == true">
+                <label for="audioOutput"  class="col-sm-2">Audio output destination: </label>
+                <select id="audioOutput" class="col-sm-10"></select>
             </div>
             <div class="form-group row">
                 <div class="col-sm-2"></div>
                 <div class="col-sm-10">
                     <div class="form-check">
                         <label class="form-check-label">
-                            <input class="form-check-input" type="checkbox"> Use camera
+                            <input class="form-check-input" type="checkbox" data-bind="checked: useCamera"> Use camera
                         </label>
                     </div>
                 </div>
             </div>
-            <div class="select">
-                <label for="videoSource">Video source: </label><select id="videoSource"></select>
+            <div class="select" data-bind="visible: useCamera() == true">
+                <label for="videoSource"  class="col-sm-2">Video source: </label>
+                <select id="videoSource" class="col-sm-10"></select>
             </div>
-
-            <video id="video" autoplay></video>
             <div class="form-group row">
                 <div class="col-sm-2"></div>
                 <div class="col-sm-10">

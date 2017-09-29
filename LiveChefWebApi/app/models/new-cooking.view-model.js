@@ -5,6 +5,10 @@ var NewCookingViewModel = function (parent) {
     self.parent = parent;
 
 
+    self.useMicrophone = ko.observable(false)
+    self.useCamera = ko.observable(false);
+
+
     self.returnToMain = function () {
         root.showScreen(Screen.Main);
     };
