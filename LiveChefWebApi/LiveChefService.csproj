@@ -157,6 +157,7 @@
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
+    <Content Include="Scripts\adapter-latest.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\infuser.js" />
