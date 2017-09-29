@@ -130,6 +130,9 @@
     <Content Include="Content\images\chef.png" />
     <Content Include="Content\images\small-logo.png" />
     <Content Include="Content\styles.css" />
+    <Content Include="Content\styles.min.css">
+      <DependentUpon>styles.css</DependentUpon>
+    </Content>
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="index.html" />
@@ -141,6 +144,14 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Content\styles.scss" />
+    <None Include="compilerconfig.json" />
+    <Content Include="compilerconfig.json.bindings">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </Content>
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
