@@ -1,0 +1,44 @@
+﻿<div data-bind="with: login" class="login-component img-responsive">
+
+    <div class="center">
+        <img class="logo img-responsive animated rotateIn" src="./Content/images/chef.png" id="logo">
+        <form class="form-horizontal animated fadeIn" role="form" id="form" (ngSubmit)="onSubmit()">
+            <h1 class="title">
+                <span>Live</span>
+                <span>Chef</span>
+            </h1>
+            <h3 class="subtitle">Cooking made simple</h3>
+
+            <div class="form-group">
+                <div class="col-xs-6 col-xs-offset-3">
+                    <div class="input-group">
+                        <span class="input-group-addon transparent"><span class="glyphicon glyphicon-user"></span></span>
+                        <input class="form-control left-border-none" placeholder="Enter username" type="text" name="username" data-bind="value: userName">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-xs-6 col-xs-offset-3">
+                    <div class="input-group">
+                        <span class="input-group-addon transparent"><span class="glyphicon glyphicon-lock"></span></span>
+                        <input class="form-control left-border-none" placeholder="Enter password" type="text" name="password" data-bind="value: password">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-10">
+                    <button type="submit" class="btn btn-primary" data-bind="click: loginUser">Login</button>
+                    <button type="button" class="btn btn-primary disabled">Signup</button>
+                </div>
+                <div data-bind="visible: error" class="alert alert-danger col-5 col-offset-4" role="alert">
+                    <span data-bind="text: error"></span>
+                </div>
+                <div class="col-sm-offset-2 col-10">
+                    <button type="button" class="btn btn-link btn-lg" data-bind="click: loginAsGuest">I'm just looking</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

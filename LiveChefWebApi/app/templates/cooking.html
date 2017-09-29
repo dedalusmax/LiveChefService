@@ -1,0 +1,32 @@
+﻿<div data-bind="with: cooking" class="main-component">
+
+    <div class="header">
+        <img class="logo img-responsive" src="./Content/images/chef.png" id="logo">
+        <button class="btn btn-default return-button" data-bind="click: returnToMain">Return</button>
+        <p class="title" data-bind="text: cookingDetailsTitle"> </p>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-header">
+                Recipe details
+            </div>
+            <div class="card-body">
+                <h3 class="card-title" data-bind="text: recipeName"></h3>
+                <p class="card-text" data-bind="text: recipeDetails"></p>
+                <a href="#" class="btn btn-danger">Need help!</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Look what is cooking</h4>
+                <p class="card-text">screen</p>
+                <video width="520" height="340" controls></video>
+                <p class="card-text"><small class="text-muted">Started 3 mins ago</small></p>
+
+            </div>
+        </div>
+    </div>
+    <div class="footer"></div>
+</div>

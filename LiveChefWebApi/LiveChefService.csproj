@@ -121,6 +121,10 @@
     <Content Include="app\index.js" />
     <Content Include="app\services\signalr.service.js" />
     <Content Include="app\services\tools.service.js" />
+    <Content Include="app\templates\cooking.html" />
+    <Content Include="app\templates\login.html" />
+    <Content Include="app\templates\main.html" />
+    <Content Include="app\templates\new-cooking.html" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -155,6 +159,7 @@
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\infuser.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\jquery-3.2.1.min.js" />
@@ -162,6 +167,8 @@
     <Content Include="Scripts\jquery.signalR-2.2.2.min.js" />
     <Content Include="Scripts\knockout-3.4.2.debug.js" />
     <Content Include="Scripts\knockout-3.4.2.js" />
+    <Content Include="Scripts\koExternalTemplateEngine.js" />
+    <Content Include="Scripts\TrafficCop.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

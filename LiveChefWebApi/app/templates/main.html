@@ -1,0 +1,28 @@
+﻿<div data-bind="with: main" class="main-component">
+
+    <div class="header">
+        <img class="logo img-responsive" src="./Content/images/chef.png" id="logo">
+        <div class="userLogin" data-bind="text: displayName"></div>
+        <button class="btn btn-default logout-button" data-bind="click: logout">Login as another user</button>
+        <p class="title">Live Chef</p>
+    </div>
+
+    <img class="add-button img-responsive" src="./Content/images/addNew.png" data-bind="click: addNewCooking, visible: displayName != 'Guest' ">
+
+    <div class="list-group" id="list-tab" data-bind="foreach: cookings, click: cookingDetails.bind(cookings)">
+        <a class="list-group-item list-group-item-action">
+            <h5 data-bind="text: chef.displayName"> </h5>
+            <img class="userImage img-responsive" src="./Content/images/small-logo.png" id="logo">
+            <h3 data-bind="text: dish.name"> </h3>
+            <small data-bind="text: status, css: { green: status ==  1, red: status == 3 }"> </small>
+        </a>
+    </div>
+
+    <div class="footer">
+        <button class="btn">
+            Guests <span class="badge badge-secondary">9</span>
+            <span class="sr-only">unread messages</span>
+        </button>
+    </div>
+
+</div>
