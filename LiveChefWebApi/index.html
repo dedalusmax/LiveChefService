@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="Content/bootstrap.min.css" />
     <script src="Scripts/bootstrap.js"></script>
     <link rel="stylesheet" href="Content/styles.css" type="text/css" />
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- necessary for SignalR -->
     <script src="signalr/hubs"></script>
 
@@ -63,8 +63,8 @@
 
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-10">
-                        <button type="submit" class="btn btn-default" data-bind="click: loginUser">Login</button>
-                        <button type="button" class="btn btn-default disabled">Signup</button>
+                        <button type="submit" class="btn btn-primary" data-bind="click: loginUser">Login</button>
+                        <button type="button" class="btn btn-primary disabled">Signup</button>
                     </div>
                     <div data-bind="visible: error" class="alert alert-danger col-5 col-offset-4" role="alert">
                         <span data-bind="text: error"></span>
@@ -86,15 +86,15 @@
             <p class="title">Live Chef</p>
         </div>
 
-        <img class="add-button img-responsive" src="./Content/images/addNew.png" data-bind="click: addNewCooking">
+        <img class="add-button img-responsive" src="./Content/images/addNew.png" data-bind="click: addNewCooking, visible: displayName != 'Guest' ">
 
         <div class="list-group" id="list-tab" data-bind="foreach: cookings, click: cookingDetails.bind(cookings)">
-                <a class="list-group-item list-group-item-action">
-                    <h5 data-bind="text: chef.displayName"> </h5>
-                    <img class="userImage img-responsive" src="./Content/images/small-logo.png" id="logo">
-                    <h3 data-bind="text: dish.name"> </h3>
-                    <small data-bind="text: status, css: { green: status ==  'Started', red: status == 'NeedHelp' }"> </small>
-                </a>
+            <a class="list-group-item list-group-item-action">
+                <h5 data-bind="text: chef.displayName"> </h5>
+                <img class="userImage img-responsive" src="./Content/images/small-logo.png" id="logo">
+                <h3 data-bind="text: dish.name"> </h3>
+                <small data-bind="text: status, css: { green: status ==  1, red: status == 3 }"> </small>
+            </a>
         </div>
 
         <div class="footer">
@@ -132,7 +132,7 @@
                     <p class="card-text">screen</p>
                     <video width="520" height="340" controls></video>
                     <p class="card-text"><small class="text-muted">Started 3 mins ago</small></p>
-                    
+
                 </div>
             </div>
         </div>
@@ -145,9 +145,87 @@
             <button class="btn btn-default return-button" data-bind="click: returnToMain">Return</button>
             <p class="title">NEW COOOOOOKING!</p>
         </div>
-        <p>add new..</p>
-        
-        <div class="footer"></div>
+        <div class="container">
+            <form>
+                <div class="form-group row">
+                    <label for="recipeName" class="col-sm-2 col-form-label">Name of recipe</label>
+                    <div class="col-sm-10">
+                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="recipeName">
+                            <option selected>Choose...</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="duration" class="col-sm-2 col-form-label">Duration of cooking</label>
+                    <div class="col-sm-10">
+                        <input type="number" class="form-control" id="duration" placeholder="Duration">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="ingredients" class="col-sm-2 col-form-label">Ingredients</label>
+                    <div class="col-sm-10">
+                        <textarea type="text" class="form-control" id="ingredients" placeholder="Ingredients" rows="4"></textarea>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="difficultyLevel" class="col-sm-2 col-form-label">Difficulty level</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="duration" placeholder="Difficulty level">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-10">
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox"> Use audio
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-10">
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox"> Use video
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-10">
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox"> Use chat
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-10">
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox"> I need help
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-10">
+                        <button type="submit" class="btn btn-primary btn-lg" data-bind="click:startCooking">Start cooking</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="footer-new-cooking"></div>
     </div>
 
 </body>

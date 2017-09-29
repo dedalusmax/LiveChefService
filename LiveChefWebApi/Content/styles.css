@@ -75,6 +75,7 @@
         font-size: 50px;
     }
 
+
     .login-component form {
         margin: 0px;
     }
@@ -122,8 +123,12 @@
         .login-component .logo {
             width: 250px;
         }
-}
 
+    .main-component .add-button {
+        width: 10% !important;
+        padding-top: 10px;
+    }
+}
 @media (min-width: 992px) {
     .login-component form {
         width: 30%;
@@ -138,8 +143,17 @@
 }
 
 .container-fluid {
-     padding-right: 0; 
-     padding-left: 0; 
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.main-component .container {
+    background-image: url(./images/main-background.png);
+    background-size: cover;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    background-repeat: no-repeat;
 }
 
 .main-component .header {
@@ -147,10 +161,12 @@
     color: white;
     font-size: 50px;
     margin-bottom: 10px;
+    display: list-item;
 }
 
-.main-component .title{
+.main-component .title {
     float: left;
+    font-size: 40px;
 }
 
 .main-component .logo {
@@ -165,13 +181,20 @@
     padding: 10px;
 }
 
-.main-component .logout-button{
-    margin-left: 70%;
+.main-component .logout-button {
+    /*margin-left: 50%;*/
+    float: right;
+    margin-top: 20px;
+    margin-right: 20px;
 }
 
-.main-component .return-button{
-    margin-left: 60%;
+.main-component .return-button {
+    /*margin-left: 60%;*/
+    float: right;
+    margin-top: 20px;
+    margin-right: 20px;
 }
+
 .main-component .red {
     color: red;
 }
@@ -194,16 +217,19 @@
     margin-top: 10px;
     margin-bottom: 10px;
 }
-.main-component .userLogin{
+
+.main-component .userLogin {
     float: right;
     font-size: 15px;
     margin-right: 25px;
     margin-top: 25px;
 }
-.main-component .add-button{
+
+.main-component .add-button {
     width: 3%;
     margin: 10px;
 }
+
 .main-component .footer {
     margin: 0;
     background-color: darkslategray;
@@ -212,4 +238,18 @@
     bottom: 0;
     left: 0;
     padding: 2rem;
+}
+
+.main-component .footer-new-cooking {
+    margin: 0;
+    background-color: darkslategray;
+    position: inherit;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 2rem;
+}
+
+.main-component form {
+    margin-top: 10%;
 }
