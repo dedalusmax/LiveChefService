@@ -2,6 +2,8 @@
 
 $(document).ready(function () {
 
+    infuser.defaults.templateUrl = "app/templates";
+
     root = new RootViewModel();
     ko.applyBindings(root);
 });
