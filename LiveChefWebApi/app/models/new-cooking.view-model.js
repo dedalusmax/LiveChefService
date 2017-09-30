@@ -19,60 +19,62 @@ var NewCookingViewModel = function (parent) {
         root.showScreen(Screen.Cooking);
     };
 
-   var hub = $.connection.chefHub;
+    var hub = $.connection.chefHub;
 
-    self.recipes = ko.observableArray(); 
+    self.recipes = ko.observableArray();
 
     hub.server.getAllRecipes().done(function (recipes) {
         recipes.forEach(function (recipe) {
             self.recipes.push(recipe);
-            console.log("Recipe: " + recipe );
+            console.log("Recipe: " + recipe);
         });
     });
 
     $(document).ready(function () {
-        var videoElement = document.querySelector('video');
-        var audioInputSelect = document.querySelector('select#audioSource');
-        var audioOutputSelect = document.querySelector('select#audioOutput');
-        var videoSelect = document.querySelector('select#videoSource');
-        var selectors = [audioInputSelect, audioOutputSelect, videoSelect];
-
+        var self = this;
+        self.videoElement = document.querySelector('video');
+        self.audioInputSelect = document.querySelector('select#audioSource');
+        self.audioOutputSelect = document.querySelector('select#audioOutput');
+        self.videoSelect = document.querySelector('select#videoSource');
+        self.selectors = [self.audioInputSelect, self.audioOutputSelect, self.videoSelect];
         function gotDevices(deviceInfos) {
             // Handles being called several times to update labels. Preserve values.
-            var values = selectors.map(function (select) {
-                return select.value;
-            });
-            selectors.forEach(function (select) {
-                while (select.firstChild) {
-                    select.removeChild(select.firstChild);
+            if (self.selectors) {
+                var values = self.selectors.map(function (select) {
+                    return select.value;
+                });
+                self.selectors.forEach(function (select) {
+                    while (select.firstChild) {
+                        select.removeChild(select.firstChild);
+                    }
+                });
+                for (var i = 0; i !== deviceInfos.length; ++i) {
+                    var deviceInfo = deviceInfos[i];
+                    var option = document.createElement('option');
+                    option.value = deviceInfo.deviceId;
+                    if (deviceInfo.kind === 'audioinput') {
+                        option.text = deviceInfo.label ||
+                            'microphone ' + (self.audioInputSelect.length + 1);
+                        self.audioInputSelect.appendChild(option);
+                    } else if (deviceInfo.kind === 'audiooutput') {
+                        option.text = deviceInfo.label || 'speaker ' +
+                            (self.audioOutputSelect.length + 1);
+                        self.audioOutputSelect.appendChild(option);
+                    } else if (deviceInfo.kind === 'videoinput') {
+                        option.text = deviceInfo.label || 'camera ' + (self.videoSelect.length + 1);
+                        self.videoSelect.appendChild(option);
+                    } else {
+                        console.log('Some other kind of source/device: ', deviceInfo);
+                    }
                 }
-            });
-            for (var i = 0; i !== deviceInfos.length; ++i) {
-                var deviceInfo = deviceInfos[i];
-                var option = document.createElement('option');
-                option.value = deviceInfo.deviceId;
-                if (deviceInfo.kind === 'audioinput') {
-                    option.text = deviceInfo.label ||
-                        'microphone ' + (audioInputSelect.length + 1);
-                    audioInputSelect.appendChild(option);
-                } else if (deviceInfo.kind === 'audiooutput') {
-                    option.text = deviceInfo.label || 'speaker ' +
-                        (audioOutputSelect.length + 1);
-                    audioOutputSelect.appendChild(option);
-                } else if (deviceInfo.kind === 'videoinput') {
-                    option.text = deviceInfo.label || 'camera ' + (videoSelect.length + 1);
-                    videoSelect.appendChild(option);
-                } else {
-                    console.log('Some other kind of source/device: ', deviceInfo);
-                }
+                self.selectors.forEach(function (select, selectorIndex) {
+                    if (Array.prototype.slice.call(select.childNodes).some(function (n) {
+                        return n.value === values[selectorIndex];
+                    })) {
+                        select.value = values[selectorIndex];
+                    }
+                });
             }
-            selectors.forEach(function (select, selectorIndex) {
-                if (Array.prototype.slice.call(select.childNodes).some(function (n) {
-                  return n.value === values[selectorIndex];
-                })) {
-                    select.value = values[selectorIndex];
-                }
-            });
         }
 
         navigator.mediaDevices.enumerateDevices().then(gotDevices).catch(handleError);
@@ -81,44 +83,37 @@ var NewCookingViewModel = function (parent) {
         function attachSinkId(element, sinkId) {
             if (typeof element.sinkId !== 'undefined') {
                 element.setSinkId(sinkId)
-                .then(function () {
-                    console.log('Success, audio output device attached: ' + sinkId);
-                })
-                .catch(function (error) {
-                    var errorMessage = error;
-                    if (error.name === 'SecurityError') {
-                        errorMessage = 'You need to use HTTPS for selecting audio output ' +
-                            'device: ' + error;
-                    }
-                    console.error(errorMessage);
-                    // Jump back to first output device in the list as it's the default.
-                    audioOutputSelect.selectedIndex = 0;
-                });
+                    .then(function () {
+                        console.log('Success, audio output device attached: ' + sinkId);
+                    })
+                    .catch(function (error) {
+                        var errorMessage = error;
+                        if (error.name === 'SecurityError') {
+                            errorMessage = 'You need to use HTTPS for selecting audio output ' +
+                                'device: ' + error;
+                        }
+                        console.error(errorMessage);
+                        // Jump back to first output device in the list as it's the default.
+                        self.audioOutputSelect.selectedIndex = 0;
+                    });
             } else {
                 console.warn('Browser does not support output device selection.');
             }
         }
 
-        function changeAudioDestination() {
-            var audioDestination = audioOutputSelect.value;
-            attachSinkId(videoElement, audioDestination);
-        }
-
-        function gotStream(stream) {
-            window.stream = stream; // make stream available to console
-            videoElement.srcObject = stream;
-            // Refresh button list in case labels have become available
-            return navigator.mediaDevices.enumerateDevices();
-        }
-
-        function start() {
+        self.changeAudioDestination = function () {
+            var audioDestination = self.audioOutputSelect.value;
+            attachSinkId(self.videoElement, audioDestination);
+        };
+        var self = this;
+        self.start = function () {
             if (window.stream) {
                 window.stream.getTracks().forEach(function (track) {
                     track.stop();
                 });
             }
-            var audioSource = audioInputSelect.value;
-            var videoSource = videoSelect.value;
+            var audioSource = self.audioInputSelect.value;
+            var videoSource = self.videoSelect.value;
             //var constraints = {
             //    audio: { deviceId: audioSource ? { exact: audioSource } : undefined },
             //    video: { deviceId: videoSource ? { exact: videoSource } : undefined }
@@ -127,7 +122,7 @@ var NewCookingViewModel = function (parent) {
             var audio, video;
 
             if (self.useMicrophone() == true) {
-                audio = "audio="+ audioSource + ";";
+                audio = "audio=" + audioSource + ";";
             }
 
             if (self.useCamera() == true) {
@@ -139,13 +134,13 @@ var NewCookingViewModel = function (parent) {
             self.cookie = document.cookie;
             //navigator.mediaDevices.getUserMedia(constraints).
             //    then(gotStream).then(gotDevices).catch(handleError);
-        }
+        };
 
-        audioInputSelect.onchange = start;
-        audioOutputSelect.onchange = changeAudioDestination;
-        videoSelect.onchange = start;
+        self.audioInputSelect.onchange = self.start;
+        self.audioOutputSelect.onchange = self.changeAudioDestination;
+        self.videoSelect.onchange = self.start;
 
-        start();
+        self.start;
 
         function handleError(error) {
             console.log('navigator.getUserMedia error: ', error);
