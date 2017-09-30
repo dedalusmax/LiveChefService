@@ -22,6 +22,10 @@ var NewCookingViewModel = function (parent) {
     var hub = $.connection.chefHub;
 
     self.recipes = ko.observableArray();
+    self.selectedRecipe = ko.observable();
+    self.difficultyLevel = ko.observable();
+    self.ingredients = ko.observableArray();
+    self.time = ko.observable();
 
     hub.server.getAllRecipes().done(function (recipes) {
         recipes.forEach(function (recipe) {
@@ -29,6 +33,14 @@ var NewCookingViewModel = function (parent) {
             console.log("Recipe: " + recipe);
         });
     });
+
+   
+    self.selectedRecipe.subscribe(function (selectedRecipe) {
+        self.ingredients(null);
+        self.difficultyLevel(selectedRecipe.difficultyLevel);
+        self.ingredients(selectedRecipe.ingredients);
+        self.time(selectedRecipe.time);
+    })
 
     $(document).ready(function () {
         var self = this;

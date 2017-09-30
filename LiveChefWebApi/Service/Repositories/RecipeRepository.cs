@@ -19,7 +19,7 @@ namespace LiveChefService.Models
 
             Add(new Recipe { Id = 1, Name = "Fish and Chips", DifficultyLevel = Difficulty.Intermediate, Time = 30, Ingredients = ingredients });
 
-            ingredients.Clear();
+            ingredients = new List<Ingredient>();
             ingredients.Add(new Ingredient { Name = "Eggs", Quantity = 2, QuantityType = "pcs" });
             ingredients.Add(new Ingredient { Name = "Flour", Quantity = 2, QuantityType = "cups" });
             ingredients.Add(new Ingredient { Name = "Baking powder", Quantity = 1, QuantityType = "pc" });
@@ -30,7 +30,7 @@ namespace LiveChefService.Models
 
             Add(new Recipe { Id = 2, Name = "Pancakes", DifficultyLevel = Difficulty.Beginner, Time= 90, Ingredients = ingredients });
 
-            ingredients.Clear();
+            ingredients= new List<Ingredient>();
             ingredients.Add(new Ingredient { Name = "Spaghetti", Quantity = 350, QuantityType = "g" });
             ingredients.Add(new Ingredient { Name = "Tomato sauce", Quantity = 2, QuantityType = "dl" });
             ingredients.Add(new Ingredient { Name = "Red Wine", Quantity = 50, QuantityType = "ml" });
@@ -40,7 +40,7 @@ namespace LiveChefService.Models
 
             Add(new Recipe { Id = 2, Name = "Chocolate Muffins", DifficultyLevel = Difficulty.Beginner, Time = 90, Ingredients = ingredients });
 
-            ingredients.Clear();
+            ingredients = new List<Ingredient>();
             ingredients.Add(new Ingredient { Name = "Sugar", Quantity = 50, QuantityType = "g" });
             ingredients.Add(new Ingredient { Name = "Powdered Sugar", Quantity = 10, QuantityType = "g" });
             ingredients.Add(new Ingredient { Name = "Butter ", Quantity = 100, QuantityType = "g" });
