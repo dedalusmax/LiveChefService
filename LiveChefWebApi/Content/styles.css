@@ -108,11 +108,7 @@ h3 {
     margin-top: 10px; }
 
 .main-component {
-  text-align: center;
-  /*.logo {
-        width: 50%;
-        margin: -60px;
-    }*/ }
+  text-align: center; }
   .main-component .navbar {
     background-color: #fefafa; }
     .main-component .navbar .navbar-brand {
@@ -159,47 +155,13 @@ h3 {
         margin: 0;
         background-color: darkslategray;
         padding: 5px; }
-  .main-component .footer {
-    margin: 0;
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    padding: 10px; }
-  .main-component .userImage {
-    width: 80px;
-    float: left;
-    padding: 10px; }
-  .main-component .return-button {
-    /*margin-left: 60%;*/
-    float: right;
-    margin-top: 20px;
-    margin-right: 20px; }
-  .main-component .list-group-item {
-    padding: 5px 5px;
-    margin: 10px; }
-  .main-component h5 {
-    padding-left: 25px;
-    margin-bottom: 0; }
-  .main-component h3 {
-    margin-top: 10px;
-    margin-bottom: 10px; }
-  .main-component .userLogin {
-    float: right;
-    font-size: 15px;
-    margin-right: 25px;
-    margin-top: 25px; }
-  .main-component .add-button {
-    width: 3%;
-    margin: 10px; }
-  .main-component .footer-new-cooking {
-    margin: 0;
-    background-color: darkslategray;
-    position: inherit;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    padding: 2rem; }
+
+.new-cooking-component .logo {
+  width: 388px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  animation: 1s ease-out 0s 1 popeye; }
 
 /* Medium devices (tablets, 768px and up) */
 @media (max-width: 768px) {

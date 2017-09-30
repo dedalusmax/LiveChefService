@@ -192,10 +192,6 @@ h3 {
         animation: infinite 1s alternate-reverse hot-button;
     }
 
-    /*.logo {
-        width: 50%;
-        margin: -60px;
-    }*/
     .card-deck {
         margin-top: 50px;
         display: flex;
@@ -235,64 +231,16 @@ h3 {
             }
         }
     }
+}
 
-    .footer {
-        margin: 0;
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        padding: 10px;
-    }
+.new-cooking-component {
 
-    .userImage {
-        width: 80px;
-        float: left;
-        padding: 10px;
-    }
-
-    .return-button {
-        /*margin-left: 60%;*/
-        float: right;
-        margin-top: 20px;
-        margin-right: 20px;
-    }
-
-    .list-group-item {
-        padding: 5px 5px;
-        margin: 10px;
-    }
-
-    h5 {
-        padding-left: 25px;
-        margin-bottom: 0;
-    }
-
-    h3 {
-        margin-top: 10px;
-        margin-bottom: 10px;
-    }
-
-    .userLogin {
-        float: right;
-        font-size: 15px;
-        margin-right: 25px;
-        margin-top: 25px;
-    }
-
-    .add-button {
-        width: 3%;
-        margin: 10px;
-    }
-
-    .footer-new-cooking {
-        margin: 0;
-        background-color: darkslategray;
-        position: inherit;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        padding: 2rem;
+    .logo {
+        width: 388px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        animation: 1s ease-out 0s 1 popeye;
     }
 }
 
