@@ -73,6 +73,17 @@ $highlight-color: #ffd800;
     }
 }
 
+@keyframes hot-button {
+    100% {
+        background-color: $highlight-color;
+        border-color: $border-color;
+        /*transform: rotate(10deg);
+        -webkit-transform: rotate(10deg);*/
+        -webkit-transform: scale(1.1, 1.0);
+        transform: scale(1.1, 1.0);
+    }
+}
+
 .container-fluid {
     padding-right: 0;
     padding-left: 0;
@@ -162,16 +173,29 @@ h3 {
             padding: 20px 20px 0 20px;
         }
 
+        .navbar-toggle {
+            border: none;
+
+            &:active, &:hover {
+                border: none;
+                color: $primary-color;
+            }
+        }
+
         .navbar-right {
             margin-right: 0;
         }
     }
 
-    .logo {
-        width: 50%;
-        margin: -60px;
+    .new-cooking {
+        margin-right: 10px;
+        animation: infinite 1s alternate-reverse hot-button;
     }
 
+    /*.logo {
+        width: 50%;
+        margin: -60px;
+    }*/
     .card-deck {
         margin-top: 50px;
         display: flex;
@@ -302,6 +326,12 @@ $medium-device-width: 768px;
     }
 
     .main-component {
+
+        .navbar.navbar-brand {
+            padding: 15px;
+            padding-left: 25px;
+        }
+
         .add-button {
             width: 10% !important;
             padding-top: 10px;

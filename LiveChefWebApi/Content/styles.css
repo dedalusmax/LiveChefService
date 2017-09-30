@@ -40,6 +40,15 @@
   100% {
     color: #ffd800; } }
 
+@keyframes hot-button {
+  100% {
+    background-color: #ffd800;
+    border-color: rgba(0, 0, 0, 0.3);
+    /*transform: rotate(10deg);
+        -webkit-transform: rotate(10deg);*/
+    -webkit-transform: scale(1.1, 1);
+    transform: scale(1.1, 1); } }
+
 .container-fluid {
   padding-right: 0;
   padding-left: 0; }
@@ -99,7 +108,11 @@ h3 {
     margin-top: 10px; }
 
 .main-component {
-  text-align: center; }
+  text-align: center;
+  /*.logo {
+        width: 50%;
+        margin: -60px;
+    }*/ }
   .main-component .navbar {
     background-color: #fefafa; }
     .main-component .navbar .navbar-brand {
@@ -108,11 +121,16 @@ h3 {
       font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
       font-weight: bold;
       padding: 20px 20px 0 20px; }
+    .main-component .navbar .navbar-toggle {
+      border: none; }
+      .main-component .navbar .navbar-toggle:active, .main-component .navbar .navbar-toggle:hover {
+        border: none;
+        color: #A70343; }
     .main-component .navbar .navbar-right {
       margin-right: 0; }
-  .main-component .logo {
-    width: 50%;
-    margin: -60px; }
+  .main-component .new-cooking {
+    margin-right: 10px;
+    animation: infinite 1s alternate-reverse hot-button; }
   .main-component .card-deck {
     margin-top: 50px;
     display: flex;
@@ -199,6 +217,9 @@ h3 {
       padding: 0; }
     .login-component button {
       font-size: large; }
+  .main-component .navbar.navbar-brand {
+    padding: 15px;
+    padding-left: 25px; }
   .main-component .add-button {
     width: 10% !important;
     padding-top: 10px; } }
