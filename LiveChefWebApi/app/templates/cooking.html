@@ -21,15 +21,33 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Look what is cooking</h4>
-                <p class="card-text">screen</p>
-                <video width="520" height="340" controls autoplay id="video"></video>
+                <video width="520" height="240"  autoplay id="video"></video>
                 <p class="card-text"><small class="text-muted">Started 3 mins ago</small></p>
 
             </div>
         </div>
     </div>
-    <div data-bind="visible: useChat() ==  true">
-        <textarea row:6></textarea>
+    <div class="col-sm-6"></div>
+    <div data-bind="visible: useChat() ==  true" class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <div id="buttons">
+                    <button id="startButton" class="btn btn-primary">Start</button>
+                    <button id="sendButton" class="btn btn-primary"  disabled>Send</button>
+                    <button id="closeButton" class="btn btn-primary" disabled>Stop</button>
+                </div>
+                <div id="sendReceive">
+                    <div id="send" class="card col-sm-6 card">
+                        <h5>Send</h5>
+                        <textarea cols="30" rows="3" id="dataChannelSend" disabled placeholder="Press Start, enter some text, then press Send."></textarea>
+                    </div>
+                    <div id="receive" class="card col-sm-6 card">
+                        <h5>Receive</h5>
+                        <textarea cols="30" rows="3" id="dataChannelReceive" disabled></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="footer"></div>
 </div>
