@@ -1,14 +1,236 @@
-﻿var CookingViewModel = function (parent) {
+﻿'use strict';
+
+var CookingViewModel = function (parent) {
     var self = this;
     self.parent = parent;
 
-
+    $(document).ready(function () {
+        self.videoElement = document.querySelector('video');
+    });
     self.cookingDetailsTitle = ko.observable("Cooking details");
     self.recipeName = ko.observable("name of recipe")
-    self.recipeDetails = ko.observable("recipe details")
+    self.recipeDetails = ko.observable("")
+    self.videoSource = ko.observable(self.readCookie("audio="));
+    self.audioSource = ko.observable(self.readCookie("video="));
+    self.useChat = ko.observable(self.parent.useChat());
+    self.useCamera = ko.observable(self.parent.useCamera());
+    self.useMicrophone = ko.observable(self.parent.useMicrophone());
 
     self.returnToMain = function () {
         root.showScreen(Screen.Main);
     };
 
+    if (audioSource != null) {
+        self.recipeDetails("audio: " + self.audioSource() + "evo i video" + self.videoSource());
+    }
+
+    function gotStream(stream) {
+        window.stream = stream; // make stream available to console
+        self.videoElement.srcObject = stream;
+        // Refresh button list in case labels have become available
+        return navigator.mediaDevices.enumerateDevices();
+    }
+
+    var constraints = {
+        audio: self.useMicrophone() == true ? {deviceId: self.audioSource() ? { exact: audioSource } : undefined }: false,
+        video: self.useCamera() == true ? {deviceId: self.videoSource() ? { exact: videoSource } : undefined } : false
+    };
+
+    // at least one has to exist
+    if (self.useMicrophone() == true || self.useCamera() == true) {
+        navigator.mediaDevices.getUserMedia(constraints)
+            .then(gotStream).then(self.parent.gotDevices).catch(self.parent.handleError);
+
+    }
+
+    // chat implementation
+    $(document).ready(function () {
+
+        var localConnection, remoteConnection, sendChannel, receiveChannel, pcConstraint, dataConstraint;
+        var dataChannelSend = document.querySelector('textarea#dataChannelSend');
+        var dataChannelReceive = document.querySelector('textarea#dataChannelReceive');
+        var startButton = document.querySelector('button#startButton');
+        var sendButton = document.querySelector('button#sendButton');
+        var closeButton = document.querySelector('button#closeButton');
+
+        startButton.onclick = createConnection;
+        sendButton.onclick = sendData;
+        closeButton.onclick = closeDataChannels;
+
+        function enableStartButton() {
+            startButton.disabled = false;
+        }
+
+        function disableSendButton() {
+            sendButton.disabled = true;
+        }
+
+        function createConnection() {
+            dataChannelSend.placeholder = '';
+            var servers = null;
+            pcConstraint = null;
+            dataConstraint = null;
+            console.log('Using SCTP based data channels');
+            // SCTP is supported from Chrome 31 and is supported in FF.
+            // No need to pass DTLS constraint as it is on by default in Chrome 31.
+            // For SCTP, reliable and ordered is true by default.
+            // Add localConnection to global scope to make it visible
+            // from the browser console.
+            window.localConnection = localConnection =
+                new RTCPeerConnection(servers, pcConstraint);
+            console.log('Created local peer connection object localConnection');
+
+            sendChannel = localConnection.createDataChannel('sendDataChannel',
+                dataConstraint);
+            console.log('Created send data channel');
+
+            localConnection.onicecandidate = function (e) {
+                onIceCandidate(localConnection, e);
+            };
+            sendChannel.onopen = onSendChannelStateChange;
+            sendChannel.onclose = onSendChannelStateChange;
+
+            // Add remoteConnection to global scope to make it visible
+            // from the browser console.
+            window.remoteConnection = remoteConnection =
+                new RTCPeerConnection(servers, pcConstraint);
+            console.log('Created remote peer connection object remoteConnection');
+
+            remoteConnection.onicecandidate = function (e) {
+                onIceCandidate(remoteConnection, e);
+            };
+            remoteConnection.ondatachannel = receiveChannelCallback;
+
+            localConnection.createOffer().then(
+                gotDescription1,
+                onCreateSessionDescriptionError
+            );
+            startButton.disabled = true;
+            closeButton.disabled = false;
+        }
+
+        function onCreateSessionDescriptionError(error) {
+            console.log('Failed to create session description: ' + error.toString());
+        }
+
+        function sendData() {
+            var data = dataChannelSend.value;
+            sendChannel.send(data);
+            console.log('Sent Data: ' + data);
+        }
+
+        function closeDataChannels() {
+            console.log('Closing data channels');
+            sendChannel.close();
+            console.log('Closed data channel with label: ' + sendChannel.label);
+            receiveChannel.close();
+            console.log('Closed data channel with label: ' + receiveChannel.label);
+            localConnection.close();
+            remoteConnection.close();
+            localConnection = null;
+            remoteConnection = null;
+            console.log('Closed peer connections');
+            startButton.disabled = false;
+            sendButton.disabled = true;
+            closeButton.disabled = true;
+            dataChannelSend.value = '';
+            dataChannelReceive.value = '';
+            dataChannelSend.disabled = true;
+            disableSendButton();
+            enableStartButton();
+        }
+
+        function gotDescription1(desc) {
+            localConnection.setLocalDescription(desc);
+            console.log('Offer from localConnection \n' + desc.sdp);
+            remoteConnection.setRemoteDescription(desc);
+            remoteConnection.createAnswer().then(
+                gotDescription2,
+                onCreateSessionDescriptionError
+            );
+        }
+
+        function gotDescription2(desc) {
+            remoteConnection.setLocalDescription(desc);
+            console.log('Answer from remoteConnection \n' + desc.sdp);
+            localConnection.setRemoteDescription(desc);
+        }
+
+        function getOtherPc(pc) {
+            return (pc === localConnection) ? remoteConnection : localConnection;
+        }
+
+        function getName(pc) {
+            return (pc === localConnection) ? 'localPeerConnection' :
+                'remotePeerConnection';
+        }
+
+        function onIceCandidate(pc, event) {
+            getOtherPc(pc).addIceCandidate(event.candidate)
+                .then(
+                function () {
+                    onAddIceCandidateSuccess(pc);
+                },
+                function (err) {
+                    onAddIceCandidateError(pc, err);
+                }
+                );
+            console.log(getName(pc) + ' ICE candidate: \n' + (event.candidate ?
+                event.candidate.candidate : '(null)'));
+        }
+
+        function onAddIceCandidateSuccess() {
+            console.log('AddIceCandidate success.');
+        }
+
+        function onAddIceCandidateError(error) {
+            console.log('Failed to add Ice Candidate: ' + error.toString());
+        }
+
+        function receiveChannelCallback(event) {
+            console.log('Receive Channel Callback');
+            receiveChannel = event.channel;
+            receiveChannel.onmessage = onReceiveMessageCallback;
+            receiveChannel.onopen = onReceiveChannelStateChange;
+            receiveChannel.onclose = onReceiveChannelStateChange;
+        }
+
+        function onReceiveMessageCallback(event) {
+            console.log('Received Message');
+            dataChannelReceive.value = event.data;
+        }
+
+        function onSendChannelStateChange() {
+            var readyState = sendChannel.readyState;
+            console.log('Send channel state is: ' + readyState);
+            if (readyState === 'open') {
+                dataChannelSend.disabled = false;
+                dataChannelSend.focus();
+                sendButton.disabled = false;
+                closeButton.disabled = false;
+            } else {
+                dataChannelSend.disabled = true;
+                sendButton.disabled = true;
+                closeButton.disabled = true;
+            }
+        }
+
+        function onReceiveChannelStateChange() {
+            var readyState = receiveChannel.readyState;
+            console.log('Receive channel state is: ' + readyState);
+        }
+    });
+};
+
+CookingViewModel.prototype.readCookie = function (name) {
+    var self = this;
+    var ca = self.parent.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+        if (c.indexOf(name) == 1) return c.substring(name.length, c.length);
+
+    }
+    return null;
 };
