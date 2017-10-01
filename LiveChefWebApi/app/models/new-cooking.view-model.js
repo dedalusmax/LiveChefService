@@ -10,16 +10,7 @@ var NewCookingViewModel = function (parent) {
     self.useCamera = ko.observable(false);
     self.useChat = ko.observable(false);
 
-    self.returnToMain = function () {
-        root.showScreen(Screen.Main);
-    };
-
-    self.startCooking = function () {
-        root.cooking(new CookingViewModel(self));
-        root.showScreen(Screen.Cooking);
-    };
-
-    var hub = $.connection.chefHub;
+    // var hub = $.connection.chefHub;
 
     self.recipes = ko.observableArray();
     self.selectedRecipe = ko.observable();
@@ -27,19 +18,47 @@ var NewCookingViewModel = function (parent) {
     self.ingredients = ko.observableArray();
     self.time = ko.observable();
 
-    hub.server.getAllRecipes().done(function (recipes) {
+    self.returnToMain = function () {
+        root.showScreen(Screen.Main);
+    };
+
+    self.startCooking = function () {
+
+        var selectedRecipe = self.selectedRecipe();
+        var newCooking = [{ Id: 4, Chef: self.parent.parent.user, Dish: selectedRecipe, Status: 1 }];
+       // root.hub.client.cookingAdded = function (newCooking) {
+           self.parent.cookings.push(newCooking); // Message: chef is not defined
+            console.log('New cooking added: ' + selectedRecipe.dishName);
+      // };
+
+        root.cooking(new CookingViewModel(self));
+        root.showScreen(Screen.Cooking);
+    };
+
+    root.hub.server.getAllRecipes().done(function (recipes) {
         recipes.forEach(function (recipe) {
             self.recipes.push(recipe);
             console.log("Recipe: " + recipe);
         });
     });
 
-   
     self.selectedRecipe.subscribe(function (selectedRecipe) {
         self.ingredients(null);
-        self.difficultyLevel(selectedRecipe.difficultyLevel);
-        self.ingredients(selectedRecipe.ingredients);
-        self.time(selectedRecipe.time);
+        if (selectedRecipe != undefined) {
+            self.difficultyLevel(selectedRecipe.difficultyLevel);
+            self.ingredients(selectedRecipe.ingredients);
+            self.time(selectedRecipe.time);
+        }
+        $(document).ready(function () {
+
+            self.addCookingElement = document.querySelector('button#startCooking');
+
+            if (selectedRecipe != undefined) {
+                self.addCookingElement.disabled = false;
+            } else {
+                self.addCookingElement.disabled = true;
+            }
+        });
     })
 
     $(document).ready(function () {

@@ -16,7 +16,7 @@
             <div class="form-group row">
                 <label for="duration" class="col-sm-2 col-form-label">Duration of cooking</label>
                 <div class="col-sm-10">
-                    <input type="number" class="form-control" id="duration" placeholder="Duration" data-bind="value: time()">
+                    <input type="number" class="form-control" id="duration" placeholder="Duration" data-bind="value: time(), visible: selectedRecipe() != null">
                 </div>
             </div>
             <div class="form-group row">
@@ -39,7 +39,7 @@
             </div>
             <div class="form-group row">
                 <label for="difficultyLevel" class="col-sm-2 col-form-label">Difficulty level</label>
-                <div class="col-sm-10">
+                <div class="col-sm-10"  data-bind="visible: selectedRecipe() != null">
                     <!--<input type="text" class="form-control" id="duration" placeholder="Difficulty level" data-bind="value: difficultyLevel()">-->
                     <label class="col-sm-3"><input class="col-sm-3" type="radio"  data-bind="checked: difficultyLevel() == 1, checkedValue: true" />Easy(Beginner)</label>
                     <label class="col-sm-3"><input class="col-sm-3" type="radio"  data-bind="checked: difficultyLevel() == 2, checkedValue: true" />Intermediate</label>
@@ -107,7 +107,7 @@
             <div class="form-group row">
                 <div class="col-sm-2"></div>
                 <div class="col-sm-10">
-                    <button type="submit" class="btn btn-primary btn-lg" data-bind="click:startCooking">Start cooking</button>
+                    <button type="submit" id="startCooking" class="btn btn-primary btn-lg" disabled data-bind="click:startCooking">Start cooking</button>
                 </div>
             </div>
         </form>
