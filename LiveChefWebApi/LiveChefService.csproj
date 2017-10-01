@@ -115,6 +115,7 @@
     <Content Include="app\models\cooking.view-model.js" />
     <Content Include="app\models\login.view-model.js" />
     <Content Include="app\models\new-cooking.view-model.js" />
+    <Content Include="app\models\recipe.view-model.js" />
     <Content Include="app\models\root.view-model.js" />
     <Content Include="app\services\ajax.service.js" />
     <Content Include="app\models\main.view-model.js" />
@@ -134,10 +135,10 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\images\backgroundImage.jpg" />
     <Content Include="Content\images\chef.png" />
-    <Content Include="Content\images\page1-img1.jpg" />
-    <Content Include="Content\images\page1-img2.jpg" />
-    <Content Include="Content\images\page1-img3.jpg" />
-    <Content Include="Content\images\page1-img4.jpg" />
+    <Content Include="Content\images\recipes\page1-img1.jpg" />
+    <Content Include="Content\images\recipes\page1-img2.jpg" />
+    <Content Include="Content\images\recipes\page1-img3.jpg" />
+    <Content Include="Content\images\recipes\page1-img4.jpg" />
     <Content Include="Content\images\small-logo.png" />
     <Content Include="Content\styles.css" />
     <Content Include="Content\styles.min.css">

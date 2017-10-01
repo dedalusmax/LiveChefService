@@ -1,15 +1,15 @@
-﻿<div class="list-group" id="list-tab" data-bind="foreach: cookings, click: cookingDetails.bind(cookings)">
+﻿<!--<div class="list-group" id="list-tab" data-bind="foreach: cookings, click: cookingDetails.bind(cookings)">
     <a class="list-group-item list-group-item-action">
         <h5 data-bind="text: chef.displayName"> </h5>
         <img class="userImage img-responsive" src="./Content/images/small-logo.png" id="logo">
         <h3 data-bind="text: dish.name"> </h3>
         <small data-bind="text: status, css: { green: status ==  1, red: status == 3 }"> </small>
     </a>
-</div>
+</div>-->
 
-<!--<div class="card-deck" data-bind="foreach: cookings, click: cookingDetails.bind(cookings)">
+<div class="card-deck" data-bind="foreach: cookings, click: cookingDetails.bind(cookings)">
     <div class="card">
-        <img class="card-img-top" src="./Content/images/page1-img1.jpg" alt="Card image cap">
+        <img class="card-img-top" data-bind="attr: { src: dish.image, alt: dish.name }">
         <div class="card-block">
             <h4 class="card-title" data-bind="text: dish.name"></h4>
             <h5 data-bind="text: chef.displayName"> </h5>
@@ -17,4 +17,4 @@
         </div>
         <p class="card-footer"><small class="text-muted" data-bind="text: chef.displayName"></small></p>
     </div>
-</div>-->
+</div>

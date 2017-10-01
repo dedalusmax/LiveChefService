@@ -5,12 +5,7 @@
     self.activeTab = ko.observable(1);
 
     self.cookings = ko.observableArray(); 
-    // [
-    //    { DishName: 'Pasta', Id: 1, Status: 'Started', Username: 'Pero' },
-    //    { DishName: 'BBQ Sauce', Id: 2, Status: 'NeedHelp', Username: 'Štef' },
-    //    { DishName: 'Bolognese', Id: 3, Status: 'Ongoing', Username: 'Josip' },
-    //    { DishName: 'Baked potatoes', Id: 4, Status: 'NeedHelp', Username: 'Barica' }
-    //]);
+    self.recipes = ko.observableArray(); 
 
     self.logout = function () {
         ajax.logout(self.parent.user, self.logoutSucceeded.bind(self));
@@ -36,7 +31,14 @@
     hub.client.cookingsInitiated = function (cookings) {
         cookings.forEach(function (cooking) {
             self.cookings.push(cooking);
-            console.log('Cooking updated: ' + cooking.dish.name);
+            console.log('Cooking initiated: ' + cooking.dish.name);
+        });
+    }
+
+    hub.client.recipesInitiated = function (recipes) {
+        recipes.forEach(function (recipe) {
+            self.recipes.push(new RecipeViewModel(recipe));
+            console.log('Recipe initiated: ' + recipe.name);
         });
     }
 

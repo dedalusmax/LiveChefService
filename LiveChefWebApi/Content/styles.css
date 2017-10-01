@@ -151,12 +151,29 @@ h3 {
       background-color: #fefafa;
       border-bottom: 1px solid rgba(0, 0, 0, 0.3);
       width: -webkit-fill-available; }
+    .card-deck .card .toast {
+      /*position: relative;
+            top: 20px;
+            right: 20px;*/
+      /*background-color: $highlight-color;
+            color: $panel-color;*/
+      /*margin-top: -220px;
+            height: 32px;
+            width: 120px;
+            margin-left: 120px;*/ }
     .card-deck .card .card-block {
       padding: 10px; }
     .card-deck .card .card-footer {
+      color: #fefafa;
+      background-color: #67203c;
       margin: 0;
-      background-color: darkslategray;
       padding: 5px; }
+      .card-deck .card .card-footer span {
+        font-size: 24px;
+        margin-right: 5px; }
+      .card-deck .card .card-footer label {
+        vertical-align: text-bottom;
+        font-weight: normal; }
 
 .new-cooking-component .logo {
   width: 388px;

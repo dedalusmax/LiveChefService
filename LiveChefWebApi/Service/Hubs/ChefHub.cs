@@ -48,9 +48,9 @@ namespace LiveChefService
         public override Task OnConnected()
         {
             this.Clients.Caller.usersInitiated(WebApiApplication.UserRepository.GetActiveUsers());
-
             this.Clients.Caller.cookingsInitiated(WebApiApplication.CookingRepository.GetActiveCookings());
-            
+            this.Clients.Caller.recipesInitiated(WebApiApplication.RecipeRepository.GetAll());
+
             return base.OnConnected();
         }
 

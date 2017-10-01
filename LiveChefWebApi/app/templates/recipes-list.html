@@ -1,42 +1,18 @@
-﻿<div class="card-deck">
+﻿<div class="card-deck" data-bind="foreach: recipes">
     <div class="card">
-        <img class="card-img-top" src="./Content/images/page1-img1.jpg" alt="Card image cap">
+        <img class="card-img-top" data-bind="attr: { src: image, alt: name }">
         <div class="card-block">
-            <h4 class="card-title">Card title</h4>
-            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+            <h4 class="card-title" data-bind="text: name"></h4>
+            <p class="card-text" data-bind="text: description"></p>
         </div>
-        <p class="card-footer"><small class="text-muted">Last updated 3 mins ago</small></p>
-    </div>
-    <div class="card">
-        <img class="card-img-top" src="./Content/images/page1-img2.jpg" alt="Card image cap">
-        <div class="card-block">
-            <h4 class="card-title">Card title</h4>
-            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+        <div class="card-footer">
+            <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+            <label data-bind="text: time"></label>
+            <label>&nbsp;min</label>
+            <div class="toast">
+                <small data-bind="text: difficultyText"></small>
+                <small>level</small>
+            </div>
         </div>
-        <p class="card-footer"><small class="text-muted">Last updated 3 mins ago</small></p>
-    </div>
-    <div class="card">
-        <img class="card-img-top" src="./Content/images/page1-img3.jpg" alt="Card image cap">
-        <div class="card-block">
-            <h4 class="card-title">Card title</h4>
-            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-        </div>
-        <p class="card-footer"><small class="text-muted">Last updated 3 mins ago</small></p>
-    </div>
-    <div class="card">
-        <img class="card-img-top" src="./Content/images/page1-img4.jpg" alt="Card image cap">
-        <div class="card-block">
-            <h4 class="card-title">Card title</h4>
-            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-        </div>
-        <p class="card-footer"><small class="text-muted">Last updated 3 mins ago</small></p>
-    </div>
-    <div class="card">
-        <img class="card-img-top" src="">
-        <div class="card-block">
-            <h4 class="card-title">Card title</h4>
-            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-        </div>
-        <p class="card-footer"><small class="text-muted">Last updated 3 mins ago</small></p>
     </div>
 </div>
