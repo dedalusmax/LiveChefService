@@ -192,43 +192,46 @@ h3 {
         animation: infinite 1s alternate-reverse hot-button;
     }
 
-    .card-deck {
+    .content {
         margin-top: 50px;
-        display: flex;
-        flex-wrap: wrap;
-        padding: 10px;
+    }
+}
 
-        .card {
-            cursor: pointer;
-            margin: 10px;
-            border: 1px solid $border-color;
-            -webkit-box-shadow: 0px 0px 8px $border-color;
-            -moz-box-shadow: 0px 0px 8px $border-color;
-            box-shadow: 0px 0px 8px $border-color;
-            width: 320px;
-            display: grid;
-            transition: margin 0.5s;
-            -webkit-transition: margin 0.5s;
+.card-deck {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px;
 
-            &:hover {
-                margin: 0px;
-            }
+    .card {
+        cursor: pointer;
+        margin: 10px;
+        border: 1px solid $border-color;
+        -webkit-box-shadow: 0px 0px 8px $border-color;
+        -moz-box-shadow: 0px 0px 8px $border-color;
+        box-shadow: 0px 0px 8px $border-color;
+        width: 320px;
+        display: grid;
+        transition: margin 0.5s;
+        -webkit-transition: margin 0.5s;
 
-            .card-img-top {
-                background-color: $panel-color;
-                border-bottom: 1px solid $border-color;
-                width: -webkit-fill-available;
-            }
+        &:hover {
+            margin: 0px;
+        }
 
-            .card-block {
-                padding: 10px;
-            }
+        .card-img-top {
+            background-color: $panel-color;
+            border-bottom: 1px solid $border-color;
+            width: -webkit-fill-available;
+        }
 
-            .card-footer {
-                margin: 0;
-                background-color: darkslategray;
-                padding: 5px;
-            }
+        .card-block {
+            padding: 10px;
+        }
+
+        .card-footer {
+            margin: 0;
+            background-color: darkslategray;
+            padding: 5px;
         }
     }
 }

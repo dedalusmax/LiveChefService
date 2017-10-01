@@ -2,6 +2,8 @@
     var self = this;
     self.parent = parent;
 
+    self.activeTab = ko.observable(1);
+
     self.cookings = ko.observableArray(); 
     // [
     //    { DishName: 'Pasta', Id: 1, Status: 'Started', Username: 'Pero' },
@@ -59,4 +61,9 @@ MainViewModel.prototype.logoutSucceeded = function (user) {
     var self = this;
     $.connection.hub.stop();
     location.reload();
+};
+
+MainViewModel.prototype.activateTab = function (tabId) {
+    var self = this;
+    self.activeTab(tabId);
 };

@@ -12,9 +12,9 @@
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Live Cooking!</a></li>
-                    <li><a href="#">Fine Recipes</a></li>
-                    <li><a href="#">Recorded cookings</a></li>
+                    <li data-bind="css: { active: activeTab() == 1}"><a href="#" data-bind="click: activateTab(1)">Live Cooking!</a></li>
+                    <li data-bind="css: { active: activeTab() == 2}"><a href="#" data-bind="click: activateTab(2)">Fine Recipes</a></li>
+                    <li data-bind="css: { active: activeTab() == 3}"><a href="#" data-bind="click: activateTab(3)">Recorded cookings</a></li>
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
@@ -36,66 +36,7 @@
         </div>
     </nav>
 
-    <!--<div class="list-group" id="list-tab" data-bind="foreach: cookings, click: cookingDetails.bind(cookings)">
-        <a class="list-group-item list-group-item-action">
-            <h5 data-bind="text: chef.displayName"> </h5>
-            <img class="userImage img-responsive" src="./Content/images/small-logo.png" id="logo">
-            <h3 data-bind="text: dish.name"> </h3>
-            <small data-bind="text: status, css: { green: status ==  1, red: status == 3 }"> </small>
-        </a>
-    </div>-->
-    <!--<div class="card-deck" data-bind="foreach: cookings, click: cookingDetails.bind(cookings)">
-        <div class="card">
-            <img class="card-img-top" src="./Content/images/page1-img1.jpg" alt="Card image cap">
-            <div class="card-block">
-                <h4 class="card-title" data-bind="text: dish.name"></h4>
-                <h5 data-bind="text: chef.displayName"> </h5>
-                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-            </div>
-            <p class="card-footer"><small class="text-muted" data-bind="text: chef.displayName"></small></p>
-        </div>
-    </div>-->
-
-    <div class="card-deck">
-        <div class="card">
-            <img class="card-img-top" src="./Content/images/page1-img1.jpg" alt="Card image cap">
-            <div class="card-block">
-                <h4 class="card-title">Card title</h4>
-                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-            </div>
-            <p class="card-footer"><small class="text-muted">Last updated 3 mins ago</small></p>
-        </div>
-        <div class="card">
-            <img class="card-img-top" src="./Content/images/page1-img2.jpg" alt="Card image cap">
-            <div class="card-block">
-                <h4 class="card-title">Card title</h4>
-                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-            </div>
-            <p class="card-footer"><small class="text-muted">Last updated 3 mins ago</small></p>
-        </div>
-        <div class="card">
-            <img class="card-img-top" src="./Content/images/page1-img3.jpg" alt="Card image cap">
-            <div class="card-block">
-                <h4 class="card-title">Card title</h4>
-                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-            </div>
-            <p class="card-footer"><small class="text-muted">Last updated 3 mins ago</small></p>
-        </div>
-        <div class="card">
-            <img class="card-img-top" src="./Content/images/page1-img4.jpg" alt="Card image cap">
-            <div class="card-block">
-                <h4 class="card-title">Card title</h4>
-                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-            </div>
-            <p class="card-footer"><small class="text-muted">Last updated 3 mins ago</small></p>
-        </div>
-        <div class="card">
-            <img class="card-img-top" src="">
-            <div class="card-block">
-                <h4 class="card-title">Card title</h4>
-                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-            </div>
-            <p class="card-footer"><small class="text-muted">Last updated 3 mins ago</small></p>
-        </div>
-    </div>
+    <div class="content" data-bind="template: { name: 'cookings-list' }, visible: activeTab() == 1"></div>
+    <div class="content" data-bind="template: { name: 'recipes-list' }, visible: activeTab() == 2"></div>
+    <div class="content" data-bind="template: { name: 'stored-cookings' }, visible: activeTab() == 3"></div>
 </div>

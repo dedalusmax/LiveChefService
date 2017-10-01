@@ -1,0 +1,20 @@
+﻿<div class="list-group" id="list-tab" data-bind="foreach: cookings, click: cookingDetails.bind(cookings)">
+    <a class="list-group-item list-group-item-action">
+        <h5 data-bind="text: chef.displayName"> </h5>
+        <img class="userImage img-responsive" src="./Content/images/small-logo.png" id="logo">
+        <h3 data-bind="text: dish.name"> </h3>
+        <small data-bind="text: status, css: { green: status ==  1, red: status == 3 }"> </small>
+    </a>
+</div>
+
+<!--<div class="card-deck" data-bind="foreach: cookings, click: cookingDetails.bind(cookings)">
+    <div class="card">
+        <img class="card-img-top" src="./Content/images/page1-img1.jpg" alt="Card image cap">
+        <div class="card-block">
+            <h4 class="card-title" data-bind="text: dish.name"></h4>
+            <h5 data-bind="text: chef.displayName"> </h5>
+            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+        </div>
+        <p class="card-footer"><small class="text-muted" data-bind="text: chef.displayName"></small></p>
+    </div>
+</div>-->

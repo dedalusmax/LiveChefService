@@ -122,9 +122,12 @@
     <Content Include="app\services\signalr.service.js" />
     <Content Include="app\services\tools.service.js" />
     <Content Include="app\templates\cooking.html" />
+    <Content Include="app\templates\cookings-list.html" />
     <Content Include="app\templates\login.html" />
     <Content Include="app\templates\main.html" />
     <Content Include="app\templates\new-cooking.html" />
+    <Content Include="app\templates\recipes-list.html" />
+    <Content Include="app\templates\stored-cookings.html" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />

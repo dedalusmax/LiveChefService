@@ -127,34 +127,36 @@ h3 {
   .main-component .new-cooking {
     margin-right: 10px;
     animation: infinite 1s alternate-reverse hot-button; }
-  .main-component .card-deck {
-    margin-top: 50px;
-    display: flex;
-    flex-wrap: wrap;
-    padding: 10px; }
-    .main-component .card-deck .card {
-      cursor: pointer;
-      margin: 10px;
-      border: 1px solid rgba(0, 0, 0, 0.3);
-      -webkit-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
-      -moz-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
-      box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
-      width: 320px;
-      display: grid;
-      transition: margin 0.5s;
-      -webkit-transition: margin 0.5s; }
-      .main-component .card-deck .card:hover {
-        margin: 0px; }
-      .main-component .card-deck .card .card-img-top {
-        background-color: #fefafa;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-        width: -webkit-fill-available; }
-      .main-component .card-deck .card .card-block {
-        padding: 10px; }
-      .main-component .card-deck .card .card-footer {
-        margin: 0;
-        background-color: darkslategray;
-        padding: 5px; }
+  .main-component .content {
+    margin-top: 50px; }
+
+.card-deck {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px; }
+  .card-deck .card {
+    cursor: pointer;
+    margin: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
+    width: 320px;
+    display: grid;
+    transition: margin 0.5s;
+    -webkit-transition: margin 0.5s; }
+    .card-deck .card:hover {
+      margin: 0px; }
+    .card-deck .card .card-img-top {
+      background-color: #fefafa;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+      width: -webkit-fill-available; }
+    .card-deck .card .card-block {
+      padding: 10px; }
+    .card-deck .card .card-footer {
+      margin: 0;
+      background-color: darkslategray;
+      padding: 5px; }
 
 .new-cooking-component .logo {
   width: 388px;
