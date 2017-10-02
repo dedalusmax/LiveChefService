@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 
 namespace LiveChefService.Models
@@ -12,7 +13,7 @@ namespace LiveChefService.Models
 
             User pero = chefs.Find(u => u.Username == "pero");
             Recipe fishAndChips = recipes.Find(r => r.Id == 1);
-            Add(new Cooking { Id = 1, Chef = pero, Dish = fishAndChips, Status = CookingStatus.Started });
+            Add(new Cooking { Id = 1, Chef = pero, Dish = fishAndChips, Status = CookingStatus.Ongoing });
 
             User stefica = chefs.Find(u => u.Username == "stefica");
             Recipe pancakes = recipes.Find(r => r.Id == 2);
@@ -35,6 +36,11 @@ namespace LiveChefService.Models
         public IEnumerable<Cooking> GetFinishedCookings()
         {
             return this.items.FindAll(c => c.Status == CookingStatus.Finished);
+        }
+
+        internal void RemoveAllStarted()
+        {
+            this.items.RemoveAll(c => c.Status == CookingStatus.Started);
         }
     }
 }

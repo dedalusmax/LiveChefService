@@ -7,10 +7,20 @@ namespace LiveChefService
 {
     public class ChefHub : Hub
     {
-        public void AddCooking(Cooking item)
-        {            
-            WebApiApplication.CookingRepository.Add(item);
-            this.Clients.All.cookingAdded(item);
+        public Cooking AddCooking(Cooking data)
+        {
+            var cooking = new Cooking
+            {
+                Chef = data.Chef,
+                Dish = data.Dish,
+                Settings = data.Settings,
+                Status = CookingStatus.Started
+            };
+
+            WebApiApplication.CookingRepository.Add(cooking);
+            this.Clients.All.cookingAdded(cooking);
+
+            return cooking;
         }
 
         public void UpdateCooking(Cooking item)
@@ -25,7 +35,7 @@ namespace LiveChefService
             this.Clients.All.cookingRemoved(item);
         }
 
-        public IEnumerable<Recipe> GetAllRecipes()
+        public List<Recipe> GetAllRecipes()
         {
             return WebApiApplication.RecipeRepository.GetAll();
         }
@@ -57,6 +67,9 @@ namespace LiveChefService
         // disconnected
         public override Task OnDisconnected(bool stopCalled)
         {
+            // wipe out all started cookings
+            WebApiApplication.CookingRepository.RemoveAllStarted();
+
             return base.OnDisconnected(stopCalled);
         }
     }

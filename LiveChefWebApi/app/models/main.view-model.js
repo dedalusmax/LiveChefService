@@ -54,7 +54,7 @@
     };
 
     self.addNewCooking = function () {
-        self.parent.newCooking(new NewCookingViewModel(self));
+        self.parent.newCooking(new NewCookingViewModel());
         self.parent.showScreen(Screen.NewCooking);
     }
 

@@ -1,12 +1,15 @@
 ﻿'use strict';
 
-var CookingViewModel = function (parent) {
+var CookingViewModel = function (data, chefIsMe) {
     var self = this;
-    self.parent = parent;
+
+    $.extend(self, data);
+    self.chefIsMe = chefIsMe;
 
     $(document).ready(function () {
         self.videoElement = document.querySelector('video');
     });
+
     self.cookingDetailsTitle = ko.observable("Cooking details");
     self.recipeName = ko.observable("name of recipe")
     self.recipeDetails = ko.observable(self.parent.selectedRecipe());
@@ -15,7 +18,6 @@ var CookingViewModel = function (parent) {
     self.useChat = ko.observable(self.parent.useChat());
     self.useCamera = ko.observable(self.parent.useCamera());
     self.useMicrophone = ko.observable(self.parent.useMicrophone());
-
 
     self.returnToMain = function () {
         root.showScreen(Screen.Main);
