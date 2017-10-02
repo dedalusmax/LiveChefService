@@ -9,20 +9,17 @@ var CookingViewModel = function (parent) {
     });
     self.cookingDetailsTitle = ko.observable("Cooking details");
     self.recipeName = ko.observable("name of recipe")
-    self.recipeDetails = ko.observable("")
+    self.recipeDetails = ko.observable(self.parent.selectedRecipe());
     self.videoSource = ko.observable(self.readCookie("audio="));
     self.audioSource = ko.observable(self.readCookie("video="));
     self.useChat = ko.observable(self.parent.useChat());
     self.useCamera = ko.observable(self.parent.useCamera());
     self.useMicrophone = ko.observable(self.parent.useMicrophone());
 
+
     self.returnToMain = function () {
         root.showScreen(Screen.Main);
     };
-
-    if (audioSource != null) {
-        self.recipeDetails("audio: " + self.audioSource() + "evo i video" + self.videoSource());
-    }
 
     function gotStream(stream) {
         window.stream = stream; // make stream available to console

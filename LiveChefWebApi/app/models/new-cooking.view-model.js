@@ -27,8 +27,8 @@ var NewCookingViewModel = function (parent) {
         var selectedRecipe = self.selectedRecipe();
         var newCooking = [{ Id: 4, Chef: self.parent.parent.user, Dish: selectedRecipe, Status: 1 }];
        // root.hub.client.cookingAdded = function (newCooking) {
-           self.parent.cookings.push(newCooking); // Message: chef is not defined
-            console.log('New cooking added: ' + selectedRecipe.dishName);
+         //  self.parent.cookings.push(newCooking); // Message: chef is not defined
+         //   console.log('New cooking added: ' + selectedRecipe.name);
       // };
 
         root.cooking(new CookingViewModel(self));
