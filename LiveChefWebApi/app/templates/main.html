@@ -12,9 +12,9 @@
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
-                    <li data-bind="css: { active: activeTab() == 1}"><a href="#" data-bind="click: activateTab(1)">Live Cooking!</a></li>
-                    <li data-bind="css: { active: activeTab() == 2}"><a href="#" data-bind="click: activateTab(2)">Fine Recipes</a></li>
-                    <li data-bind="css: { active: activeTab() == 3}"><a href="#" data-bind="click: activateTab(3)">Recorded cookings</a></li>
+                    <li data-bind="css: { active: activeTab() == 1}"><a href="#" data-bind="click: activateTab.bind($data, 1)">Live Cooking!</a></li>
+                    <li data-bind="css: { active: activeTab() == 2}"><a href="#" data-bind="click: activateTab.bind($data, 2)">Fine Recipes</a></li>
+                    <li data-bind="css: { active: activeTab() == 3}"><a href="#" data-bind="click: activateTab.bind($data, 3)">Recorded cookings</a></li>
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">

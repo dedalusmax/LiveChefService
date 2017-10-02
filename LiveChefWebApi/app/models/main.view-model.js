@@ -57,15 +57,14 @@
         self.parent.newCooking(new NewCookingViewModel(self));
         self.parent.showScreen(Screen.NewCooking);
     }
+
+    self.activateTab = function (tabId) {
+        self.activeTab(tabId);
+    };
 };
 
 MainViewModel.prototype.logoutSucceeded = function (user) {
     var self = this;
     $.connection.hub.stop();
     location.reload();
-};
-
-MainViewModel.prototype.activateTab = function (tabId) {
-    var self = this;
-    self.activeTab(tabId);
 };
