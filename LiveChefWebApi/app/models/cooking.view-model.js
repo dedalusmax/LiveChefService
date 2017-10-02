@@ -14,8 +14,6 @@ var CookingViewModel = function (data, chefIsMe) {
     self.selectedAudioOutput = null;
     self.selectedVideoInput = null;
 
-    self.videoElement = document.querySelector('video');
-
     if (chefIsMe && (self.settings.useMicrophone || self.settings.useCamera)) {
         self.selectedAudioInput = JSON.parse(getCookie('audioInput'));
         self.selectedAudioOutput = JSON.parse(getCookie('audioOutput'));
@@ -32,29 +30,34 @@ var CookingViewModel = function (data, chefIsMe) {
         });
     };
 
-    // at least one has to exist
-    if (self.settings.useMicrophone || self.settings.useCamera) {
-
-        var audioSource = self.selectedAudioInput.deviceId;
-        var videoSource = self.selectedVideoInput.deviceId;
-
-        var constraints = {
-            audio: self.settings.useMicrophone ? { deviceId: audioSource } : false,
-            video: self.settings.useCamera ? { deviceId: videoSource } : false
-        };
-
-        //var constraints = {
-        //    audio: self.settings.useMicrophone,
-        //    video: self.settings.useCamera
-        //};
-
-        navigator.mediaDevices.getUserMedia(constraints).then(self.mediaRetrieved.bind(self)).catch(self.mediaError);
-    }
-
-    return;
-
     // chat implementation
     $(document).ready(function () {
+
+        if (self.settings.useMicrophone || self.settings.useCamera) {
+
+            var video = document.querySelector('video');
+
+            var audioSource = self.selectedAudioInput.deviceId;
+            var videoSource = self.selectedVideoInput.deviceId;
+
+            var constraints = {
+                audio: self.settings.useMicrophone ? { deviceId: audioSource } : false,
+                video: self.settings.useCamera ? { deviceId: videoSource } : false
+            };
+
+            function handleSuccess(stream) {
+                window.stream = stream; // make stream available to browser console
+                video.srcObject = stream;
+            }
+
+            function handleError(error) {
+                console.log('navigator.getUserMedia error: ', error);
+            }
+
+            navigator.mediaDevices.getUserMedia(constraints).
+                then(handleSuccess).catch(handleError);
+
+        }
 
         var localConnection, remoteConnection, sendChannel, receiveChannel, pcConstraint, dataConstraint;
         var dataChannelSend = document.querySelector('textarea#dataChannelSend');
