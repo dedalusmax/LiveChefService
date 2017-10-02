@@ -43,9 +43,9 @@ var NewCookingViewModel = function () {
             console.log("Cooking added: " + cooking.dish.name);
 
             // save selected devices into cookies
-            setCookie('audioInput', self.selectedAudioInput());
-            setCookie('audioOutput', self.selectedAudioOutput());
-            setCookie('videoInput', self.selectedVideoInput());
+            setCookie('audioInput', JSON.stringify(self.selectedAudioInput()));
+            setCookie('audioOutput', JSON.stringify(self.selectedAudioOutput()));
+            setCookie('videoInput', JSON.stringify(self.selectedVideoInput()));
 
             root.cooking(new CookingViewModel(cooking, true));
             root.showScreen(Screen.Cooking);

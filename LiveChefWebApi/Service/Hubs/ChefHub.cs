@@ -29,10 +29,10 @@ namespace LiveChefService
             this.Clients.All.cookingUpdated(item);
         }
 
-        public void RemoveCooking(Cooking item)
+        public void AbortCooking(int cookingId)
         {
-            WebApiApplication.CookingRepository.Remove(item.Id);
-            this.Clients.All.cookingRemoved(item);
+            WebApiApplication.CookingRepository.Remove(cookingId);
+            this.Clients.All.cookingRemoved(cookingId);
         }
 
         public List<Recipe> GetAllRecipes()

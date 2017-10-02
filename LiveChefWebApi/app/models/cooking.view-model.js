@@ -3,44 +3,55 @@
 var CookingViewModel = function (data, chefIsMe) {
     var self = this;
 
+    // take over the data from the model
     $.extend(self, data);
+
+    // add new fields to the model
+    self.dish = new RecipeViewModel(data.dish);
     self.chefIsMe = chefIsMe;
 
-    $(document).ready(function () {
-        self.videoElement = document.querySelector('video');
-    });
+    self.selectedAudioInput = null;
+    self.selectedAudioOutput = null;
+    self.selectedVideoInput = null;
 
-    self.cookingDetailsTitle = ko.observable("Cooking details");
-    self.recipeName = ko.observable("name of recipe")
-    self.recipeDetails = ko.observable(self.parent.selectedRecipe());
-    self.videoSource = ko.observable(self.readCookie("audio="));
-    self.audioSource = ko.observable(self.readCookie("video="));
-    self.useChat = ko.observable(self.parent.useChat());
-    self.useCamera = ko.observable(self.parent.useCamera());
-    self.useMicrophone = ko.observable(self.parent.useMicrophone());
+    self.videoElement = document.querySelector('video');
 
-    self.returnToMain = function () {
-        root.showScreen(Screen.Main);
-    };
-
-    function gotStream(stream) {
-        window.stream = stream; // make stream available to console
-        self.videoElement.srcObject = stream;
-        // Refresh button list in case labels have become available
-        return navigator.mediaDevices.enumerateDevices();
+    if (chefIsMe && (self.settings.useMicrophone || self.settings.useCamera)) {
+        self.selectedAudioInput = JSON.parse(getCookie('audioInput'));
+        self.selectedAudioOutput = JSON.parse(getCookie('audioOutput'));
+        self.selectedVideoInput = JSON.parse(getCookie('videoInput'));
     }
 
-    var constraints = {
-        audio: self.useMicrophone() == true ? {deviceId: self.audioSource() ? { exact: audioSource } : undefined }: false,
-        video: self.useCamera() == true ? {deviceId: self.videoSource() ? { exact: videoSource } : undefined } : false
+    var hub = root.hub;
+
+    self.returnToMain = function () {
+
+        hub.server.abortCooking(self.id).done(function () {
+            console.log("Cooking aborted: " + self.id);
+            root.showScreen(Screen.Main);
+        });
     };
 
     // at least one has to exist
-    if (self.useMicrophone() == true || self.useCamera() == true) {
-        navigator.mediaDevices.getUserMedia(constraints)
-            .then(gotStream).then(self.parent.gotDevices).catch(self.parent.handleError);
+    if (self.settings.useMicrophone || self.settings.useCamera) {
 
+        var audioSource = self.selectedAudioInput.deviceId;
+        var videoSource = self.selectedVideoInput.deviceId;
+
+        var constraints = {
+            audio: self.settings.useMicrophone ? { deviceId: audioSource } : false,
+            video: self.settings.useCamera ? { deviceId: videoSource } : false
+        };
+
+        //var constraints = {
+        //    audio: self.settings.useMicrophone,
+        //    video: self.settings.useCamera
+        //};
+
+        navigator.mediaDevices.getUserMedia(constraints).then(self.mediaRetrieved.bind(self)).catch(self.mediaError);
     }
+
+    return;
 
     // chat implementation
     $(document).ready(function () {
@@ -221,15 +232,12 @@ var CookingViewModel = function (data, chefIsMe) {
     });
 };
 
-CookingViewModel.prototype.readCookie = function (name) {
+CookingViewModel.prototype.mediaRetrieved = function (stream) {
     var self = this;
-    var ca = self.parent.cookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-        if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
-        if (c.indexOf(name) == 1) return c.substring(name.length, c.length);
+    window.stream = stream; // make stream available to console
+    //self.videoElement.srcObject = stream;
+}
 
-    }
-    return null;
-};
+CookingViewModel.prototype.mediaError = function (error) {
+    console.log('navigator.mediaDevices.getUserMedia error: ', error);
+}

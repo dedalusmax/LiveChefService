@@ -15,9 +15,16 @@
 
     hub.client.cookingAdded = function (cooking) {
         self.cookings.push(cooking);
-        console.log('New cooking added: ' + cooking.dishName);
+        console.log('New cooking added: ' + cooking.dish.name);
     };
 
+    hub.client.cookingRemoved = function (cookingId) {
+        self.cookings.remove(function (cooking) {
+            return cooking.id == cookingId;
+        });
+        console.log('Cooking removed: ' + cookingId);
+    };
+    
     hub.client.userLoggedIn = function (user) {
         console.log('User logged-in: ' + user.username);
     };
