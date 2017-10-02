@@ -3,6 +3,9 @@
     self.parent = parent;
 
     self.activeTab = ko.observable(1);
+    self.activateTab = function (tabId) {
+        self.activeTab(tabId);
+    };
 
     self.cookings = ko.observableArray(); 
     self.recipes = ko.observableArray(); 
@@ -64,10 +67,6 @@
         self.parent.newCooking(new NewCookingViewModel());
         self.parent.showScreen(Screen.NewCooking);
     }
-
-    self.activateTab = function (tabId) {
-        self.activeTab(tabId);
-    };
 };
 
 MainViewModel.prototype.logoutSucceeded = function (user) {

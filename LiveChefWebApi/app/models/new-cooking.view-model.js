@@ -5,6 +5,18 @@ var NewCookingViewModel = function () {
 
     var hub = root.hub;
 
+    var noPages = 2;
+    self.activePage = ko.observable(1);
+    self.activatePage = function (moveStep) {
+        var newPage = self.activePage() + moveStep;
+        if (newPage < 1) {
+            newPage = noPages;
+        } else if (newPage > noPages) {
+            newPage = 1;
+        }
+        self.activePage(newPage);
+    };
+
     // list of recipes loaded from the server
     self.recipes = ko.observableArray();
     self.selectedRecipe = ko.observable(null);
