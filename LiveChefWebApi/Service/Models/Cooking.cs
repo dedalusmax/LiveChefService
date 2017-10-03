@@ -1,4 +1,6 @@
-﻿namespace LiveChefService.Models
+﻿using System;
+
+namespace LiveChefService.Models
 {
     public enum CookingStatus
     {
@@ -14,6 +16,14 @@
         public bool UseCamera { get; set; }
         public bool UseChat { get; set; }
         public bool AllowHelp { get; set; }
+
+        public CookingSettings(bool useMicrophone, bool useCamera, bool useChat, bool allowHelp)
+        {
+            this.UseMicrophone = useMicrophone;
+            this.UseCamera = useCamera;
+            this.UseChat = useChat;
+            this.AllowHelp = allowHelp;
+        }
     }
 
     public class Cooking : IModel
@@ -23,5 +33,7 @@
         public Recipe Dish { get; set; }
         public CookingSettings Settings { get; set; }
         public CookingStatus Status { get; set; }
+        public TimeSpan TimeStarted { get; set; }
+        public TimeSpan TimeFinished { get; set; }
     }
 }

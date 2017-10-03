@@ -1,36 +1,27 @@
 ﻿<div data-bind="with: cooking" class="cooking-component">
 
     <div class="header">
-        <button class="btn btn-default return-button" data-bind="click: returnToMain">Return</button>
-        <p class="title">Cooking details</p>
+        <!-- ko if: !chefIsMe -->
+        <button class="btn btn-default" data-bind="click: returnToMain">Return</button>
+        <!-- /ko -->
+        <!-- ko if: chefIsMe -->
+        <button class="btn btn-warning" data-bind="click: giveUp">Give up!</button>
+        <!-- /ko -->
     </div>
-
-    <div class="col-sm-6" data-bind="with: dish">
-        <img class="card-img-top" data-bind="attr: { src: image, alt: name }">
-        <div class="card-block">
-            <h4 class="card-title" data-bind="text: name"></h4>
-            <p class="card-text" data-bind="text: description"></p>
-        </div>
-        <div class="card-footer">
-            <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
-            <label data-bind="text: time"></label>
-            <label>&nbsp;min</label>
-            <div class="toast">
-                <small data-bind="text: difficultyText"></small>
-                <small>level</small>
-            </div>
-        </div>
-    </div>
+    
+    <h4 class="title">Cooking details</h4>
+    <div class="col-sm-6" data-bind="template: { name: 'recipe-card', data: dish }"></div>
 
     <div class="col-sm-6" data-bind="visible: settings.useCamera">
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Look what is cooking</h4>
                 <video width="520" height="240" autoplay controls></video>
-                <p class="card-text"><small class="text-muted">Started 3 mins ago</small></p>
             </div>
         </div>
     </div>
+
+    <!-- ko if: chefIsMe -->
 
     <div class="col-sm-6"></div>
     <div data-bind="visible: settings.useChat" class="col-sm-6">
@@ -54,5 +45,6 @@
             </div>
         </div>
     </div>
-    <div class="footer"></div>
+
+    <!-- /ko -->
 </div>

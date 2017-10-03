@@ -1,5 +1,6 @@
 ﻿using LiveChefService.Models;
 using Microsoft.AspNet.SignalR;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,7 +15,8 @@ namespace LiveChefService
                 Chef = data.Chef,
                 Dish = data.Dish,
                 Settings = data.Settings,
-                Status = CookingStatus.Started
+                Status = CookingStatus.Started,
+                TimeStarted = new TimeSpan(DateTime.Now.Ticks)
             };
 
             WebApiApplication.CookingRepository.Add(cooking);

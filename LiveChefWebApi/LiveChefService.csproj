@@ -122,6 +122,7 @@
     <Content Include="app\index.js" />
     <Content Include="app\services\signalr.service.js" />
     <Content Include="app\services\tools.service.js" />
+    <Content Include="app\templates\recipe-card.html" />
     <Content Include="app\templates\cooking.html" />
     <Content Include="app\templates\cookings-list.html" />
     <Content Include="app\templates\login.html" />
@@ -156,6 +157,7 @@
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\styles.scss" />
+    <Content Include="app\models\my-cooking.view-model.js" />
     <None Include="compilerconfig.json" />
     <Content Include="compilerconfig.json.bindings">
       <DependentUpon>compilerconfig.json</DependentUpon>

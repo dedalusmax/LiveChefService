@@ -16,18 +16,6 @@
 
     var hub = self.parent.hub;
 
-    hub.client.cookingAdded = function (cooking) {
-        self.cookings.push(cooking);
-        console.log('New cooking added: ' + cooking.dish.name);
-    };
-
-    hub.client.cookingRemoved = function (cookingId) {
-        self.cookings.remove(function (cooking) {
-            return cooking.id == cookingId;
-        });
-        console.log('Cooking removed: ' + cookingId);
-    };
-    
     hub.client.userLoggedIn = function (user) {
         console.log('User logged-in: ' + user.username);
     };
@@ -38,17 +26,29 @@
         });
     }
 
-    hub.client.cookingsInitiated = function (cookings) {
-        cookings.forEach(function (cooking) {
-            self.cookings.push(cooking);
-            console.log('Cooking initiated: ' + cooking.dish.name);
-        });
-    }
-
     hub.client.recipesInitiated = function (recipes) {
         recipes.forEach(function (recipe) {
             self.recipes.push(new RecipeViewModel(recipe));
             console.log('Recipe initiated: ' + recipe.name);
+        });
+    }
+
+    hub.client.cookingAdded = function (cooking) {
+        self.cookings.push(new CookingViewModel(cooking));
+        console.log('New cooking added: ' + cooking.dish.name);
+    };
+
+    hub.client.cookingRemoved = function (cookingId) {
+        self.cookings.remove(function (cooking) {
+            return cooking.id == cookingId;
+        });
+        console.log('Cooking removed: ' + cookingId);
+    };
+    
+    hub.client.cookingsInitiated = function (cookings) {
+        cookings.forEach(function (cooking) {
+            self.cookings.push(new CookingViewModel(cooking));
+            console.log('Cooking initiated: ' + cooking.dish.name);
         });
     }
 
@@ -58,8 +58,8 @@
     $.connection.hub.start().done(function () {
     });
 
-    self.cookingDetails = function () {
-        self.parent.cooking(new CookingViewModel(self));
+    self.viewCooking = function (cooking) {
+        self.parent.cooking(new CookingViewModel(cooking));
         self.parent.showScreen(Screen.Cooking);
     };
 

@@ -1,0 +1,28 @@
+﻿<div class="card">
+    <img class="card-img-top" data-bind="attr: { src: image, alt: name }">
+    <div class="card-block">
+        <h4 class="card-title" data-bind="text: name"></h4>
+        <p class="card-text" data-bind="text: description"></p>
+    </div>
+    <div class="card-footer">
+        <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+        <label data-bind="text: time"></label>
+        <label>&nbsp;min</label>
+        <div>
+            <small data-bind="text: difficultyText"></small>
+            <small>level</small>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-block">
+        <h4 class="card-title">Ingredients:</h4>
+        <ul data-bind="foreach: ingredients">
+            <li>
+                <span data-bind="text: name"></span>
+                <small data-bind="text: quantity"></small>
+                <small data-bind="text: quantityType"></small>
+            </li>
+        </ul>
+    </div>
+</div>
