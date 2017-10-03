@@ -5,59 +5,27 @@
         <form class="form-horizontal">
             <h1>Let's cook together!</h1>
 
-            <div class="wizard row">
+            <div class="wizard">
                 <span class="glyphicon glyphicon-chevron-left wizard-nav col-sm-1" data-bind="click: activatePage.bind($data, -1)"></span>
                 <div class="wizard-pages col-sm-10">
                     <div class="wizard-page" data-bind="visible: activePage() == 1">
                         
-                        <h3>Choose recipe</h3>
-
-                        <!--<div class="dropdown">
-                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                                Choose ...
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu" data-bind="foreach: recipes">
-                                <li><a href="#" data-bind="text: name"></a></li>
-                            </ul>
-                        </div>-->
+                        <h3>Choose your dish</h3>
 
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="email">Email:</label>
-                            <select class="col-sm-10" data-bind="options: recipes, optionsText: 'name', value: selectedRecipe, optionsCaption: 'Choose...'"></select>
+                            <div class="dropdown">
+                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                    A fine selection of our recipes
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" data-bind="foreach: recipes">
+                                    <li data-bind="click: $parent.selectRecipe.bind($data)"><a href="#" data-bind="text: name"></a></li>
+                                </ul>
+                            </div>
                         </div>
-
-                        <!--<select data-bind="options: recipes, optionsText: 'name', value: selectedRecipe, optionsCaption: 'Choose...'"></select>-->
 
                         <!-- ko if: selectedRecipe() -->
-
-                        <div class="form-group row">
-                            <label for="duration" class="col-sm-2 col-form-label">Duration of cooking</label>
-                            <div class="col-sm-10">
-                                <span data-bind="text: selectedRecipe().time"></span>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="ingredients" class="col-sm-4 col-form-label">Ingredients</label>
-                            <table class="col-sm-6 table-responsive table-sm table-hover table-striped table-bordered text-center">
-                                <thead class="text-info">
-                                    <tr><th class="text-center">Name</th><th class="text-center">Quantity</th><th class="text-center">QuantityType</th></tr>
-                                </thead>
-                                <tbody data-bind="foreach: selectedRecipe().ingredients">
-                                    <tr>
-                                        <td data-bind="text: name"></td>
-                                        <td data-bind="text: quantity"></td>
-                                        <td data-bind="text: quantityType"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="form-group row">
-                            <label for="difficultyLevel" class="col-sm-2 col-form-label">Difficulty level</label>
-                            <div class="col-sm-10">
-                                <span data-bind="text: selectedRecipe().difficultyText"></span>
-                            </div>
-                        </div>
+                        <div class="postcard" data-bind="template: { name: 'recipe-card', data: selectedRecipe }"></div>
 
                         <!-- /ko -->
 
@@ -66,17 +34,12 @@
                         
                         <h3>Set media options</h3>
 
-                        <!-- Settings -->
                         <div class="form-group row">
-                            <div class="col-sm-2"></div>
-                            <div class="col-sm-10">
-                                <div class="form-check">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input" type="checkbox" data-bind="checked: useMicrophone"> Use microphone
-                                    </label>
-                                </div>
-                            </div>
+                            <button type="button" class="btn btn-default" data-toggle="button" data-bind="toggle: useMicrophone">
+                                <span class="glyphicon glyphicon-ok" aria-hidden="true" data-bind="visible: useMicrophone"></span>&nbsp;&nbsp;Use microphone
+                            </button>
                         </div>
+
                         <div class="form-group row">
                             <div class="select" data-bind="visible: useMicrophone() == true">
                                 <label for="audioSource" class="col-sm-2">Audio input source: </label>
@@ -89,15 +52,11 @@
                                 <select id="audioOutput" class="col-sm-10" data-bind="options: audioOutputs, optionsText: 'label', value: selectedAudioOutput"></select>
                             </div>
                         </div>
+
                         <div class="form-group row">
-                            <div class="col-sm-2"></div>
-                            <div class="col-sm-10">
-                                <div class="form-check">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input" type="checkbox" data-bind="checked: useCamera"> Use camera
-                                    </label>
-                                </div>
-                            </div>
+                            <button type="button" class="btn btn-default" data-toggle="button" data-bind="toggle: useCamera">
+                                <span class="glyphicon glyphicon-ok" aria-hidden="true" data-bind="visible: useCamera"></span>&nbsp;&nbsp;Use camera
+                            </button>
                         </div>
                         <div class="form-group row">
                             <div class="select" data-bind="visible: useCamera() == true">
@@ -105,25 +64,17 @@
                                 <select id="videoSource" class="col-sm-10" data-bind="options: videoInputs, optionsText: 'label', value: selectedVideoInput"></select>
                             </div>
                         </div>
+
                         <div class="form-group row">
-                            <div class="col-sm-2"></div>
-                            <div class="col-sm-10">
-                                <div class="form-check">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input" type="checkbox" data-bind="checked: useChat"> I want to allow chat with others while I cook
-                                    </label>
-                                </div>
-                            </div>
+                            <button type="button" class="btn btn-default" data-toggle="button" data-bind="toggle: useChat">
+                                <span class="glyphicon glyphicon-ok" aria-hidden="true" data-bind="visible: useChat"></span>&nbsp;&nbsp;Use chat to communicate with others
+                            </button>
                         </div>
+
                         <div class="form-group row">
-                            <div class="col-sm-2"></div>
-                            <div class="col-sm-10">
-                                <div class="form-check">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input" type="checkbox" data-bind="checked: allowHelp"> I want to allow that someone is helping me via audio or video
-                                    </label>
-                                </div>
-                            </div>
+                            <button type="button" class="btn btn-default" data-toggle="button" data-bind="toggle: allowHelp">
+                                <span class="glyphicon glyphicon-ok" aria-hidden="true" data-bind="visible: allowHelp"></span>&nbsp;&nbsp;Allow that someone is helping me via audio or video
+                            </button>
                         </div>
 
                     </div>
@@ -131,12 +82,9 @@
                 <span class="glyphicon glyphicon-chevron-right wizard-nav col-sm-1" data-bind="click: activatePage.bind($data, +1)"></span>
             </div>
 
-            <div class="form-group row">
-                <div class="col-sm-2"></div>
-                <div class="col-sm-10">
-                    <button type="submit" class="btn btn-primary btn-lg" disabled data-bind="click: startCooking, enable: selectedRecipe">Start cooking</button>
-                    <button class="btn btn-default" data-bind="click: returnToMain">I changed my mind</button>
-                </div>
+            <div class="form-group footer">
+                <button class="btn btn-primary" type="submit" data-bind="click: startCooking, enable: selectedRecipe">Start cooking</button>
+                <button class="btn btn-default" type="button" data-bind="click: returnToMain">I changed my mind</button>
             </div>
         </form>
     </div>

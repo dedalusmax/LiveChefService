@@ -10,8 +10,12 @@
     border-color: rgba(0, 0, 0, 0.3);
     opacity: 1; }
   .btn-primary.disabled, .btn-primary:active.disabled, .btn-primary:hover.disabled {
-    background-color: #c899ac;
-    opacity: 0.5; }
+    background-color: #c899ac; }
+
+.btn-default.active, .btn-default.active:focus {
+  color: #fefafa;
+  background-color: #A70343;
+  border-color: rgba(0, 0, 0, 0.3); }
 
 .btn-link {
   color: #A70343; }
@@ -186,21 +190,38 @@ h3 {
       vertical-align: text-bottom;
       font-weight: normal; }
 
+.new-cooking-component .logo {
+  width: 300px; }
+
+.new-cooking-component h1 {
+  font-size: 32px;
+  margin-top: -12px; }
+
 .new-cooking-component form {
-  width: 1200px; }
+  min-width: 800px;
+  min-height: 640px; }
 
-.new-cooking-component .wizard .wizard-nav {
-  font-size: 24px;
-  cursor: pointer;
-  -webkit-transition: -webkit-transform 0.5s;
-  transition: transform 0.5s; }
-  .new-cooking-component .wizard .wizard-nav:hover {
-    transform: scale(1.5);
-    -webkit-transform: scale(1.5); }
+.new-cooking-component .wizard {
+  margin-top: 12px; }
+  .new-cooking-component .wizard .wizard-nav {
+    font-size: 24px;
+    cursor: pointer;
+    -webkit-transition: -webkit-transform 0.5s;
+    transition: transform 0.5s; }
+    .new-cooking-component .wizard .wizard-nav:hover {
+      transform: scale(1.5);
+      -webkit-transform: scale(1.5); }
+  .new-cooking-component .wizard .wizard-pages {
+    min-height: 400px;
+    text-align: initial; }
 
-.new-cooking-component .wizard .wizard-pages {
-  min-height: 400px;
-  text-align: initial; }
+.new-cooking-component .postcard {
+  display: flex; }
+
+.new-cooking-component .footer {
+  position: absolute;
+  bottom: 0;
+  width: 50%; }
 
 .cooking-component {
   padding: 10px; }

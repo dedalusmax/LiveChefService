@@ -20,6 +20,9 @@ var NewCookingViewModel = function () {
     // list of recipes loaded from the server
     self.recipes = ko.observableArray();
     self.selectedRecipe = ko.observable(null);
+    self.selectRecipe = function (recipe) {
+        self.selectedRecipe(recipe);
+    }
 
     // settings
     self.useMicrophone = ko.observable(true);

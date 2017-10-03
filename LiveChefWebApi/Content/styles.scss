@@ -26,8 +26,13 @@ $highlight-color: #ffd800;
 
     &.disabled, &:active.disabled, &:hover.disabled {
         background-color: $disabled-color;
-        opacity: 0.5;
     }
+}
+
+.btn-default.active, .btn-default.active:focus {
+    color: $panel-color;
+    background-color: $primary-color;
+    border-color: $border-color;
 }
 
 .btn-link {
@@ -277,11 +282,23 @@ h3 {
 
 .new-cooking-component {
 
+    .logo {
+        width: 300px;
+    }
+
+    h1 {
+        font-size: 32px;
+        margin-top: -12px;
+    }
+
     form {
-        width: 1200px;
+        min-width: 800px;
+        min-height: 640px;
     }
 
     .wizard {
+        margin-top: 12px;
+
         .wizard-nav {
             font-size: 24px;
             cursor: pointer;
@@ -298,6 +315,16 @@ h3 {
             min-height: 400px;
             text-align: initial;
         }
+    }
+
+    .postcard {
+        display: flex;
+    }
+
+    .footer {
+        position: absolute;
+        bottom: 0;
+        width: 50%;
     }
 }
 
