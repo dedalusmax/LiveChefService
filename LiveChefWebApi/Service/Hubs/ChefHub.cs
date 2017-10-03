@@ -16,7 +16,7 @@ namespace LiveChefService
                 Dish = data.Dish,
                 Settings = data.Settings,
                 Status = CookingStatus.Started,
-                TimeStarted = new TimeSpan(DateTime.Now.Ticks)
+                StartedTime = DateTime.Now
             };
 
             WebApiApplication.CookingRepository.Add(cooking);

@@ -33,7 +33,7 @@ namespace LiveChefService.Models
         public Recipe Dish { get; set; }
         public CookingSettings Settings { get; set; }
         public CookingStatus Status { get; set; }
-        public TimeSpan TimeStarted { get; set; }
-        public TimeSpan TimeFinished { get; set; }
+        public DateTime StartedTime { get; set; }
+        public DateTime Finishedtime { get; set; }
     }
 }

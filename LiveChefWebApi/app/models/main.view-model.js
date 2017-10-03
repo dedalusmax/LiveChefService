@@ -67,6 +67,13 @@
         self.parent.newCooking(new NewCookingViewModel());
         self.parent.showScreen(Screen.NewCooking);
     }
+
+    var timer = window.setInterval(function () {
+        var now = new Date();
+        self.cookings().forEach(function (cooking) {
+            cooking.refreshTime(now);
+        });
+    }, 1000);
 };
 
 MainViewModel.prototype.logoutSucceeded = function (user) {

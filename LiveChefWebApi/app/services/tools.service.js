@@ -28,6 +28,15 @@ function getCookie(name) {
     return '';
 }
 
+function formatTimeFromDate(date) {
+
+    var mins = date.getMinutes();
+    var secs = date.getSeconds();
+    if (mins < 10) mins = '0' + mins;
+    if (secs < 10) secs = '0' + secs;
+    return date.getHours() + ':' + mins + ':' + secs;
+}
+
 ko.bindingHandlers.toggle = {
 
     init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {

@@ -10,7 +10,9 @@
     </div>
     
     <h4 class="title">Cooking details</h4>
-    <div class="col-sm-6" data-bind="template: { name: 'recipe-card', data: dish }"></div>
+    <div class="col-sm-6" data-bind="template: { name: 'recipe-card', data: dish }"></div> 
+
+    <!-- ko if: chefIsMe -->
 
     <div class="col-sm-6" data-bind="visible: settings.useCamera">
         <div class="card">
@@ -20,8 +22,6 @@
             </div>
         </div>
     </div>
-
-    <!-- ko if: chefIsMe -->
 
     <div class="col-sm-6"></div>
     <div data-bind="visible: settings.useChat" class="col-sm-6">

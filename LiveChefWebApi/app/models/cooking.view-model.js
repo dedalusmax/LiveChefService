@@ -7,9 +7,11 @@
     // add new fields to the model
     self.dish = new RecipeViewModel(data.dish);
     self.chefIsMe = chefIsMe || false;
-    self.timeStarted = new Date(data.timeStarted);
 
-    self.currentTime = ko.observable();
+    var timeStarted = new Date(data.startedTime);
+    self.timeStarted = formatTimeFromDate(timeStarted);
+
+    self.currentTime = ko.observable('');
 
     self.status = ko.observable(data.status);
     self.statusText = ko.computed(function () {
@@ -33,4 +35,9 @@
         console.log("Cooking closed: " + self.id);
         root.showScreen(Screen.Main);
     };
+
+    self.refreshTime = function (now) {
+        var diff = Math.abs(now - timeStarted);
+        self.currentTime(formatTimeFromDate(new Date(diff)));
+    }
 };
