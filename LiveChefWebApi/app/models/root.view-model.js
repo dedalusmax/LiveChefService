@@ -9,6 +9,7 @@ var RootViewModel = function () {
     self = this;
 
     self.user = null;
+    self.hub = $.connection.chefHub;
 
     self.activeScreen = ko.observable(Screen.Login);
 

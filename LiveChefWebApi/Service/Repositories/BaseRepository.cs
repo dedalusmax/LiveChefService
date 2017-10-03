@@ -12,7 +12,7 @@ namespace LiveChefService.Models
             return this.items.Find(f => f.Id == id);
         }
 
-        public IEnumerable<T> GetAll()
+        public List<T> GetAll()
         {
             return this.items;
         }

@@ -1,0 +1,30 @@
+﻿<div class="card-deck" data-bind="foreach: cookings">
+    <div class="card" data-bind="click: $parent.viewCooking.bind($data, $data)">
+        <div class="card-header">
+            <h5 data-bind="text: chef.displayName"></h5>
+            <small>is cooking</small>
+            <b data-bind="text: dish.name"></b>
+        </div>
+        <img class="card-img-top" data-bind="attr: { src: dish.image, alt: dish.name }">
+        <div class="card-block">
+            <p class="card-text" data-bind="text: dish.description"></p>
+            <div>
+                <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+                <label data-bind="text: dish.time"></label>
+                <label>&nbsp;min</label>
+            </div>
+            <div>
+                <small data-bind="text: dish.difficultyText"></small>
+                <small>level</small>
+            </div>
+        </div>
+        <p class="card-footer">
+            <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+            <small data-bind="text: 'Time cooking: ' + timeStarted"></small>
+            <span class="glyphicon glyphicon-camera" aria-hidden="true" data-bind="style: { color: settings.useCamera ? 'white' : 'grey' }"></span>
+            <span class="glyphicon glyphicon-volume-up" aria-hidden="true" data-bind="style: { color: settings.useMicrophone ? 'white' : 'grey' }"></span>
+            <span class="glyphicon glyphicon-comment" aria-hidden="true" data-bind="style: { color: settings.allowChat ? 'white' : 'grey' }"></span>
+            <small data-bind="text: statusText"></small>
+        </p>
+    </div>
+</div>

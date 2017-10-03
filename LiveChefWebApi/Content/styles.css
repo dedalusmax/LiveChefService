@@ -1,215 +1,232 @@
-﻿.login-component {
-    background-image: url("./images/backgroundImage.jpg");
-    text-align: center;
-    background-size: cover;
-    background-position: 50% 50%;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    position: fixed;
-}
+﻿.btn {
+  font-size: initial;
+  padding: 5px 25px 5px 25px; }
 
-    .login-component .title {
-        padding-top: 5px;
-        font-family: cursive;
-        font-size: 70px;
-        color: #A70343;
-        text-shadow: 2px 2px 5px black;
-        margin-top: -40px;
-        position: relative;
-        z-index: 1;
-        font-weight: bold;
-    }
+.btn-primary {
+  background-color: #A70343;
+  border-color: rgba(0, 0, 0, 0.3); }
+  .btn-primary:active:focus, .btn-primary:focus, .btn-primary:visited, .btn-primary:active:hover, .btn-primary:hover, .btn-primary:active {
+    background-color: #67203c;
+    border-color: rgba(0, 0, 0, 0.3);
+    opacity: 1; }
+  .btn-primary.disabled, .btn-primary:active.disabled, .btn-primary:hover.disabled {
+    background-color: #c899ac;
+    opacity: 0.5; }
 
-    .login-component button {
-        min-width: 100px;
-        padding: 5px;
-        margin-top: 5px;
-        font-size: 15px;
-    }
+.btn-link {
+  color: #A70343; }
+  .btn-link:active:focus, .btn-link:focus, .btn-link:link, .btn-link:visited, .btn-link:active:hover, .btn-link:hover, .btn-link:active {
+    color: #67203c;
+    opacity: 1;
+    text-decoration: none;
+    outline: none; }
 
-    .login-component .logo {
-        width: 380px;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-    }
+@keyframes popeye {
+  0% {
+    opacity: 0;
+    transform: rotate(180deg); }
+  100% {
+    opacity: 1;
+    transform: rotate(0); } }
 
-    .login-component form {
-        background-color: white;
-        margin-top: -30px;
-        border-radius: 10px;
-        border: 1px solid #999;
-        border: inset 1px solid #333;
-        -webkit-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
-        -moz-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
-        box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
-    }
+@keyframes slide {
+  0% {
+    opacity: 0;
+    margin-top: initial; }
+  100% {
+    opacity: 1; } }
 
-.login-componenth3 .subtitle {
-    font-size: 20px;
-    font-family: cursive;
-    text-shadow: 2px 2px 5px #BF82A4;
-    margin-top: 10px;
-}
+@keyframes hot {
+  100% {
+    color: #ffd800; } }
 
-.login-component .alert {
-    display: inline-block;
-    margin-top: 10px;
-}
-
-.login-component #logo {
-    animation-duration: 1s;
-    animation-delay: 0s;
-}
-
-.login-component #form {
-    animation-duration: 1s;
-    animation-delay: 0s;
-}
-
-/* Midium devices (tablets, 768px and up) */
-@media (max-width: 992px) {
-
-    .login-component .title {
-        font-size: 50px;
-    }
-
-    .login-component form {
-        margin: 0px;
-    }
-
-    .login-component button {
-        width: 60%;
-    }
-}
-/* Midium devices (tablets, 768px and up) */
-@media (min-width: 768px) {
-    .login-component .col-sm-offset-2 {
-        margin-left: 0px;
-    }
-
-    .login-component .center {
-        margin: 0 auto;
-        position: relative;
-        left: 50%;
-        top: 50%;
-        -webkit-transform: translate(-50%, -50%);
-        transform: translate(-50%, -50%);
-    }
-}
-/* small  - Landscape phones */
-@media (max-width: 768px) {
-    .login-component {
-        background-image: none;
-    }
-
-        .login-component form {
-            margin-left: 40px;
-            margin-right: 40px;
-            border: none;
-            box-shadow: none;
-        }
-
-        .login-component button {
-            width: 100%;
-        }
-
-        .login-component .title {
-            font-size: 30px;
-        }
-
-        .login-component .logo {
-            width: 250px;
-        }
-}
-
-@media (min-width: 992px) {
-    .login-component form {
-        width: 30%;
-        display: inline-block;
-    }
-}
-
-@media (min-width: 1200px) {
-    .login-component .logo {
-        padding-top: 5px;
-    }
-}
+@keyframes hot-button {
+  0% {
+    transform: rotate(-2deg);
+    -webkit-transform: rotate(-2deg); }
+  100% {
+    background-color: #ffd800;
+    border-color: rgba(0, 0, 0, 0.3);
+    transform: rotate(2deg);
+    -webkit-transform: rotate(2deg);
+    /*-webkit-transform: scale(1.1, 1.0);
+        transform: scale(1.1, 1.0);*/ } }
 
 .container-fluid {
-     padding-right: 0; 
-     padding-left: 0; 
-}
+  padding-right: 0;
+  padding-left: 0; }
 
-.main-component .header {
-    background-color: darkslategray;
-    color: white;
-    font-size: 50px;
-    margin-bottom: 10px;
-}
+h3 {
+  font-stretch: condensed;
+  color: #A70343;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  margin-top: 0; }
 
-.main-component .title{
-    float: left;
-}
-
-.main-component .logo {
-    width: 60px;
-    float: left;
-    margin: 5px 15px;
-}
-
-.main-component .userImage {
-    width: 80px;
-    float: left;
-    padding: 10px;
-}
-
-.main-component .logout-button{
-    margin-left: 70%;
-}
-
-.main-component .return-button{
-    margin-left: 60%;
-}
-.main-component .red {
-    color: red;
-}
-
-.main-component .green {
-    color: green;
-}
-
-.main-component .list-group-item {
-    padding: 5px 5px;
-    margin: 10px;
-}
-
-.main-component h5 {
-    padding-left: 25px;
+.poster {
+  background-image: url("images/backgroundImage.jpg");
+  text-align: center;
+  background-size: cover;
+  background-position: 50% 50%;
+  position: fixed;
+  width: 100%;
+  height: 100%; }
+  .poster .center {
+    margin: 0 auto;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%); }
+  .poster .logo {
+    width: 388px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    animation: 1s ease-out 0s 1 popeye; }
+  .poster h1 {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 64px;
+    font-weight: bold;
+    color: #A70343;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
     margin-bottom: 0;
-}
+    margin-top: -40px; }
+    .poster h1 .live {
+      animation: infinite 1s alternate-reverse hot; }
+  .poster form {
+    background-color: #fefafa;
+    margin-top: -30px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
+    width: 600px;
+    display: inline-block;
+    animation: 1s alternate slide; }
 
-.main-component h3 {
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-.main-component .userLogin{
-    float: right;
-    font-size: 15px;
-    margin-right: 25px;
-    margin-top: 25px;
-}
-.main-component .add-button{
-    width: 3%;
+.login-component h1 {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-size: 64px;
+  font-weight: bold;
+  color: #A70343;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  margin-bottom: 0;
+  margin-top: -40px; }
+  .login-component h1 .live {
+    animation: infinite 1s alternate-reverse hot; }
+
+.login-component .col-sm-offset-2 {
+  margin-left: 0px; }
+
+.login-component .alert {
+  display: inline-block;
+  margin-top: 10px; }
+
+.main-component {
+  text-align: center; }
+  .main-component .navbar {
+    background-color: #fefafa; }
+    .main-component .navbar .navbar-brand {
+      color: #A70343;
+      margin: 0;
+      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+      font-weight: bold;
+      padding: 20px 20px 0 20px; }
+    .main-component .navbar .navbar-toggle {
+      border: none; }
+      .main-component .navbar .navbar-toggle:active, .main-component .navbar .navbar-toggle:hover {
+        border: none;
+        color: #A70343; }
+    .main-component .navbar .navbar-right {
+      margin-right: 0; }
+  .main-component .new-cooking {
+    margin-right: 10px;
+    animation: infinite 1s alternate-reverse hot-button; }
+  .main-component .content {
+    margin-top: 50px; }
+
+.card-deck {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px; }
+  .card-deck .card {
+    cursor: pointer;
     margin: 10px;
-}
-.main-component .footer {
+    display: grid;
+    transition: margin 0.5s;
+    -webkit-transition: margin 0.5s; }
+    .card-deck .card:hover {
+      margin: 0px; }
+
+.card {
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
+  width: 320px; }
+  .card .card-header {
+    background-color: #A70343;
+    color: #fefafa; }
+  .card .card-img-top {
+    background-color: #fefafa;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+    width: -webkit-fill-available; }
+  .card .card-block {
+    padding: 10px; }
+  .card .card-footer {
+    color: #fefafa;
+    background-color: #67203c;
     margin: 0;
-    background-color: darkslategray;
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    padding: 2rem;
-}
+    padding: 5px; }
+    .card .card-footer span {
+      font-size: 24px;
+      margin-right: 5px; }
+    .card .card-footer label {
+      vertical-align: text-bottom;
+      font-weight: normal; }
+
+.new-cooking-component form {
+  width: 1200px; }
+
+.new-cooking-component .wizard .wizard-nav {
+  font-size: 24px;
+  cursor: pointer;
+  -webkit-transition: -webkit-transform 0.5s;
+  transition: transform 0.5s; }
+  .new-cooking-component .wizard .wizard-nav:hover {
+    transform: scale(1.5);
+    -webkit-transform: scale(1.5); }
+
+.new-cooking-component .wizard .wizard-pages {
+  min-height: 400px;
+  text-align: initial; }
+
+.cooking-component {
+  padding: 10px; }
+  .cooking-component .header {
+    /*margin: 10px;*/ }
+
+/* Medium devices (tablets, 768px and up) */
+@media (max-width: 768px) {
+  .login-component {
+    background-image: none; }
+    .login-component .logo {
+      width: 70%; }
+    .login-component form {
+      margin: 0px;
+      border: none;
+      box-shadow: none;
+      width: auto;
+      background-color: transparent; }
+    .login-component [class*='col-'] {
+      padding: 0; }
+    .login-component button {
+      font-size: large; }
+  .main-component .navbar.navbar-brand {
+    padding: 15px;
+    padding-left: 25px; }
+  .main-component .add-button {
+    width: 10% !important;
+    padding-top: 10px; } }
+

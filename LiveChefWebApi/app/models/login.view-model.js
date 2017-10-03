@@ -2,8 +2,8 @@
     var self = this;
     self.parent = parent;
 
-    self.userName = ko.observable('');
-    self.password = ko.observable('');
+    self.userName = ko.observable(getCookie('username'));
+    self.password = ko.observable(getCookie('password'));
      
     self.error = ko.observable(null);
 
@@ -19,6 +19,12 @@
 LoginViewModel.prototype.loginSucceeded = function (user) {
     var self = this;
     self.parent.user = user;
+
+    if (!user.isGuest) {
+        setCookie('username', user.username);
+        setCookie('password', user.password);
+    }
+
     self.parent.main(new MainViewModel(self.parent));
     self.parent.showScreen(Screen.Main);
     self.error(null);

@@ -10,9 +10,9 @@ namespace LiveChefService
 {
     public class WebApiApplication : System.Web.HttpApplication
     {
-        internal static readonly CookingRepository CookingRepository = new CookingRepository();
         internal static readonly UserRepository UserRepository = new UserRepository();
         internal static readonly RecipeRepository RecipeRepository = new RecipeRepository();
+        internal static readonly CookingRepository CookingRepository = new CookingRepository();
 
         protected void Application_Start()
         {

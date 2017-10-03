@@ -1,14 +1,36 @@
-﻿var CookingViewModel = function (parent) {
+﻿var CookingViewModel = function (data, chefIsMe) {
     var self = this;
-    self.parent = parent;
 
+    // take over the data from the model
+    $.extend(self, data);
 
-    self.cookingDetailsTitle = ko.observable("Cooking details");
-    self.recipeName = ko.observable("name of recipe")
-    self.recipeDetails = ko.observable("recipe details")
+    // add new fields to the model
+    self.dish = new RecipeViewModel(data.dish);
+    self.chefIsMe = chefIsMe || false;
+    self.timeStarted = new Date(data.timeStarted);
+
+    self.currentTime = ko.observable();
+
+    self.status = ko.observable(data.status);
+    self.statusText = ko.computed(function () {
+        switch (self.status()) {
+            case 1:
+                return 'Just started';
+            case 2:
+                return 'Ongoing';
+            case 3:
+                return 'Help needed!';
+            case 4:
+                return 'Finished';
+        }
+    });
+
+    if (self.chefIsMe) {
+        $.extend(self, new MyCookingViewModel(self));
+    }
 
     self.returnToMain = function () {
+        console.log("Cooking closed: " + self.id);
         root.showScreen(Screen.Main);
     };
-
 };

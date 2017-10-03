@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 
 namespace LiveChefService.Models
@@ -7,98 +8,42 @@ namespace LiveChefService.Models
     {
         public CookingRepository()
         {
-            User newChef = new User();
-            newChef.DisplayName = "Pero";
-            newChef.Username = "pr";
-            newChef.Password = "123";
-            newChef.IsLoggedIn = true;
-            newChef.IsGuest = false;
+            List<User> chefs = WebApiApplication.UserRepository.GetAll();
+            List<Recipe> recipes = WebApiApplication.RecipeRepository.GetAll();
 
-            Recipe newDish = new Recipe();
-            newDish.Name = "Fish and Chips";
-            newDish.Time = 30;
+            TimeSpan started = new TimeSpan(DateTime.Now.Ticks);
 
-            var ingredients = new List<Ingredient>();
-            ingredients.Add(new Ingredient { Name = "Tortilla", Quantity = 4, QuantityType = "pcs" });
-            ingredients.Add(new Ingredient { Name = "Gouda Cheese", Quantity = 120, QuantityType = "g" });
-            ingredients.Add(new Ingredient { Name = "Fish", Quantity = 500, QuantityType = "g" });
-            ingredients.Add(new Ingredient { Name = "Lemon juice", Quantity = 1, QuantityType = "pc" });
-            ingredients.Add(new Ingredient { Name = "Flour", Quantity = 70, QuantityType = "g" });
-            ingredients.Add(new Ingredient { Name = "Potatoes", Quantity = 500, QuantityType = "g" });
-            ingredients.Add(new Ingredient { Name = "Onion", Quantity = 1, QuantityType = "pc" });
-            ingredients.Add(new Ingredient { Name = "Pickles", Quantity = 100, QuantityType = "g" });
-            ingredients.Add(new Ingredient { Name = "Cherry tomatoes", Quantity = 100, QuantityType = "g" });
+            User pero = chefs.Find(u => u.Username == "pero");
+            Recipe fishAndChips = recipes.Find(r => r.Id == 1);
             
-            newDish.Ingredients = ingredients;
-            Add(new Cooking { Id = 1, Chef = newChef, Status = CookingStatus.Started, Dish = newDish });
-            ingredients.Clear();
+            Add(new Cooking { Id = 1, Chef = pero, Dish = fishAndChips, Status = CookingStatus.Ongoing, Settings = new CookingSettings(true, false, false, true), TimeStarted = started });
 
-            newChef = new User();
-            newChef.DisplayName = "Štef";
-            newChef.Username = "šf";
-            newChef.Password = "123";
-            newChef.IsLoggedIn = true;
-            newChef.IsGuest = false;
+            User stefica = chefs.Find(u => u.Username == "stefica");
+            Recipe pancakes = recipes.Find(r => r.Id == 2);
+            Add(new Cooking { Id = 2, Chef = stefica, Dish = pancakes, Status = CookingStatus.NeedHelp, Settings = new CookingSettings(true, true, true, true), TimeStarted = started.Subtract(new TimeSpan(0, 15, 0)) });
 
-            newDish = new Recipe();
-            newDish.Name = "Pancakes";
-            ingredients.Add(new Ingredient { Name = "Eggs", Quantity = 2, QuantityType = "pcs" });
-            ingredients.Add(new Ingredient { Name = "Flour", Quantity = 2, QuantityType = "cups" });
-            ingredients.Add(new Ingredient { Name = "Baking powder", Quantity = 1, QuantityType = "pc" });
-            ingredients.Add(new Ingredient { Name = "Milk", Quantity = 2, QuantityType = "cups" });
-            ingredients.Add(new Ingredient { Name = "Oil", Quantity = 10, QuantityType = "ml" });
-            ingredients.Add(new Ingredient { Name = "Sugar", Quantity = 50, QuantityType = "g" });
-            ingredients.Add(new Ingredient { Name = "Salt", Quantity = 1, QuantityType = "teaspoon" });
-                        
-            newDish.Ingredients = ingredients;
-            Add(new Cooking { Id = 2, Chef = newChef, Status = CookingStatus.NeedHelp, Dish = newDish });
-            ingredients.Clear();
+            User mico = chefs.Find(u => u.Username == "mico");
+            Recipe lasagneBolognese = recipes.Find(r => r.Id == 3);
+            Add(new Cooking { Id = 3, Chef = mico, Dish = lasagneBolognese, Status = CookingStatus.Ongoing, Settings = new CookingSettings(true, true, false, false), TimeStarted = started.Subtract(new TimeSpan(1, 30, 0)) });
 
-            newChef = new User();
-            newChef.DisplayName = "Đuro";
-            newChef.Username = "đr";
-            newChef.Password = "123";
-            newChef.IsLoggedIn = true;
-            newChef.IsGuest = false;
+            User jura = chefs.Find(u => u.Username == "jura");
+            Recipe chocolateMuffins = recipes.Find(r => r.Id == 4);
+            Add(new Cooking { Id = 4, Chef = jura, Dish = chocolateMuffins, Status = CookingStatus.Finished, Settings = new CookingSettings(true, false, false, true), TimeStarted = started.Subtract(new TimeSpan(3, 0, 0)) });
+        }
 
-            newDish = new Recipe();
-            newDish.Name = "Spaghetti bolognese";
+        public IEnumerable<Cooking> GetActiveCookings()
+        {
+            return this.items.FindAll(c => c.Status != CookingStatus.Finished);
+        }
 
-            ingredients.Add(new Ingredient { Name = "Spaghetti", Quantity = 350, QuantityType = "g" });
-            ingredients.Add(new Ingredient { Name = "Tomato sauce", Quantity = 2, QuantityType = "dl" });
-            ingredients.Add(new Ingredient { Name = "Red Wine", Quantity = 50, QuantityType = "ml" });
-            ingredients.Add(new Ingredient { Name = "Parsley", Quantity = 3, QuantityType = "pcs" });
-            ingredients.Add(new Ingredient { Name = "Parmesan", Quantity = 50, QuantityType = "g" });
-            ingredients.Add(new Ingredient { Name = "Salt", Quantity = 1, QuantityType = "teaspoon" });
+        public IEnumerable<Cooking> GetFinishedCookings()
+        {
+            return this.items.FindAll(c => c.Status == CookingStatus.Finished);
+        }
 
-            
-            newDish.Ingredients = ingredients;
-            Add(new Cooking { Id = 3, Chef = newChef, Status = CookingStatus.Ongoing, Dish = newDish });
-            ingredients.Clear();
-
-            newChef = new User();
-            newChef.DisplayName = "Jura";
-            newChef.Username = "jr";
-            newChef.Password = "123";
-            newChef.IsLoggedIn = true;
-            newChef.IsGuest = false;
-
-            newDish = new Recipe();
-            newDish.Name = "Chocolate muffins";
-
-            ingredients.Add(new Ingredient { Name = "Sugar", Quantity = 50, QuantityType = "g" });
-            ingredients.Add(new Ingredient { Name = "Powdered Sugar", Quantity = 10, QuantityType = "g" });
-            ingredients.Add(new Ingredient { Name = "Butter ", Quantity = 100, QuantityType = "g" });
-            ingredients.Add(new Ingredient { Name = "Eggs", Quantity = 1, QuantityType = "pc" });
-            ingredients.Add(new Ingredient { Name = "Milk", Quantity = 2, QuantityType = "dl" });
-            ingredients.Add(new Ingredient { Name = "Cocoa", Quantity = 2, QuantityType = "tablespoon" });
-            ingredients.Add(new Ingredient { Name = "Flour", Quantity = 100, QuantityType = "g" });
-            ingredients.Add(new Ingredient { Name = "Chopped hazelnuts", Quantity = 50, QuantityType = "g" });
-            ingredients.Add(new Ingredient { Name = "Chocolate", Quantity = 200, QuantityType = "g" });
-
-            
-            newDish.Ingredients = ingredients;
-            Add(new Cooking { Id = 4, Chef = newChef, Status = CookingStatus.NeedHelp, Dish = newDish });
+        internal void RemoveAllStarted()
+        {
+            this.items.RemoveAll(c => c.Status == CookingStatus.Started);
         }
     }
 }

@@ -115,20 +115,36 @@
     <Content Include="app\models\cooking.view-model.js" />
     <Content Include="app\models\login.view-model.js" />
     <Content Include="app\models\new-cooking.view-model.js" />
+    <Content Include="app\models\recipe.view-model.js" />
     <Content Include="app\models\root.view-model.js" />
     <Content Include="app\services\ajax.service.js" />
     <Content Include="app\models\main.view-model.js" />
     <Content Include="app\index.js" />
     <Content Include="app\services\signalr.service.js" />
     <Content Include="app\services\tools.service.js" />
+    <Content Include="app\templates\recipe-card.html" />
+    <Content Include="app\templates\cooking.html" />
+    <Content Include="app\templates\cookings-list.html" />
+    <Content Include="app\templates\login.html" />
+    <Content Include="app\templates\main.html" />
+    <Content Include="app\templates\new-cooking.html" />
+    <Content Include="app\templates\recipes-list.html" />
+    <Content Include="app\templates\stored-cookings.html" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\images\backgroundImage.jpg" />
     <Content Include="Content\images\chef.png" />
+    <Content Include="Content\images\recipes\page1-img1.jpg" />
+    <Content Include="Content\images\recipes\page1-img2.jpg" />
+    <Content Include="Content\images\recipes\page1-img3.jpg" />
+    <Content Include="Content\images\recipes\page1-img4.jpg" />
     <Content Include="Content\images\small-logo.png" />
     <Content Include="Content\styles.css" />
+    <Content Include="Content\styles.min.css">
+      <DependentUpon>styles.css</DependentUpon>
+    </Content>
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="index.html" />
@@ -140,16 +156,23 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
-    <None Include="Scripts\jquery-1.9.1.intellisense.js" />
-    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Content\styles.scss" />
+    <Content Include="app\models\my-cooking.view-model.js" />
+    <None Include="compilerconfig.json" />
+    <Content Include="compilerconfig.json.bindings">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </Content>
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
+    <Content Include="Scripts\adapter-latest.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Scripts\jquery-1.9.1.js" />
-    <Content Include="Scripts\jquery-1.9.1.min.js" />
+    <Content Include="Scripts\infuser.js" />
     <Content Include="Scripts\jquery-3.2.1.min.js" />
-    <Content Include="Scripts\jquery.signalR-2.2.2.js" />
     <Content Include="Scripts\jquery.signalR-2.2.2.min.js" />
-    <Content Include="Scripts\knockout-3.4.2.debug.js" />
     <Content Include="Scripts\knockout-3.4.2.js" />
+    <Content Include="Scripts\koExternalTemplateEngine.js" />
+    <Content Include="Scripts\TrafficCop.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -182,7 +205,6 @@
     </Content>
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
-    <Content Include="Scripts\jquery-1.9.1.min.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
