@@ -8,9 +8,6 @@ var ChefCookingViewModel = function (data) {
         var leftVideo = document.querySelector('video#leftVideo');
         var rightVideo = document.querySelector('video#rightVideo');
 
-        var thisStream;
-        var self = this;
-
         if (leftVideo != null && rightVideo != null) {
             var stream;
 
@@ -27,35 +24,59 @@ var ChefCookingViewModel = function (data) {
                 if (stream) {
                     return;
                 }
-
-                var constraints = {
-                    audio: false,
-                    video: true
-                };
-
-                function handleSuccess(stream) {
-                    window.stream = stream; // make stream available to browser console
-                    leftVideo.srcObject = stream;
-                    self.thisStream = leftVideo.srcObject;
+                if (leftVideo.captureStream) {
+                    stream = leftVideo.captureStream();
+                    console.log('Captured stream from leftVideo with captureStream',
+                        stream);
+                    call();
+                } else if (leftVideo.mozCaptureStream) {
+                    stream = leftVideo.mozCaptureStream();
+                    console.log('Captured stream from leftVideo with mozCaptureStream()',
+                        stream);
+                    call();
+                } else {
+                    console.log('captureStream() not supported');
                 }
-
-                function handleError(error) {
-                    console.log('navigator.getUserMedia error: ', error);
-                }
-
-                navigator.mediaDevices.getUserMedia(constraints).
-                    then(handleSuccess).catch(handleError);
-
-
-                call();         
             }
-            
-           maybeCreateStream();           
-           leftVideo.play();       
+
+            // Video tag capture must be set up after video tracks are enumerated.
+            leftVideo.oncanplay = maybeCreateStream;
+            if (leftVideo.readyState >= 0) {  // HAVE_FUTURE_DATA
+                // Video is already ready to play, call maybeCreateStream in case oncanplay
+                // fired before we registered the event handler.
+                maybeCreateStream();
+            }
+
+            leftVideo.play();
+
+            rightVideo.onloadedmetadata = function () {
+                console.log('Remote video videoWidth: ' + this.videoWidth +
+                    'px,  videoHeight: ' + this.videoHeight + 'px');
+            };
+
+            rightVideo.onresize = function () {
+                console.log('Remote video size changed to ' +
+                    rightVideo.videoWidth + 'x' + rightVideo.videoHeight);
+                // We'll use the first onresize callback as an indication that
+                // video has started playing out.
+                if (startTime) {
+                    var elapsedTime = window.performance.now() - startTime;
+                    console.log('Setup time: ' + elapsedTime.toFixed(3) + 'ms');
+                    startTime = null;
+                }
+            };
 
             function call() {
                 console.log('Starting call');
-
+                startTime = window.performance.now();
+                var videoTracks = stream.getVideoTracks();
+                var audioTracks = stream.getAudioTracks();
+                if (videoTracks.length > 0) {
+                    console.log('Using video device: ' + videoTracks[0].label);
+                }
+                if (audioTracks.length > 0) {
+                    console.log('Using audio device: ' + audioTracks[0].label);
+                }
                 var servers = null;
                 pc1 = new RTCPeerConnection(servers);
                 console.log('Created local peer connection object pc1');
@@ -73,9 +94,16 @@ var ChefCookingViewModel = function (data) {
                 pc2.oniceconnectionstatechange = function (e) {
                     onIceStateChange(pc2, e);
                 };
-                // pc2.ontrack = gotRemoteStream;
-                //pc2.getRemoteStreams() = gotRemoteStream;
-                gotRemoteStream();
+                pc2.ontrack = gotRemoteStream;
+
+                stream.getTracks().forEach(
+                    function (track) {
+                        pc1.addTrack(
+                            track,
+                            stream
+                        );
+                    }
+                );
                 console.log('Added local stream to pc1');
 
                 console.log('pc1 createOffer start');
@@ -117,19 +145,19 @@ var ChefCookingViewModel = function (data) {
             }
 
             function gotRemoteStream(event) {
-                if (rightVideo.srcObject !== event) {
-                    rightVideo.srcObject = self.thisStream;
+                if (rightVideo.srcObject !== event.streams[0]) {
+                    rightVideo.srcObject = event.streams[0];
                     console.log('pc2 received remote stream', event);
                 }
             }
 
             function onCreateAnswerSuccess(desc) {
-                console.log('Answer from pc2:\n' + desc.sdp);
-                console.log('pc2 setLocalDescription start');
+                cosnole.log('Answer from pc2:\n' + desc.sdp);
+                cosnole.log('pc2 setLocalDescription start');
                 pc2.setLocalDescription(desc, function () {
                     onSetLocalSuccess(pc2);
                 }, onSetSessionDescriptionError);
-                console.log('pc1 setRemoteDescription start');
+                cosnole.log('pc1 setRemoteDescription start');
                 pc1.setRemoteDescription(desc, function () {
                     onSetRemoteSuccess(pc1);
                 }, onSetSessionDescriptionError);
@@ -145,12 +173,12 @@ var ChefCookingViewModel = function (data) {
                         onAddIceCandidateError(pc, err);
                     }
                     );
-                console.log(getName(pc) + ' ICE candidate: \n' + (event.candidate ?
+                cosnole.log(getName(pc) + ' ICE candidate: \n' + (event.candidate ?
                     event.candidate.candidate : '(null)'));
             }
 
             function onAddIceCandidateSuccess(pc) {
-                console.log(getName(pc) + ' addIceCandidate success');
+                cosnole.log(getName(pc) + ' addIceCandidate success');
             }
 
             function onAddIceCandidateError(pc, error) {
