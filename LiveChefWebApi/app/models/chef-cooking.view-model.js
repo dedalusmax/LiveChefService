@@ -3,13 +3,12 @@
 var ChefCookingViewModel = function (data) {
     var self = data;
 
-
     $(document).ready(function () {
 
         var leftVideo = document.querySelector('video#leftVideo');
         var rightVideo = document.querySelector('video#rightVideo');
-     
-        var thisStream ;
+
+        var thisStream;
         var self = this;
 
         if (leftVideo != null && rightVideo != null) {
@@ -21,6 +20,8 @@ var ChefCookingViewModel = function (data) {
                 offerToReceiveAudio: 1,
                 offerToReceiveVideo: 1
             };
+
+            var startTime;
 
             function maybeCreateStream() {
                 if (stream) {
@@ -35,7 +36,6 @@ var ChefCookingViewModel = function (data) {
                 function handleSuccess(stream) {
                     window.stream = stream; // make stream available to browser console
                     leftVideo.srcObject = stream;
-                  //  setCookie('stream', JSON.stringify(leftVideo.srcObject));
                     self.thisStream = leftVideo.srcObject;
                 }
 
@@ -51,15 +51,19 @@ var ChefCookingViewModel = function (data) {
             }
             
            maybeCreateStream();           
+           leftVideo.play();       
 
-           function call() {
+            function call() {
+                console.log('Starting call');
 
                 var servers = null;
                 pc1 = new RTCPeerConnection(servers);
+                console.log('Created local peer connection object pc1');
                 pc1.onicecandidate = function (e) {
                     onIceCandidate(pc1, e);
                 };
                 pc2 = new RTCPeerConnection(servers);
+                console.log('Created remote peer connection object pc2');
                 pc2.onicecandidate = function (e) {
                     onIceCandidate(pc2, e);
                 };
@@ -69,7 +73,8 @@ var ChefCookingViewModel = function (data) {
                 pc2.oniceconnectionstatechange = function (e) {
                     onIceStateChange(pc2, e);
                 };
-
+                // pc2.ontrack = gotRemoteStream;
+                //pc2.getRemoteStreams() = gotRemoteStream;
                 gotRemoteStream();
                 console.log('Added local stream to pc1');
 
@@ -83,7 +88,8 @@ var ChefCookingViewModel = function (data) {
             }
 
             function onCreateOfferSuccess(desc) {
-
+                console.log('Offer from pc1\n' + desc.sdp);
+                console.log('pc1 setLocalDescription start');
                 pc1.setLocalDescription(desc, function () {
                     onSetLocalSuccess(pc1);
                 }, onSetSessionDescriptionError);
@@ -110,14 +116,16 @@ var ChefCookingViewModel = function (data) {
                 console.log('Failed to set session description: ' + error.toString());
             }
 
-            function gotRemoteStream() {
-                if (rightVideo.srcObject !== undefined && self.thisStream != undefined) {
+            function gotRemoteStream(event) {
+                if (rightVideo.srcObject !== event) {
                     rightVideo.srcObject = self.thisStream;
-                    
+                    console.log('pc2 received remote stream', event);
                 }
             }
 
             function onCreateAnswerSuccess(desc) {
+                console.log('Answer from pc2:\n' + desc.sdp);
+                console.log('pc2 setLocalDescription start');
                 pc2.setLocalDescription(desc, function () {
                     onSetLocalSuccess(pc2);
                 }, onSetSessionDescriptionError);

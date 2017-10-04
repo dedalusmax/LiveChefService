@@ -39,7 +39,6 @@
             function handleSuccess(stream) {
                 window.stream = stream; // make stream available to browser console
                 video.srcObject = stream;
-                self.settings.stream = video.srcObject;
             }
 
             function handleError(error) {
