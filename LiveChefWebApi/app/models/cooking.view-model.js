@@ -29,8 +29,6 @@
 
     if (self.chefIsMe) {
         $.extend(self, new MyCookingViewModel(self));
-    } else {
-        $.extend(self, new ChefCookingViewModel(self));
     }
 
     self.returnToMain = function () {
