@@ -37,5 +37,21 @@
 
             console.log('Remote media stream retrieved removed.');
         }
+
+        if (self.transmission.sdp) {
+            var desc = JSON.parse(self.transmission.sdp);
+
+            // set the generated SDP to be the very remote session description that initiated the session
+            self.connection.setRemoteDescription(desc, function () {
+                console.log('Remote description set to: ' + desc);
+
+            });
+        }
+
+        // we need to create and send a WebRTC offer over to the peer we would like to connect with
+        //self.connection.createOffer(function (desc) {
+        //    console.log('Created answer for the caller.');
+
+        //});
     });
 }

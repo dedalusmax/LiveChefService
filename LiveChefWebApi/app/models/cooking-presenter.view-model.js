@@ -78,7 +78,7 @@ CookingPresenterViewModel.prototype.mediaRetrieved = function (stream) {
 
         // set the generated SDP to be our local session description
         self.connection.setLocalDescription(desc, function () {
-            console.log('Created offer for the peers.');
+            console.log('Local description set to: ' + desc);
 
             // store offer description into the cooking itself and send it to all interested parties
 
