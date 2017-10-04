@@ -1,27 +1,18 @@
 ﻿'use strict';
 
 var ChefCookingViewModel = function (data) {
-    var self = this;
-
-    // take over the data from the model
-    $.extend(self, data);
-
-    var thisStream;
+    var self = data;
 
 
-    if (self.stream != undefined) {
-        self.thisStream = self.stream;
-    }
     $(document).ready(function () {
 
-      //  var leftVideo = document.querySelector('video#leftVideo');
+        var leftVideo = document.querySelector('video#leftVideo');
         var rightVideo = document.querySelector('video#rightVideo');
-
+     
+        var thisStream ;
         var self = this;
 
-
-
-        if (rightVideo != null) {
+        if (leftVideo != null && rightVideo != null) {
             var stream;
 
             var pc1;
@@ -36,24 +27,24 @@ var ChefCookingViewModel = function (data) {
                     return;
                 }
 
-                //var constraints = {
-                //    audio: false,
-                //    video: true
-                //};
+                var constraints = {
+                    audio: false,
+                    video: true
+                };
 
-                //function handleSuccess(stream) {
-                //    window.stream = stream; // make stream available to browser console
-                //    leftVideo.srcObject = stream;
-                //  //  setCookie('stream', JSON.stringify(leftVideo.srcObject));
-                //    self.thisStream = leftVideo.srcObject;
-                //}
+                function handleSuccess(stream) {
+                    window.stream = stream; // make stream available to browser console
+                    leftVideo.srcObject = stream;
+                  //  setCookie('stream', JSON.stringify(leftVideo.srcObject));
+                    self.thisStream = leftVideo.srcObject;
+                }
 
-                //function handleError(error) {
-                //    console.log('navigator.getUserMedia error: ', error);
-                //}
+                function handleError(error) {
+                    console.log('navigator.getUserMedia error: ', error);
+                }
 
-                //navigator.mediaDevices.getUserMedia(constraints).
-                //    then(handleSuccess).catch(handleError);
+                navigator.mediaDevices.getUserMedia(constraints).
+                    then(handleSuccess).catch(handleError);
 
 
                 call();         
