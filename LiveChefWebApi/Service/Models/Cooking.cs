@@ -16,13 +16,15 @@ namespace LiveChefService.Models
         public bool UseCamera { get; set; }
         public bool UseChat { get; set; }
         public bool AllowHelp { get; set; }
+        public Object stream { get; set; }
 
-        public CookingSettings(bool useMicrophone, bool useCamera, bool useChat, bool allowHelp)
+        public CookingSettings(bool useMicrophone, bool useCamera, bool useChat, bool allowHelp, Object stream)
         {
             this.UseMicrophone = useMicrophone;
             this.UseCamera = useCamera;
             this.UseChat = useChat;
             this.AllowHelp = allowHelp;
+            this.stream = stream;
         }
     }
 
