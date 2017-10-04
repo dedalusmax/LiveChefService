@@ -45,5 +45,10 @@ namespace LiveChefService.Models
         {
             this.items.RemoveAll(c => c.Status == CookingStatus.Started);
         }
+
+        internal Cooking GetById(int cookingId)
+        {
+            return this.items.Find(c => c.Id == cookingId);
+        }
     }
 }

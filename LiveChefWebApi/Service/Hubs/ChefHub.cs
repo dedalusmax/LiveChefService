@@ -25,6 +25,33 @@ namespace LiveChefService
             return cooking;
         }
 
+        public void StartTransmission(int cookingId, string sdp)
+        {
+            var cooking = WebApiApplication.CookingRepository.GetById(cookingId);
+            cooking.Transmission.SDP = sdp;
+            WebApiApplication.CookingRepository.Change(cooking);
+
+            this.Clients.Others.transmissionStarted(cookingId, sdp);
+        }
+
+        public void SetRdp(int cookingId, string sdp)
+        {
+            var cooking = WebApiApplication.CookingRepository.GetById(cookingId);
+            cooking.Transmission.SDP = sdp;
+            WebApiApplication.CookingRepository.Change(cooking);
+
+            this.Clients.Others.rdpSet(cookingId, sdp);
+        }
+
+        public void SetIceCandidate(int cookingId, string candidate)
+        {
+            var cooking = WebApiApplication.CookingRepository.GetById(cookingId);
+            cooking.Transmission.ICECandidate = candidate;
+            WebApiApplication.CookingRepository.Change(cooking);
+
+            this.Clients.Others.iceCandidateSet(cookingId, candidate);
+        }
+
         public void UpdateCooking(Cooking item)
         {
             WebApiApplication.CookingRepository.Change(item);
