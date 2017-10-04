@@ -40,7 +40,7 @@ namespace LiveChefService
             cooking.Transmission.SDP = sdp;
             WebApiApplication.CookingRepository.Change(cooking);
 
-            this.Clients.Others.rdpSet(cookingId, sdp);
+            this.Clients.Others.cookingUpdated(cooking);
         }
 
         public void SetIceCandidate(int cookingId, string candidate)
@@ -49,7 +49,7 @@ namespace LiveChefService
             cooking.Transmission.ICECandidate = candidate;
             WebApiApplication.CookingRepository.Change(cooking);
 
-            this.Clients.Others.iceCandidateSet(cookingId, candidate);
+            this.Clients.Others.cookingUpdated(cooking);
         }
 
         public void UpdateCooking(Cooking item)

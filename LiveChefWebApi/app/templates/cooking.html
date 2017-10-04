@@ -33,4 +33,24 @@
     </div>
 
     <!-- /ko -->
+
+    <!-- ko if: !chefIsMe -->
+
+    <div class="col-sm-6">
+        <h4>Media stream from the presenter</h4>
+        <div class="card fullsize">
+            <div class="card-body">
+                <video class="fullsize" autoplay controls></video>
+            </div>
+            <div class="card-footer">
+                <div>
+                    <span class="glyphicon glyphicon-camera" aria-hidden="true" data-bind="style: { color: settings.useCamera ? 'white' : 'grey' }"></span>
+                    <span class="glyphicon glyphicon-volume-up" aria-hidden="true" data-bind="style: { color: settings.useMicrophone ? 'white' : 'grey' }"></span>
+                    <span class="glyphicon glyphicon-comment" aria-hidden="true" data-bind="style: { color: settings.allowChat ? 'white' : 'grey' }"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- /ko -->
 </div>

@@ -38,6 +38,15 @@
         console.log('New cooking added: ' + cooking.dish.name);
     };
 
+    hub.client.cookingUpdated = function (cooking) {
+        
+        var found = self.cookings().find(c => c.id == cooking.id);
+        if (found) {
+            found.transmission = cooking.transmission;
+            console.log('Cooking updated: ' + cooking.id + ' transmission: ' + cooking.transmission);
+        }
+};
+
     hub.client.cookingRemoved = function (cookingId) {
         self.cookings.remove(function (cooking) {
             return cooking.id == cookingId;
