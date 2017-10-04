@@ -9,38 +9,24 @@
         <!-- /ko -->
     </div>
     
-    <h4 class="title">Cooking details</h4>
-    <div class="col-sm-6" data-bind="template: { name: 'recipe-card', data: dish }"></div> 
+    <div class="col-sm-6">
+        <h4>Cooking details</h4>
+        <div data-bind="template: { name: 'recipe-card', data: dish }"></div>
+    </div>
 
     <!-- ko if: chefIsMe -->
 
     <div class="col-sm-6" data-bind="visible: settings.useCamera">
-        <div class="card">
+        <h4>My cooking is emitting live!</h4>
+        <div class="card fullsize">
             <div class="card-body">
-                <h4 class="card-title">Look what is cooking</h4>
-                <video width="520" height="240" autoplay controls></video>
+                <video class="fullsize" autoplay controls></video>
             </div>
-        </div>
-    </div>
-
-    <div class="col-sm-6"></div>
-    <div data-bind="visible: settings.useChat" class="col-sm-6">
-        <div class="card">
-            <div class="card-body">
-                <div id="buttons">
-                    <button id="startButton" class="btn btn-primary">Start</button>
-                    <button id="sendButton" class="btn btn-primary" disabled>Send</button>
-                    <button id="closeButton" class="btn btn-primary" disabled>Stop</button>
-                </div>
-                <div id="sendReceive">
-                    <div id="send" class="card col-sm-6 card">
-                        <h5>Send</h5>
-                        <textarea cols="30" rows="3" id="dataChannelSend" disabled placeholder="Press Start, enter some text, then press Send."></textarea>
-                    </div>
-                    <div id="receive" class="card col-sm-6 card">
-                        <h5>Receive</h5>
-                        <textarea cols="30" rows="3" id="dataChannelReceive" disabled></textarea>
-                    </div>
+            <div class="card-footer">
+                <div>
+                    <span class="glyphicon glyphicon-camera" aria-hidden="true" data-bind="style: { color: settings.useCamera ? 'white' : 'grey' }"></span>
+                    <span class="glyphicon glyphicon-volume-up" aria-hidden="true" data-bind="style: { color: settings.useMicrophone ? 'white' : 'grey' }"></span>
+                    <span class="glyphicon glyphicon-comment" aria-hidden="true" data-bind="style: { color: settings.allowChat ? 'white' : 'grey' }"></span>
                 </div>
             </div>
         </div>

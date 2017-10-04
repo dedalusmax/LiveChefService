@@ -59,7 +59,10 @@
     });
 
     self.viewCooking = function (cooking) {
-        self.parent.cooking(new CookingViewModel(cooking));
+        var model = new CookingViewModel(cooking);
+        model.open();
+        root.cooking(model);
+        self.parent.cooking(model);
         self.parent.showScreen(Screen.Cooking);
     };
 

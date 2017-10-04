@@ -3,6 +3,7 @@
 $(document).ready(function () {
 
     infuser.defaults.templateUrl = "app/templates";
+    infuser.defaults.ajax.async = false;
 
     root = new RootViewModel();
     ko.applyBindings(root);

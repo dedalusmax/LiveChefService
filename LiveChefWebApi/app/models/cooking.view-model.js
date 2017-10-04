@@ -5,7 +5,7 @@
     $.extend(self, data);
 
     // add new fields to the model
-    self.dish = new RecipeViewModel(data.dish);
+    self.dish = new RecipeViewModel(data.dish, true);
     self.chefIsMe = chefIsMe || false;
 
     var timeStarted = new Date(data.startedTime);
@@ -27,8 +27,12 @@
         }
     });
 
-    if (self.chefIsMe) {
-        $.extend(self, new MyCookingViewModel(self));
+    self.open = function() {
+        if (self.chefIsMe) {
+            $.extend(self, new CookingPresenterViewModel(self));
+        } else {
+            $.extend(self, new CookingViewerViewModel(self));
+        }
     }
 
     self.returnToMain = function () {

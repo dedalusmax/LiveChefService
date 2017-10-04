@@ -1,13 +1,13 @@
 ﻿<div data-bind="with: newCooking" class="poster new-cooking-component">
 
-    <div class="center">
+    <div>
         <img class="logo" src="./Content/images/chef.png">
         <form class="form-horizontal">
             <h1>Let's cook together!</h1>
 
             <div class="wizard">
-                <span class="glyphicon glyphicon-chevron-left wizard-nav col-sm-1" data-bind="click: activatePage.bind($data, -1)"></span>
-                <div class="wizard-pages col-sm-10">
+                <span class="glyphicon glyphicon-chevron-left wizard-nav col-xs-1" data-bind="click: activatePage.bind($data, -1)"></span>
+                <div class="wizard-pages col-xs-10">
                     <div class="wizard-page" data-bind="visible: activePage() == 1">
                         
                         <h3>Choose your dish</h3>
@@ -25,7 +25,7 @@
                         </div>
 
                         <!-- ko if: selectedRecipe() -->
-                        <div class="postcard" data-bind="template: { name: 'recipe-card', data: selectedRecipe }"></div>
+                        <div data-bind="template: { name: 'recipe-card', data: selectedRecipe }"></div>
 
                         <!-- /ko -->
 
@@ -79,7 +79,7 @@
 
                     </div>
                 </div>
-                <span class="glyphicon glyphicon-chevron-right wizard-nav col-sm-1" data-bind="click: activatePage.bind($data, +1)"></span>
+                <span class="glyphicon glyphicon-chevron-right wizard-nav col-xs-1" data-bind="click: activatePage.bind($data, +1)"></span>
             </div>
 
             <div class="form-group footer">
