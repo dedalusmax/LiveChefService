@@ -14,6 +14,8 @@
     self.stream = null;
     self.connection = null;
 
+    self.snapshotId = self.snapshots().length;
+    
     self.giveUp = function () {
 
         self.stopStream();
@@ -109,4 +111,44 @@ CookingPresenterViewModel.prototype.stopStream = function () {
         self.connection.close();
         console.log('Stopped peer connection.');
     }
+}
+
+CookingPresenterViewModel.prototype.takeSnapshot = function () {
+    var self = this;
+
+    var video = document.querySelector('video');
+
+    self.snapshotId++;
+
+    var now = new Date();
+    var timeTaken = new Date(Math.abs(now - self.timeStarted));
+
+    var snapshot = {
+        snapshotId: 'snapshot' + self.snapshotId,
+        timeTaken: timeTaken,
+        timeTakenText: formatTimeFromDate(timeTaken),
+        width: video.videoWidth / 2, // 50% video width
+        height: video.videoHeight / 2, // 50% video height,
+        description: ko.observable(''),
+        editMode: ko.observable(false)
+    };
+
+    self.snapshots.push(snapshot);
+
+    var canvas = document.querySelector('#' + snapshot.snapshotId);
+
+    canvas.getContext('2d').
+        drawImage(video, 0, 0, canvas.width, canvas.height);
+}
+
+CookingPresenterViewModel.prototype.removeSnapshot = function (self, snapshot) {
+
+    self.snapshots.remove(function (s) {
+        return s.snapshotId == snapshot.snapshotId;
+    });
+}
+
+CookingPresenterViewModel.prototype.toggleEditMode = function (self) {
+
+    self.editMode(!self.editMode());
 }

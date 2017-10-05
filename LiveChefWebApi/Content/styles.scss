@@ -285,7 +285,7 @@ h3 {
     &.fullsize {
         width: 100%;
     }
-    
+
     .card-header {
         background-color: $primary-color;
         color: $panel-color;
@@ -331,6 +331,13 @@ h3 {
             small {
                 line-height: 24px;
             }
+        }
+
+        textarea {
+            color: black;
+            width: 100%;
+            margin-left: -10px;
+            margin-right: -10px;
         }
     }
 }

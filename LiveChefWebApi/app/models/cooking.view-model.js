@@ -8,8 +8,8 @@
     self.dish = new RecipeViewModel(data.dish, true);
     self.chefIsMe = chefIsMe || false;
 
-    var timeStarted = new Date(data.startedTime);
-    self.timeStarted = formatTimeFromDate(timeStarted);
+    self.timeStarted = new Date(data.startedTime);
+    self.timeStartedText = formatTimeFromDate(self.timeStarted);
 
     self.currentTime = ko.observable('');
 
@@ -27,6 +27,8 @@
         }
     });
 
+    self.snapshots = ko.observableArray();
+
     self.open = function() {
         if (self.chefIsMe) {
             $.extend(self, new CookingPresenterViewModel(self));
@@ -41,7 +43,7 @@
     };
 
     self.refreshTime = function (now) {
-        var diff = Math.abs(now - timeStarted);
+        var diff = Math.abs(now - self.timeStarted);
         self.currentTime(formatTimeFromDate(new Date(diff)));
     }
 };
