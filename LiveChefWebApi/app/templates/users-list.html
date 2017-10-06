@@ -1,0 +1,33 @@
+﻿<div class="row">
+
+    <div class="card-deck col-sm-6" data-bind="foreach: usersView">
+        <div class="card">
+            <div class="card-header">
+                <h5 data-bind="text: displayName"></h5>
+            </div>
+            <div class="card-block">
+                <p class="card-text" data-bind="text: 'logged in: ' + isLoggedIn()"></p>
+            </div>
+            <div class="card-footer">
+                <div data-bind="visible: isLoggedIn">
+                    <span class="glyphicon glyphicon-camera glyph-button" aria-hidden="true" data-bind="click: $parent.communicator.startVideoCall"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6" data-bind="with: communicator">
+        <h4>Communication with the user</h4>
+        <div class="card fullsize">
+            <div class="card-header">
+                <video id="localVideo" class="fullsize" autoplay controls></video>
+            </div>
+            <div class="card-body">
+                <video id="remoteVideo" class="fullsize" autoplay controls></video>
+            </div>
+            <div class="card-footer">
+            </div>
+        </div>
+    </div>
+
+</div>

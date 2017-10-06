@@ -27,3 +27,34 @@ function getCookie(name) {
     }
     return '';
 }
+
+function formatTimeFromDate(date) {
+
+    var mins = date.getMinutes();
+    var secs = date.getSeconds();
+    if (mins < 10) mins = '0' + mins;
+    if (secs < 10) secs = '0' + secs;
+    return date.getHours() + ':' + mins + ':' + secs;
+}
+
+ko.bindingHandlers.toggle = {
+
+    init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        // This will be called when the binding is first applied to an element
+        // Set up any initial state, event handlers, etc. here
+
+        if (valueAccessor()()) {
+            $(element).addClass('active');
+        }
+
+        ko.utils.registerEventHandler(element, "click", function (event) {
+            var checked = $(event.target).hasClass('active');
+            valueAccessor()(!checked);
+        });
+    },
+    update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        // This will be called once when the binding is first applied to an element,
+        // and again whenever any observables/computeds that are accessed change
+        // Update the DOM element based on the supplied values here.
+    }
+};

@@ -20,6 +20,9 @@ var NewCookingViewModel = function () {
     // list of recipes loaded from the server
     self.recipes = ko.observableArray();
     self.selectedRecipe = ko.observable(null);
+    self.selectRecipe = function (recipe) {
+        self.selectedRecipe(recipe);
+    }
 
     // settings
     self.useMicrophone = ko.observable(true);
@@ -59,14 +62,16 @@ var NewCookingViewModel = function () {
             setCookie('audioOutput', JSON.stringify(self.selectedAudioOutput()));
             setCookie('videoInput', JSON.stringify(self.selectedVideoInput()));
 
-            root.cooking(new CookingViewModel(cooking, true));
+            var model = new CookingViewModel(cooking, true);
+            model.open();
+            root.cooking(model);
             root.showScreen(Screen.Cooking);
         });
     };
 
     hub.server.getAllRecipes().done(function (recipes) {
         recipes.forEach(function (recipe) {
-            self.recipes.push(new RecipeViewModel(recipe));
+            self.recipes.push(new RecipeViewModel(recipe, true));
             console.log("Recipe loaded: " + recipe.name);
         });
     });

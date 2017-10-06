@@ -16,13 +16,40 @@ namespace LiveChefService
                 Dish = data.Dish,
                 Settings = data.Settings,
                 Status = CookingStatus.Started,
-                TimeStarted = new TimeSpan(DateTime.Now.Ticks)
+                StartedTime = DateTime.Now
             };
 
             WebApiApplication.CookingRepository.Add(cooking);
             this.Clients.All.cookingAdded(cooking);
 
             return cooking;
+        }
+
+        public void StartTransmission(int cookingId, string sdp)
+        {
+            var cooking = WebApiApplication.CookingRepository.GetById(cookingId);
+            cooking.Transmission.SDP = sdp;
+            WebApiApplication.CookingRepository.Change(cooking);
+
+            this.Clients.Others.transmissionStarted(cookingId, sdp);
+        }
+
+        public void SetRdp(int cookingId, string sdp)
+        {
+            var cooking = WebApiApplication.CookingRepository.GetById(cookingId);
+            cooking.Transmission.SDP = sdp;
+            WebApiApplication.CookingRepository.Change(cooking);
+
+            this.Clients.Others.cookingUpdated(cooking);
+        }
+
+        public void SetIceCandidate(int cookingId, string candidate)
+        {
+            var cooking = WebApiApplication.CookingRepository.GetById(cookingId);
+            cooking.Transmission.ICECandidate = candidate;
+            WebApiApplication.CookingRepository.Change(cooking);
+
+            this.Clients.Others.cookingUpdated(cooking);
         }
 
         public void UpdateCooking(Cooking item)
@@ -57,9 +84,15 @@ namespace LiveChefService
         {
             this.Clients.Caller.getStoredCookings(WebApiApplication.CookingRepository.GetFinishedCookings());
         }
+
+        public void Send(string message)
+        {
+            this.Clients.Others.newMessage(message);
+        }
+
         public override Task OnConnected()
         {
-            this.Clients.Caller.usersInitiated(WebApiApplication.UserRepository.GetActiveUsers());
+            this.Clients.Caller.usersInitiated(WebApiApplication.UserRepository.GetAll());
             this.Clients.Caller.cookingsInitiated(WebApiApplication.CookingRepository.GetActiveCookings());
             this.Clients.Caller.recipesInitiated(WebApiApplication.RecipeRepository.GetAll());
 

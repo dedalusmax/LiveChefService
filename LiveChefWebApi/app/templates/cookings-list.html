@@ -1,5 +1,5 @@
 ﻿<div class="card-deck" data-bind="foreach: cookings">
-    <div class="card" data-bind="click: $parent.viewCooking.bind($data, $data)">
+    <div class="card" data-bind="click: $parent.viewCooking.bind($data)">
         <div class="card-header">
             <h5 data-bind="text: chef.displayName"></h5>
             <small>is cooking</small>
@@ -18,13 +18,25 @@
                 <small>level</small>
             </div>
         </div>
-        <p class="card-footer">
-            <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
-            <small data-bind="text: 'Time cooking: ' + timeStarted"></small>
-            <span class="glyphicon glyphicon-camera" aria-hidden="true" data-bind="style: { color: settings.useCamera ? 'white' : 'grey' }"></span>
-            <span class="glyphicon glyphicon-volume-up" aria-hidden="true" data-bind="style: { color: settings.useMicrophone ? 'white' : 'grey' }"></span>
-            <span class="glyphicon glyphicon-comment" aria-hidden="true" data-bind="style: { color: settings.allowChat ? 'white' : 'grey' }"></span>
-            <small data-bind="text: statusText"></small>
-        </p>
+        <div class="card-footer">
+            <div class="time row">
+                <div class="col-sm-6">
+                    <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+                    <small data-bind="text: 'started: ' + timeStartedText"></small>
+                </div>
+                <div class="col-sm-6">
+                    <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+                    <small data-bind="text: 'cooking: ' + currentTime()"></small>
+                </div>
+            </div>
+            <div>
+                <span class="glyphicon glyphicon-camera" aria-hidden="true" data-bind="style: { color: settings.useCamera ? 'white' : 'grey' }"></span>
+                <span class="glyphicon glyphicon-volume-up" aria-hidden="true" data-bind="style: { color: settings.useMicrophone ? 'white' : 'grey' }"></span>
+                <span class="glyphicon glyphicon-comment" aria-hidden="true" data-bind="style: { color: settings.allowChat ? 'white' : 'grey' }"></span>
+            </div>
+            <div data-bind="css: { live2: status() == 3 }">
+                <small data-bind="text: statusText"></small>
+            </div>
+        </div>
     </div>
 </div>

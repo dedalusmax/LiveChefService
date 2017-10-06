@@ -8,7 +8,14 @@
     };
 
     self.cookings = ko.observableArray(); 
-    self.recipes = ko.observableArray(); 
+    self.recipes = ko.observableArray();
+
+    self.communicator = new CommunicatorViewModel();
+    self.users = ko.observableArray(); 
+
+    self.usersView = ko.computed(function () {
+        return self.users().filter(u => u.id !== root.user.id);
+    });
 
     self.logout = function () {
         ajax.logout(self.parent.user, self.logoutSucceeded.bind(self));
@@ -17,11 +24,32 @@
     var hub = self.parent.hub;
 
     hub.client.userLoggedIn = function (user) {
-        console.log('User logged-in: ' + user.username);
+        if (user.isGuest) {
+            self.users.push(new UserViewModel(user));           
+        } else {
+            var found = self.users().find(c => c.id == user.id);
+            found.isLoggedIn(true);
+        }
+        console.log('User logged-in: ' + user.displayName);
+    };
+
+    hub.client.userLoggedOut = function (user) {
+        var found = self.users().find(c => c.id == user.id);
+        if (user.isGuest && found) {
+            self.users.remove(found);
+        } else if (found) {
+            found.isLoggedIn(false);
+        }
+        console.log('User logged-out: ' + user.displayName);
+    };
+
+    hub.client.newMessage = function (message) {
+        self.communicator.newMessage(message);
     };
 
     hub.client.usersInitiated = function (users) {
         users.forEach(function (user) {
+            self.users.push(new UserViewModel(user));
             console.log('User updated: ' + user.displayName);
         });
     }
@@ -37,6 +65,14 @@
         self.cookings.push(new CookingViewModel(cooking));
         console.log('New cooking added: ' + cooking.dish.name);
     };
+
+    hub.client.cookingUpdated = function (cooking) {
+        var found = self.cookings().find(c => c.id == cooking.id);
+        if (found) {
+            found.transmission = cooking.transmission;
+            console.log('Cooking updated: ' + cooking.id + ' transmission: ' + cooking.transmission);
+        }
+};
 
     hub.client.cookingRemoved = function (cookingId) {
         self.cookings.remove(function (cooking) {
@@ -59,7 +95,10 @@
     });
 
     self.viewCooking = function (cooking) {
-        self.parent.cooking(new CookingViewModel(cooking));
+        var model = new CookingViewModel(cooking);
+        model.open();
+        root.cooking(model);
+        self.parent.cooking(model);
         self.parent.showScreen(Screen.Cooking);
     };
 
@@ -67,6 +106,13 @@
         self.parent.newCooking(new NewCookingViewModel());
         self.parent.showScreen(Screen.NewCooking);
     }
+
+    var timer = window.setInterval(function () {
+        var now = new Date();
+        self.cookings().forEach(function (cooking) {
+            cooking.refreshTime(now);
+        });
+    }, 1000);
 };
 
 MainViewModel.prototype.logoutSucceeded = function (user) {

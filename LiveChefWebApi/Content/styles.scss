@@ -26,8 +26,13 @@ $highlight-color: #ffd800;
 
     &.disabled, &:active.disabled, &:hover.disabled {
         background-color: $disabled-color;
-        opacity: 0.5;
     }
+}
+
+.btn-default.active, .btn-default.active:focus {
+    color: $panel-color;
+    background-color: $primary-color;
+    border-color: $border-color;
 }
 
 .btn-link {
@@ -41,8 +46,19 @@ $highlight-color: #ffd800;
     }
 }
 
-// animations:
+video {
+    object-fit: cover;
+}
 
+.glyph-button {
+    cursor: pointer;
+
+    :hover {
+        color: $primary-color;
+    }
+}
+
+// animations:
 @keyframes popeye {
     0% {
         opacity: 0;
@@ -72,6 +88,14 @@ $highlight-color: #ffd800;
     }
 }
 
+@keyframes hot2 {
+    100% {
+        color: $hover-color;
+        background-color: $highlight-color;
+        border-color: $border-color;
+    }
+}
+
 @keyframes hot-button {
     0% {
         transform: rotate(-2deg);
@@ -87,9 +111,21 @@ $highlight-color: #ffd800;
     }
 }
 
+.live {
+    animation: infinite 1s alternate-reverse hot;
+}
+
+.live2 {
+    animation: infinite 1s alternate-reverse hot2;
+}
+
 .container-fluid {
     padding-right: 0;
     padding-left: 0;
+}
+
+.fullsize {
+    width: 100%;
 }
 
 h3 {
@@ -133,10 +169,6 @@ h3 {
         text-shadow: 2px 2px 5px $border-color;
         margin-bottom: 0;
         margin-top: -40px;
-
-        .live {
-            animation: infinite 1s alternate-reverse hot;
-        }
     }
 
     form {
@@ -154,6 +186,9 @@ h3 {
 }
 
 .login-component {
+    position: fixed;
+    width: 100%;
+    height: 100%;
 
     h1 {
         font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -184,6 +219,9 @@ h3 {
 
     .navbar {
         background-color: $panel-color;
+        -webkit-box-shadow: 0px 0px 8px $border-color;
+        -moz-box-shadow: 0px 0px 8px $border-color;
+        box-shadow: 0px 0px 8px $border-color;
 
         .navbar-brand {
             color: $primary-color;
@@ -195,11 +233,19 @@ h3 {
 
         .navbar-toggle {
             border: none;
+            background-color: transparent;
 
             &:active, &:hover {
                 border: none;
                 color: $primary-color;
             }
+        }
+
+        .navbar-nav > .active > a {
+            color: $primary-color;
+            font-weight: bold;
+            background-image: linear-gradient(0deg, transparent, $panel-color);
+            border-bottom: 3px solid;
         }
 
         .navbar-right {
@@ -240,7 +286,12 @@ h3 {
     -webkit-box-shadow: 0px 0px 8px $border-color;
     -moz-box-shadow: 0px 0px 8px $border-color;
     box-shadow: 0px 0px 8px $border-color;
+    background-color: $panel-color;
     width: 320px;
+
+    &.fullsize {
+        width: 100%;
+    }
 
     .card-header {
         background-color: $primary-color;
@@ -257,31 +308,74 @@ h3 {
         padding: 10px;
     }
 
+    span.glyphicon {
+        font-size: 24px;
+        margin-right: 5px;
+    }
+
     .card-footer {
         color: $panel-color;
         background-color: $hover-color;
         margin: 0;
         padding: 5px;
-
-        span {
-            font-size: 24px;
-            margin-right: 5px;
-        }
+        text-align: center;
 
         label {
             vertical-align: text-bottom;
             font-weight: normal;
+        }
+
+        .time {
+            margin: 0;
+            margin-bottom: 5px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed $panel-color;
+
+            > div {
+                display: inline-flex;
+            }
+
+            small {
+                line-height: 24px;
+            }
+        }
+
+        textarea {
+            color: black;
+            width: 100%;
+            margin-left: -10px;
+            margin-right: -10px;
         }
     }
 }
 
 .new-cooking-component {
 
+    > div {
+        display: inline-grid;
+    }
+
+    .logo {
+        width: 240px;
+        margin-left: -50px;
+        margin-top: -50px;
+    }
+
+    h1 {
+        font-size: 32px;
+        margin-top: -12px;
+    }
+
     form {
-        width: 1200px;
+        width: 100%;
+        height: 100%;
+        /*min-width: 800px;*/
+        /*min-height: 640px;*/
     }
 
     .wizard {
+        margin-top: 12px;
+
         .wizard-nav {
             font-size: 24px;
             cursor: pointer;
@@ -299,6 +393,18 @@ h3 {
             text-align: initial;
         }
     }
+
+    .postcard-flexible {
+        > div {
+            display: flex;
+        }
+    }
+
+    .footer {
+        position: absolute;
+        bottom: 0;
+        width: 50%;
+    }
 }
 
 .cooking-component {
@@ -307,25 +413,56 @@ h3 {
     .header {
         /*margin: 10px;*/
     }
+
+    .none {
+        -webkit-filter: none;
+        filter: none;
+    }
+
+    .blur {
+        -webkit-filter: blur(3px);
+        filter: blur(3px);
+    }
+
+    .grayscale {
+        -webkit-filter: grayscale(1);
+        filter: grayscale(1);
+    }
+
+    .invert {
+        -webkit-filter: invert(1);
+        filter: invert(1);
+    }
+
+    .sepia {
+        -webkit-filter: sepia(1);
+        filter: sepia(1);
+    }
+}
+
+/* Smaller monitors (for tiny adjustments) */
+@media (max-width: 1250px) {
+
+    .main-component .content {
+        margin-top: 100px;
+    }
 }
 
 /* Medium devices (tablets, 768px and up) */
-$medium-device-width: 768px;
+@media (max-width: 768px) {
 
-@media (max-width: $medium-device-width) {
-
-    .login-component {
+    .poster {
         background-image: none;
 
         .logo {
-            width: 70%;
+            width: 300px;
         }
 
         form {
             margin: 0px;
             border: none;
             box-shadow: none;
-            width: auto;
+            width: 100%;
             background-color: transparent;
         }
 
@@ -338,16 +475,55 @@ $medium-device-width: 768px;
         }
     }
 
-    .main-component {
+    .card {
+        width: 100%;
+    }
 
-        .navbar.navbar-brand {
-            padding: 15px;
-            padding-left: 25px;
+    .form-horizontal .form-group {
+        margin-left: 0;
+        margin-right: 0;
+        width: 100%;
+    }
+
+    .main-component {
+        .content {
+            margin-top: 40px;
+        }
+
+        .navbar {
+            border: 0;
+            margin: 0;
+
+            .navbar-brand {
+                padding: 15px;
+                padding-left: 25px;
+            }
+
+            .navbar-text {
+                display: none;
+            }
+
+            .navbar-form {
+                border: 0;
+                margin: 0;
+            }
+
+            .new-cooking {
+                margin: -10px 0 10px 0;
+                animation: none;
+            }
         }
 
         .add-button {
             width: 10% !important;
             padding-top: 10px;
+        }
+    }
+
+    .new-cooking-component {
+
+        > div {
+            display: block;
         }
     }
 }

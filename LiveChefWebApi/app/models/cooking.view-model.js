@@ -5,11 +5,13 @@
     $.extend(self, data);
 
     // add new fields to the model
-    self.dish = new RecipeViewModel(data.dish);
+    self.dish = new RecipeViewModel(data.dish, true);
     self.chefIsMe = chefIsMe || false;
-    self.timeStarted = new Date(data.timeStarted);
 
-    self.currentTime = ko.observable();
+    self.timeStarted = new Date(data.startedTime);
+    self.timeStartedText = formatTimeFromDate(self.timeStarted);
+
+    self.currentTime = ko.observable('');
 
     self.status = ko.observable(data.status);
     self.statusText = ko.computed(function () {
@@ -25,12 +27,23 @@
         }
     });
 
-    if (self.chefIsMe) {
-        $.extend(self, new MyCookingViewModel(self));
+    self.snapshots = ko.observableArray();
+
+    self.open = function() {
+        if (self.chefIsMe) {
+            $.extend(self, new CookingPresenterViewModel(self));
+        } else {
+            $.extend(self, new CookingViewerViewModel(self));
+        }
     }
 
     self.returnToMain = function () {
         console.log("Cooking closed: " + self.id);
         root.showScreen(Screen.Main);
     };
+
+    self.refreshTime = function (now) {
+        var diff = Math.abs(now - self.timeStarted);
+        self.currentTime(formatTimeFromDate(new Date(diff)));
+    }
 };

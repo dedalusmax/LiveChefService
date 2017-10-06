@@ -112,11 +112,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\models\communicator.view-model.js" />
     <Content Include="app\models\cooking.view-model.js" />
     <Content Include="app\models\login.view-model.js" />
     <Content Include="app\models\new-cooking.view-model.js" />
     <Content Include="app\models\recipe.view-model.js" />
     <Content Include="app\models\root.view-model.js" />
+    <Content Include="app\models\cooking-viewer.view-model.js" />
+    <Content Include="app\models\user.view-model.js" />
     <Content Include="app\services\ajax.service.js" />
     <Content Include="app\models\main.view-model.js" />
     <Content Include="app\index.js" />
@@ -129,7 +132,8 @@
     <Content Include="app\templates\main.html" />
     <Content Include="app\templates\new-cooking.html" />
     <Content Include="app\templates\recipes-list.html" />
-    <Content Include="app\templates\stored-cookings.html" />
+    <Content Include="app\templates\recorded-cookings.html" />
+    <Content Include="app\templates\users-list.html" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -157,7 +161,7 @@
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\styles.scss" />
-    <Content Include="app\models\my-cooking.view-model.js" />
+    <Content Include="app\models\cooking-presenter.view-model.js" />
     <None Include="compilerconfig.json" />
     <Content Include="compilerconfig.json.bindings">
       <DependentUpon>compilerconfig.json</DependentUpon>

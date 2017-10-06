@@ -1,4 +1,4 @@
-﻿var RecipeViewModel = function (data) {
+﻿var RecipeViewModel = function (data, showDetails) {
     var self = this;
 
     $.extend(self, data);
@@ -14,4 +14,6 @@
             self.difficultyText = 'Advanced';
             break;
     }
+
+    self.showDetails = ko.observable(showDetails);
 }
