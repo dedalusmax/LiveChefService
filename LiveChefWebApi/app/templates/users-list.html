@@ -10,7 +10,8 @@
             </div>
             <div class="card-footer">
                 <div data-bind="visible: isLoggedIn">
-                    <span class="glyphicon glyphicon-camera glyph-button" aria-hidden="true" data-bind="click: $parent.communicator.startVideoCall"></span>
+                    <span class="glyphicon glyphicon-camera glyph-button" aria-hidden="true" data-bind="click: $parent.communicator.startVideoCall, visible: !$parent.communicator.connected()"></span>
+                    <span class="glyphicon glyphicon-remove glyph-button" aria-hidden="true" data-bind="click: $parent.communicator.endVideoCall, visible: $parent.communicator.connected"></span>
                 </div>
             </div>
         </div>

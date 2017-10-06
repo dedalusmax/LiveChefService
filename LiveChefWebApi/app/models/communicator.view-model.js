@@ -1,6 +1,8 @@
 ﻿var CommunicatorViewModel = function (data) {
     var self = this;
 
+    self.connected = ko.observable(false);
+
     self.localStream = null;
     self.connection = null;
 
@@ -37,6 +39,14 @@
                 root.hub.server.send(JSON.stringify({ "sdp": desc }));
             });
         });
+    }
+
+    self.endVideoCall = function () {
+
+        if (self.connection) {
+            self.connection.close();
+            self.connection = null;
+        }
     }
 }
 
@@ -77,6 +87,45 @@ CommunicatorViewModel.prototype.createConnection = function () {
         self.remoteStream = event.stream;
         remoteVideo.srcObject = event.stream;
     };
+
+    connection.oniceconnectionstatechange = function () {
+
+        var conn = self.connection ? self.connection : this;
+        console.log('ICE connection state change: ' + conn.iceConnectionState);
+
+        if (conn.iceConnectionState == 'connected' || conn.iceConnectionState == 'completed') {
+            self.connected(true);
+        } else {
+            self.connected(false);
+        }
+    }
+
+    connection.onicegatheringstatechange = function () {
+
+        console.log('ICE gathering state change.');
+    }
+
+    connection.onnegotiationneeded = function () {
+
+        console.log('Negotiation needed.');
+    }
+
+    connection.onsignalingstatechange = function () {
+
+        console.log('Signaling state change: ' + this.signalingState + ', ' + this.readyState);
+    }
+
+    // media stream was closed
+    connection.onremovestream = function (event) {
+        console.log('Stopped streaming from remote media stream.');
+
+        if (self.remoteStream) {
+            for (let track of self.remoteStream.getTracks()) {
+                track.stop();
+                console.log('Stopped streaming ' + track.kind + ' track from getUserMedia.');
+            }
+        }
+    }
 
     return connection;
 }
