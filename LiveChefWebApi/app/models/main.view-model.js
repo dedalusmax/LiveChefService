@@ -8,7 +8,9 @@
     };
 
     self.cookings = ko.observableArray(); 
-    self.recipes = ko.observableArray(); 
+    self.recipes = ko.observableArray();
+
+    self.communicator = new CommunicatorViewModel();
     self.users = ko.observableArray(); 
 
     self.usersView = ko.computed(function () {
@@ -39,6 +41,10 @@
             found.isLoggedIn(false);
         }
         console.log('User logged-out: ' + user.displayName);
+    };
+
+    hub.client.newMessage = function (message) {
+        self.communicator.newMessage(message);
     };
 
     hub.client.usersInitiated = function (users) {

@@ -4,8 +4,4 @@
     $.extend(self, data);
 
     self.isLoggedIn = ko.observable(data.isLoggedIn);
-
-    self.startVideoCall = function () {
-        alert('start!');
-    }
 }

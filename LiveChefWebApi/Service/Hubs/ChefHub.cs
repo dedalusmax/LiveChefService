@@ -84,6 +84,12 @@ namespace LiveChefService
         {
             this.Clients.Caller.getStoredCookings(WebApiApplication.CookingRepository.GetFinishedCookings());
         }
+
+        public void Send(string message)
+        {
+            this.Clients.Others.newMessage(message);
+        }
+
         public override Task OnConnected()
         {
             this.Clients.Caller.usersInitiated(WebApiApplication.UserRepository.GetAll());
