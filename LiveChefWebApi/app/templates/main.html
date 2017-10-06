@@ -15,6 +15,7 @@
                     <li data-bind="css: { active: activeTab() == 1}"><a href="#" data-bind="click: activateTab.bind($data, 1)">Live Cooking!</a></li>
                     <li data-bind="css: { active: activeTab() == 2}"><a href="#" data-bind="click: activateTab.bind($data, 2)">Fine Recipes</a></li>
                     <li data-bind="css: { active: activeTab() == 3}"><a href="#" data-bind="click: activateTab.bind($data, 3)">Recorded cookings</a></li>
+                    <li data-bind="css: { active: activeTab() == 4}"><a href="#" data-bind="click: activateTab.bind($data, 4)">Users</a></li>
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
@@ -39,4 +40,5 @@
     <div class="content" data-bind="template: { name: 'cookings-list' }, visible: activeTab() == 1"></div>
     <div class="content" data-bind="template: { name: 'recipes-list' }, visible: activeTab() == 2"></div>
     <div class="content" data-bind="template: { name: 'recorded-cookings' }, visible: activeTab() == 3"></div>
+    <div class="content" data-bind="template: { name: 'users-list' }, visible: activeTab() == 4"></div>
 </div>

@@ -46,8 +46,19 @@ $highlight-color: #ffd800;
     }
 }
 
-// animations:
+video {
+    object-fit: cover;
+}
 
+.glyph-button {
+    cursor: pointer;
+
+    :hover {
+        color: $primary-color;
+    }
+}
+
+// animations:
 @keyframes popeye {
     0% {
         opacity: 0;
@@ -270,10 +281,6 @@ h3 {
     }
 }
 
-.postcard {
-    display: flex;
-}
-
 .card {
     border: 1px solid $border-color;
     -webkit-box-shadow: 0px 0px 8px $border-color;
@@ -387,6 +394,12 @@ h3 {
         }
     }
 
+    .postcard-flexible {
+        > div {
+            display: flex;
+        }
+    }
+
     .footer {
         position: absolute;
         bottom: 0;
@@ -399,6 +412,31 @@ h3 {
 
     .header {
         /*margin: 10px;*/
+    }
+
+    .none {
+        -webkit-filter: none;
+        filter: none;
+    }
+
+    .blur {
+        -webkit-filter: blur(3px);
+        filter: blur(3px);
+    }
+
+    .grayscale {
+        -webkit-filter: grayscale(1);
+        filter: grayscale(1);
+    }
+
+    .invert {
+        -webkit-filter: invert(1);
+        filter: invert(1);
+    }
+
+    .sepia {
+        -webkit-filter: sepia(1);
+        filter: sepia(1);
     }
 }
 

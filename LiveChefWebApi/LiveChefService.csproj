@@ -118,6 +118,7 @@
     <Content Include="app\models\recipe.view-model.js" />
     <Content Include="app\models\root.view-model.js" />
     <Content Include="app\models\cooking-viewer.view-model.js" />
+    <Content Include="app\models\user.view-model.js" />
     <Content Include="app\services\ajax.service.js" />
     <Content Include="app\models\main.view-model.js" />
     <Content Include="app\index.js" />
@@ -131,6 +132,7 @@
     <Content Include="app\templates\new-cooking.html" />
     <Content Include="app\templates\recipes-list.html" />
     <Content Include="app\templates\recorded-cookings.html" />
+    <Content Include="app\templates\users-list.html" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
