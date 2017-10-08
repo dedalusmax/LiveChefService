@@ -42,19 +42,30 @@
     }
 
     self.endVideoCall = function () {
-        // turn off media stream
-        if (self.localStream) {
-            for (let track of self.localStream.getTracks()) {
-                track.stop();
-                console.log('Stopped streaming ' + track.kind + ' track from getUserMedia.');
-            }
-        }
         // turn off connection
         if (self.connection) {
             self.connection.close();
             self.connection = null;
         }
+
+        // turn off media streams
+        //self.stopMediaStream(self.localStream, 'localVideo');
+        self.stopMediaStream(self.remoteStream, 'remoteVideo');
     }
+}
+
+CommunicatorViewModel.prototype.stopMediaStream = function (stream, videoElement) {
+    var self = this;
+
+    if (stream) {
+        for (let track of stream.getTracks()) {
+            track.stop();
+            console.log('Stopped streaming ' + track.kind + ' track from getUserMedia.');
+        }
+    }
+
+    var video = document.querySelector('#' + videoElement);
+    video.srcObject = null;
 }
 
 CommunicatorViewModel.prototype.mediaRetrieved = function (stream) {
@@ -129,18 +140,7 @@ CommunicatorViewModel.prototype.createConnection = function () {
 
         // turn off remote video  
         if (event.target.iceConnectionState == 'disconnected') {
-
-            // turn off media stream
-            if (self.remoteStream) {
-                for (let track of self.remoteStream.getTracks()) {
-                    track.stop();
-                    console.log('Stopped streaming ' + track.kind + ' track from getUserMedia.');
-                }
-            }
-
-            // turn off connection
-            conn.close();
-            conn = null;
+            self.endVideoCall();
         }
     }
 
