@@ -6,18 +6,18 @@
     self.localStream = null;
     self.connection = null;
 
-    // chat implementation
-    $(document).ready(function () {
+        // chat implementation
+        $(document).ready(function () {
 
-        var constraints = {
-            audio: true,
-            video: true
-        };
+            var constraints = {
+                audio: true,
+                video: true
+            };
 
-        // obtains and displays video and audio streams from the local webcam
-        navigator.mediaDevices.getUserMedia(constraints).
-            then(self.mediaRetrieved.bind(self)).catch(self.mediaError);
-    });
+            // obtains and displays video and audio streams from the local webcam
+            navigator.mediaDevices.getUserMedia(constraints).
+                then(self.mediaRetrieved.bind(self)).catch(self.mediaError);
+        });
 
     self.startVideoCall = function () {
 
@@ -42,7 +42,14 @@
     }
 
     self.endVideoCall = function () {
-
+        // turn off media stream
+        if (self.localStream) {
+            for (let track of self.localStream.getTracks()) {
+                track.stop();
+                console.log('Stopped streaming ' + track.kind + ' track from getUserMedia.');
+            }
+        }
+        // turn off connection
         if (self.connection) {
             self.connection.close();
             self.connection = null;
@@ -117,6 +124,22 @@ CommunicatorViewModel.prototype.createConnection = function () {
         } else {
             self.connected(false);
         }
+
+        // turn off remote video  
+        if (conn.iceConnectionState == 'disconnected') {
+
+            // turn off media stream
+            if (self.remoteStream) {
+                for (let track of self.remoteStream.getTracks()) {
+                    track.stop();
+                    console.log('Stopped streaming ' + track.kind + ' track from getUserMedia.');
+                }
+            }
+
+            // turn off connection
+            conn.close();
+            conn = null;
+        }
     }
 
     connection.onicegatheringstatechange = function () {
@@ -131,20 +154,33 @@ CommunicatorViewModel.prototype.createConnection = function () {
 
     connection.onsignalingstatechange = function () {
 
+        // notify selected user to turn on camera
+        if (this.signalingState == 'have-remote-offer') {
+            alert('Someone is calling you..');
+        }
+        // calling someone
+        if (this.signalingState == 'have-local-offer') {
+            alert('Calling..')
+        }
+
+        // hang up
+        if (this.signalingState == 'closed') {
+            alert('Call ended..');
+        }
         console.log('Signaling state change: ' + this.signalingState + ', ' + this.readyState);
     }
 
     // media stream was closed
-    connection.onremovestream = function (event) {
-        console.log('Stopped streaming from remote media stream.');
+    //connection.onremovestream = function (event) {
+    //    console.log('Stopped streaming from remote media stream.');
 
-        if (self.remoteStream) {
-            for (let track of self.remoteStream.getTracks()) {
-                track.stop();
-                console.log('Stopped streaming ' + track.kind + ' track from getUserMedia.');
-            }
-        }
-    }
+    //    if (self.remoteStream) {
+    //        for (let track of self.remoteStream.getTracks()) {
+    //            track.stop();
+    //            console.log('Stopped streaming ' + track.kind + ' track from getUserMedia.');
+    //        }
+    //    }
+    //}
 
     return connection;
 }
@@ -179,7 +215,10 @@ CommunicatorViewModel.prototype.newMessage = function (data) {
             }
         });
     } else if (message.candidate) {
-        console.log('adding ice candidate...');
-        connection.addIceCandidate(new RTCIceCandidate(message.candidate));
+        // to set ice candidate there has to be remote connection
+        if (!connection || connection.remoteDescription.type) {
+            console.log('adding ice candidate...');
+            connection.addIceCandidate(new RTCIceCandidate(message.candidate));
+        }
     }
 };
