@@ -91,6 +91,8 @@ CommunicatorViewModel.prototype.createConnection = function () {
             {
                 urls: [
                     "stun:stun.l.google.com:19302",
+                    "stun:stun.services.mozilla.com",
+                    "stun:stun.skyway.io:3478",
                     "stun:stun.stunprotocol.org:3478"
                 ]
             }
@@ -100,6 +102,8 @@ CommunicatorViewModel.prototype.createConnection = function () {
 
     connection.onicecandidate = function (event) {
         if (event.candidate) {
+            console.log('connection.onicecandidate: ', event.candidate.candidate);
+
             // each time the client finds a new candidate, it will send it over to the remote peer
             root.hub.server.send(JSON.stringify({ "candidate": event.candidate }));
         }
@@ -107,26 +111,24 @@ CommunicatorViewModel.prototype.createConnection = function () {
 
     // New remote media stream was added
     connection.onaddstream = function (event) {
+        console.log('connection.onaddstream');
 
-        console.log('Started streaming from remote media stream.');
         var remoteVideo = document.querySelector('#remoteVideo');
         self.remoteStream = event.stream;
         remoteVideo.srcObject = event.stream;
     };
 
-    connection.oniceconnectionstatechange = function () {
+    connection.oniceconnectionstatechange = function (event) {
+        console.log('connection.oniceconnectionstatechange: ', event.target.iceConnectionState);
 
-        var conn = self.connection ? self.connection : this;
-        console.log('ICE connection state change: ' + conn.iceConnectionState);
-
-        if (conn.iceConnectionState == 'connected' || conn.iceConnectionState == 'completed') {
+        if (event.target.iceConnectionState == 'connected' || event.target.iceConnectionState == 'completed') {
             self.connected(true);
         } else {
             self.connected(false);
         }
 
         // turn off remote video  
-        if (conn.iceConnectionState == 'disconnected') {
+        if (event.target.iceConnectionState == 'disconnected') {
 
             // turn off media stream
             if (self.remoteStream) {
@@ -142,45 +144,43 @@ CommunicatorViewModel.prototype.createConnection = function () {
         }
     }
 
-    connection.onicegatheringstatechange = function () {
-
-        console.log('ICE gathering state change.');
+    connection.onicegatheringstatechange = function (event) {
+        console.log('connection.oniceconnectionstatechange: ', event.target.iceGatheringState);
     }
 
-    connection.onnegotiationneeded = function () {
-
-        console.log('Negotiation needed.');
+    connection.onnegotiationneeded = function (event) {
+        console.log('connection.onnegotiationneeded.');
     }
 
-    connection.onsignalingstatechange = function () {
+    connection.onsignalingstatechange = function (event) {
+        console.log('connection.onsignalingstatechange: ', event.target.signalingState);
 
         // notify selected user to turn on camera
-        if (this.signalingState == 'have-remote-offer') {
-            alert('Someone is calling you..');
+        if (event.target.signalingState == 'have-remote-offer') {
+            console.log('Someone is calling you..');
         }
         // calling someone
-        if (this.signalingState == 'have-local-offer') {
-            alert('Calling..')
+        if (event.target.signalingState == 'have-local-offer') {
+            console.log('Calling..')
         }
 
         // hang up
-        if (this.signalingState == 'closed') {
-            alert('Call ended..');
+        if (event.target.signalingState == 'closed') {
+            console.log('Call ended..');
         }
-        console.log('Signaling state change: ' + this.signalingState + ', ' + this.readyState);
     }
 
     // media stream was closed
-    //connection.onremovestream = function (event) {
-    //    console.log('Stopped streaming from remote media stream.');
+    connection.onremovestream = function (event) {
+        console.log('connection.onremovestream: ' + event);
 
-    //    if (self.remoteStream) {
-    //        for (let track of self.remoteStream.getTracks()) {
-    //            track.stop();
-    //            console.log('Stopped streaming ' + track.kind + ' track from getUserMedia.');
-    //        }
-    //    }
-    //}
+        if (self.remoteStream) {
+            for (let track of self.remoteStream.getTracks()) {
+                track.stop();
+                console.log('Stopped streaming ' + track.kind + ' track from getUserMedia.');
+            }
+        }
+    }
 
     return connection;
 }
@@ -189,36 +189,36 @@ CommunicatorViewModel.prototype.newMessage = function (data) {
     var self = this;
 
     var message = JSON.parse(data);
-    var connection = self.connection || self.createConnection();
+    self.connection = self.connection || self.createConnection();
 
     // An SDP message contains connection and media information, and is either an 'offer' or an 'answer'
     if (message.sdp) {
-        connection.setRemoteDescription(new RTCSessionDescription(message.sdp), function () {
-            if (connection.remoteDescription.type == 'offer') {
+        self.connection.setRemoteDescription(new RTCSessionDescription(message.sdp), function () {
+            if (self.connection.remoteDescription.type == 'offer') {
                 console.log('received offer, sending answer...');
 
                 // Add our stream to the connection to be shared
-                connection.addStream(self.localStream);
+                self.connection.addStream(self.localStream);
 
                 // Create an SDP response
-                connection.createAnswer(function (desc) {
+                self.connection.createAnswer(function (desc) {
 
                     // Which becomes our local session description
-                    connection.setLocalDescription(desc, function () {
+                    self.connection.setLocalDescription(desc, function () {
 
                         // And send it to the originator, where it will become their RemoteDescription
-                        root.hub.server.send(JSON.stringify({ 'sdp': connection.localDescription }));
+                        root.hub.server.send(JSON.stringify({ 'sdp': self.connection.localDescription }));
                     });
                 }, function (error) { console.log('Error creating session description: ' + error); });
-            } else if (connection.remoteDescription.type == 'answer') {
+            } else if (self.connection.remoteDescription.type == 'answer') {
                 console.log('got an answer');
             }
         });
     } else if (message.candidate) {
         // to set ice candidate there has to be remote connection
-        if (!connection || connection.remoteDescription.type) {
+        if (!self.connection || self.connection.remoteDescription.type) {
             console.log('adding ice candidate...');
-            connection.addIceCandidate(new RTCIceCandidate(message.candidate));
+            self.connection.addIceCandidate(new RTCIceCandidate(message.candidate));
         }
     }
 };
