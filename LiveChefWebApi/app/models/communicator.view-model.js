@@ -69,7 +69,26 @@ CommunicatorViewModel.prototype.createConnection = function () {
 
     // peer connection is going to handle negotiating a network connection with another client, 
     // and keep an open session allowing the two to communicate directly
-    var connection = new RTCPeerConnection(null);
+    var connection = new RTCPeerConnection({
+        iceServers: [
+            {
+                urls: [
+                    "turn:173.194.72.127:19305?transport=udp",
+                    "turn:[2404:6800:4008:C01::7F]:19305?transport=udp",
+                    "turn:173.194.72.127:443?transport=tcp",
+                    "turn:[2404:6800:4008:C01::7F]:443?transport=tcp"
+                ],
+                username: "CKjCuLwFEgahxNRjuTAYzc/s6OMT",
+                credential: "u1SQDR/SQsPQIxXNWQT7czc/G4c="
+            },
+            {
+                urls: [
+                    "stun:stun.l.google.com:19302",
+                    "stun:stun.stunprotocol.org:3478"
+                ]
+            }
+        ]
+    });
     console.log('Created new peer connection.');
 
     connection.onicecandidate = function (event) {
