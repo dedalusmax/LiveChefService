@@ -64,11 +64,10 @@ namespace LiveChefService.Controllers
             item.IsGuest = true;
             item.DisplayName = "Guest";
 
-            WebApiApplication.UserRepository.Add(item);
-            context.Clients.All.userLoggedIn(item);
+            var newUser = WebApiApplication.UserRepository.Add(item);
+            context.Clients.All.userLoggedIn(newUser);
 
-            return PrepareResponse(item);
-
+            return PrepareResponse(newUser);
         }
 
         [HttpPost]

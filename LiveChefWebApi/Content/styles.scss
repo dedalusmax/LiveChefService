@@ -349,6 +349,11 @@ h3 {
     }
 }
 
+.anti-row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
 .new-cooking-component {
 
     > div {
@@ -437,6 +442,14 @@ h3 {
     .sepia {
         -webkit-filter: sepia(1);
         filter: sepia(1);
+    }
+}
+
+.users-list-component {
+
+    .my-video {
+        width: 25%;
+        position: absolute;
     }
 }
 
