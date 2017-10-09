@@ -13,13 +13,13 @@ var CommunicatorViewModel = function (data) {
     self.localStream = null;
     self.connection = null;
 
-    self.intendedAction = null;
+    self.intendedAction = ko.observable(null);
     self.userIdToConnect = ko.observable(null);
     self.requestedConnection = false;
 
     self.startVideoCall = function (user) {
 
-        self.intendedAction = MediaAction.VideoCall;
+        self.intendedAction(MediaAction.VideoCall);
         self.userIdToConnect(user.id);
 
         self.startLocalStream();
@@ -27,7 +27,7 @@ var CommunicatorViewModel = function (data) {
 
     self.startAudioCall = function (user) {
 
-        self.intendedAction = MediaAction.AudioCall;
+        self.intendedAction(MediaAction.AudioCall);
         self.userIdToConnect(user.id);
 
         self.startLocalStream();
@@ -44,7 +44,7 @@ CommunicatorViewModel.prototype.startLocalStream = function () {
     // obtains and displays video and audio streams from the local webcam
     var constraints = {
         audio: true,
-        video: (self.intendedAction == MediaAction.VideoCall)
+        video: (self.intendedAction() == MediaAction.VideoCall)
     };
 
     navigator.mediaDevices.getUserMedia(constraints).
@@ -84,17 +84,17 @@ CommunicatorViewModel.prototype.closeConnectionAndStreams = function () {
     }
 
     // turn off media streams
-    self.stopMediaStream(self.remoteStream, 'remoteVideo');
-    self.stopMediaStream(self.localStream, 'localVideo');
+    self.stopMediaStream(self.remoteStream, 'remoteVideo', 'remoteAudio');
+    self.stopMediaStream(self.localStream, 'localVideo', 'localAudio');
 
     // clear local variables
     self.isStreaming(false);
-    self.intendedAction = null;
+    self.intendedAction(null);
     self.userIdToConnect(null);
     self.requestedConnection = false;
 }
 
-CommunicatorViewModel.prototype.stopMediaStream = function (stream, videoElement) {
+CommunicatorViewModel.prototype.stopMediaStream = function (stream, videoElement, audioElement) {
     var self = this;
 
     if (stream) {
@@ -105,23 +105,37 @@ CommunicatorViewModel.prototype.stopMediaStream = function (stream, videoElement
     }
 
     var video = document.querySelector('#' + videoElement);
-    video.srcObject = null;
+    if (video) video.srcObject = null;
+    
+    var audio = document.querySelector('#' + audioElement);
+    if (audio) audio.srcObject = null;
 }
 
 CommunicatorViewModel.prototype.mediaRetrieved = function (stream) {
     var self = this;
 
     self.isStreaming(true);
+    self.localStream = stream;
 
     console.log('Started streaming from getUserMedia.');
-    var localVideo = document.querySelector('#localVideo');
-    self.localStream = stream;
-    localVideo.srcObject = stream;
+    if (self.intendedAction() == MediaAction.VideoCall) {
+        var localVideo = document.querySelector('#localVideo');
+        localVideo.srcObject = stream;
+    } else if (self.intendedAction() == MediaAction.AudioCall) {
+        var audioTracks = stream.getAudioTracks();
+        console.log('Using audio device: ' + audioTracks[0].label);
+        var localAudio = document.querySelector('#localAudio');
+        localAudio.srcObject = stream;
+    }
+
+    stream.oninactive = function () {
+        console.log('Stream ended');
+    };
 
     if (self.requestedConnection) {
         self.startCommunication();
     } else {
-        root.hub.server.requestForJoin(root.user.id, self.intendedAction, self.userIdToConnect());
+        root.hub.server.requestForJoin(root.user.id, self.intendedAction(), self.userIdToConnect());
     }
 }
 
@@ -140,7 +154,7 @@ CommunicatorViewModel.prototype.joinRequested = function (action, userIdToConnec
 
     self.requestedConnection = true;
 
-    self.intendedAction = action;
+    self.intendedAction(action);
     self.userIdToConnect(userIdToConnect);
 
     self.startLocalStream();
@@ -188,9 +202,15 @@ CommunicatorViewModel.prototype.createConnection = function () {
     connection.onaddstream = function (event) {
         console.log('connection.onaddstream');
 
-        var remoteVideo = document.querySelector('#remoteVideo');
         self.remoteStream = event.stream;
-        remoteVideo.srcObject = event.stream;
+
+        if (self.intendedAction() == MediaAction.VideoCall) {
+            var remoteVideo = document.querySelector('#remoteVideo');
+            remoteVideo.srcObject = event.stream;
+        } else {
+            var remoteAudio = document.querySelector('#remoteAudio');
+            remoteAudio.srcObject = event.stream;
+        }
     };
 
     connection.oniceconnectionstatechange = function (event) {

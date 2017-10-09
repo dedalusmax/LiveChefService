@@ -22,9 +22,13 @@
     <div class="col-sm-6" data-bind="with: communicator, visible: communicator.isStreaming">
         <h4>Communication with the user</h4>
         <div class="card fullsize">
-            <div class="card-body">
+            <div class="card-body" data-bind="if: intendedAction() == 1">
                 <video id="localVideo" class="my-video" autoplay></video>
                 <video id="remoteVideo" class="fullsize" autoplay controls></video>
+            </div>
+            <div class="card-body" data-bind="if: intendedAction() == 2">
+                <audio id="localAudio" class="my-audio" autoplay></audio>
+                <audio id="remoteAudio" class="fullsize" autoplay controls></audio>
             </div>
             <div class="card-footer">
                 <span class="glyphicon glyphicon-remove glyph-button" aria-hidden="true" data-bind="click: stopCall.bind($data), visible: connected"></span>
