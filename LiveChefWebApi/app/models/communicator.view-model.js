@@ -1,57 +1,97 @@
-﻿var CommunicatorViewModel = function (data) {
+﻿var MediaAction = {
+    VideoCall: 1,
+    AudioCall: 2,
+    Chat: 3
+};
+
+var CommunicatorViewModel = function (data) {
     var self = this;
 
     self.connected = ko.observable(false);
+    self.isStreaming = ko.observable(false);
 
     self.localStream = null;
     self.connection = null;
 
-        // chat implementation
-        $(document).ready(function () {
+    self.intendedAction = null;
+    self.userIdToConnect = ko.observable(null);
+    self.requestedConnection = false;
 
-            var constraints = {
-                audio: true,
-                video: true
-            };
+    self.startVideoCall = function (user) {
 
-            // obtains and displays video and audio streams from the local webcam
-            navigator.mediaDevices.getUserMedia(constraints).
-                then(self.mediaRetrieved.bind(self)).catch(self.mediaError);
-        });
+        self.intendedAction = MediaAction.VideoCall;
+        self.userIdToConnect(user.id);
 
-    self.startVideoCall = function () {
-
-        self.connection = self.connection || self.createConnection();
-
-        // adding the stream we received from 'getUserMedia' into the connection object
-        self.connection.addStream(self.localStream);
-        console.log('Added stream to peer connection.');
-
-        // we need to create and send a WebRTC offer over to the peer we would like to connect with
-        self.connection.createOffer(function (desc) {
-            console.log('Created offer for the peers.');
-
-            // set the generated SDP to be our local session description
-            self.connection.setLocalDescription(desc, function () {
-                console.log('Local description set to: ' + desc);
-
-                // store offer description into the cooking itself and send it to all interested parties
-                root.hub.server.send(JSON.stringify({ "sdp": desc }));
-            });
-        });
+        self.startLocalStream();
     }
 
-    self.endVideoCall = function () {
-        // turn off connection
-        if (self.connection) {
-            self.connection.close();
-            self.connection = null;
-        }
+    self.startAudioCall = function (user) {
 
-        // turn off media streams
-        //self.stopMediaStream(self.localStream, 'localVideo');
-        self.stopMediaStream(self.remoteStream, 'remoteVideo');
+        self.intendedAction = MediaAction.AudioCall;
+        self.userIdToConnect(user.id);
+
+        self.startLocalStream();
     }
+
+    self.stopCall = function (user) {
+        self.closeConnectionAndStreams();
+    }
+}
+
+CommunicatorViewModel.prototype.startLocalStream = function () {
+    var self = this;
+
+    // obtains and displays video and audio streams from the local webcam
+    var constraints = {
+        audio: true,
+        video: (self.intendedAction == MediaAction.VideoCall)
+    };
+
+    navigator.mediaDevices.getUserMedia(constraints).
+        then(self.mediaRetrieved.bind(self)).catch(self.mediaError.bind(self));
+}
+
+CommunicatorViewModel.prototype.startCommunication = function () {
+    var self = this;
+
+    self.connection = self.connection || self.createConnection();
+
+    // adding the stream we received from 'getUserMedia' into the connection object
+    self.connection.addStream(self.localStream);
+    console.log('Added stream to peer connection.');
+
+    // we need to create and send a WebRTC offer over to the peer we would like to connect with
+    self.connection.createOffer(function (desc) {
+        console.log('Created offer for the peers.');
+
+        // set the generated SDP to be our local session description
+        self.connection.setLocalDescription(desc, function () {
+            console.log('Local description set to: ' + desc);
+
+            // store offer description into the cooking itself and send it to all interested parties
+            root.hub.server.send(self.userIdToConnect(), JSON.stringify({ "sdp": desc }));
+        });
+    });
+}
+
+CommunicatorViewModel.prototype.closeConnectionAndStreams = function () {
+    var self = this;
+
+    // turn off connection
+    if (self.connection) {
+        self.connection.close();
+        self.connection = null;
+    }
+
+    // turn off media streams
+    self.stopMediaStream(self.remoteStream, 'remoteVideo');
+    self.stopMediaStream(self.localStream, 'localVideo');
+
+    // clear local variables
+    self.isStreaming(false);
+    self.intendedAction = null;
+    self.userIdToConnect(null);
+    self.requestedConnection = false;
 }
 
 CommunicatorViewModel.prototype.stopMediaStream = function (stream, videoElement) {
@@ -71,15 +111,39 @@ CommunicatorViewModel.prototype.stopMediaStream = function (stream, videoElement
 CommunicatorViewModel.prototype.mediaRetrieved = function (stream) {
     var self = this;
 
+    self.isStreaming(true);
+
     console.log('Started streaming from getUserMedia.');
     var localVideo = document.querySelector('#localVideo');
     self.localStream = stream;
     localVideo.srcObject = stream;
+
+    if (self.requestedConnection) {
+        self.startCommunication();
+    } else {
+        root.hub.server.requestForJoin(root.user.id, self.intendedAction, self.userIdToConnect());
+    }
 }
 
 CommunicatorViewModel.prototype.mediaError = function (error) {
+    var self = this;
+
+    self.isStreaming(false);
+    self.requestedConnection = false;
 
     console.log('navigator.mediaDevices.getUserMedia error: ', error);
+}
+
+CommunicatorViewModel.prototype.joinRequested = function (action, userIdToConnect) {
+    // a caller sent a message through SignalR that he wants to start communicating with me
+    var self = this;
+
+    self.requestedConnection = true;
+
+    self.intendedAction = action;
+    self.userIdToConnect(userIdToConnect);
+
+    self.startLocalStream();
 }
 
 CommunicatorViewModel.prototype.createConnection = function () {
@@ -116,7 +180,7 @@ CommunicatorViewModel.prototype.createConnection = function () {
             console.log('connection.onicecandidate: ', event.candidate.candidate);
 
             // each time the client finds a new candidate, it will send it over to the remote peer
-            root.hub.server.send(JSON.stringify({ "candidate": event.candidate }));
+            root.hub.server.send(self.userIdToConnect(), JSON.stringify({ "candidate": event.candidate }));
         }
     };
 
@@ -140,7 +204,7 @@ CommunicatorViewModel.prototype.createConnection = function () {
 
         // turn off remote video  
         if (event.target.iceConnectionState == 'disconnected') {
-            self.endVideoCall();
+            self.closeConnectionAndStreams();
         }
     }
 
@@ -207,7 +271,7 @@ CommunicatorViewModel.prototype.newMessage = function (data) {
                     self.connection.setLocalDescription(desc, function () {
 
                         // And send it to the originator, where it will become their RemoteDescription
-                        root.hub.server.send(JSON.stringify({ 'sdp': self.connection.localDescription }));
+                        root.hub.server.send(self.userIdToConnect(), JSON.stringify({ 'sdp': self.connection.localDescription }));
                     });
                 }, function (error) { console.log('Error creating session description: ' + error); });
             } else if (self.connection.remoteDescription.type == 'answer') {

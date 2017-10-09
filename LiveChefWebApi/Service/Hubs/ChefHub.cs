@@ -6,8 +6,30 @@ using System.Threading.Tasks;
 
 namespace LiveChefService
 {
+    public enum MediaAction
+    {
+        VideoCall = 1,
+        AudioCall = 2,
+        Chat = 3
+    }
+
     public class ChefHub : Hub
     {
+        public void Join(int userId)
+        {
+            this.Groups.Add(this.Context.ConnectionId, userId.ToString());
+        }
+
+        public void RequestForJoin(int userId, MediaAction action, int userIdToConnect)
+        {
+            this.Clients.Group(userIdToConnect.ToString()).joinRequested(action, userId);
+        }
+
+        public void Send(int userId, string message)
+        {
+            this.Clients.Group(userId.ToString()).newMessage(message);
+        }
+
         public Cooking AddCooking(Cooking data)
         {
             var cooking = new Cooking
@@ -23,33 +45,6 @@ namespace LiveChefService
             this.Clients.All.cookingAdded(cooking);
 
             return cooking;
-        }
-
-        public void StartTransmission(int cookingId, string sdp)
-        {
-            var cooking = WebApiApplication.CookingRepository.GetById(cookingId);
-            cooking.Transmission.SDP = sdp;
-            WebApiApplication.CookingRepository.Change(cooking);
-
-            this.Clients.Others.transmissionStarted(cookingId, sdp);
-        }
-
-        public void SetRdp(int cookingId, string sdp)
-        {
-            var cooking = WebApiApplication.CookingRepository.GetById(cookingId);
-            cooking.Transmission.SDP = sdp;
-            WebApiApplication.CookingRepository.Change(cooking);
-
-            this.Clients.Others.cookingUpdated(cooking);
-        }
-
-        public void SetIceCandidate(int cookingId, string candidate)
-        {
-            var cooking = WebApiApplication.CookingRepository.GetById(cookingId);
-            cooking.Transmission.ICECandidate = candidate;
-            WebApiApplication.CookingRepository.Change(cooking);
-
-            this.Clients.Others.cookingUpdated(cooking);
         }
 
         public void UpdateCooking(Cooking item)
@@ -83,11 +78,6 @@ namespace LiveChefService
         public void GetStoredCookings()
         {
             this.Clients.Caller.getStoredCookings(WebApiApplication.CookingRepository.GetFinishedCookings());
-        }
-
-        public void Send(string message)
-        {
-            this.Clients.Others.newMessage(message);
         }
 
         public override Task OnConnected()

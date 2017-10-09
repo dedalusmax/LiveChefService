@@ -1,4 +1,4 @@
-﻿<div class="row">
+﻿<div class="users-list-component row anti-row">
 
     <div class="card-deck col-sm-6" data-bind="foreach: usersView">
         <div class="card">
@@ -6,32 +6,29 @@
                 <h5 data-bind="text: displayName"></h5>
             </div>
             <div class="card-block">
-                <p class="card-text text-success" data-bind="text: ' Online',  visible: isLoggedIn()"></p>
-                <p class="card-text text-danger" data-bind="text: ' Offline',  visible: !isLoggedIn()"></p>
+                <p class="card-text text-success" data-bind="visible: isLoggedIn()">Online</p>
+                <p class="card-text text-danger" data-bind="visible: !isLoggedIn()">Offline</p>
+                <small data-bind="visible: $parent.communicator.userIdToConnect() == id">In a call</small>
             </div>
-            <div class="card-footer">
-                <div data-bind="visible: isLoggedIn">
-                    <!--<span class="glyphicon glyphicon-facetime-video glyph-button" aria-hidden="true" data-bind="click: $parent.communicator.videoCall, visible: !$parent.communicator.setStream()"></span>-->
-                    <!--<span class="glyphicon glyphicon-camera glyph-button" aria-hidden="true" data-bind="click: $parent.communicator.startVideoCall.bind($data), visible: !$parent.communicator.connected()"></span>-->
-                    <span class="glyphicon glyphicon-camera glyph-button" aria-hidden="true" data-bind="click: $parent.communicator.startVideoCall, visible: !$parent.communicator.connected()"></span>
-                    <span class="glyphicon glyphicon-remove glyph-button" aria-hidden="true" data-bind="click: $parent.communicator.endVideoCall, visible: $parent.communicator.connected"></span>
+            <div class="card-footer" data-bind="visible: isLoggedIn">
+                <div>
+                    <span class="glyphicon glyphicon-earphone glyph-button" aria-hidden="true" data-bind="click: $parent.communicator.startAudioCall.bind($data), visible: !$parent.communicator.connected()"></span>
+                    <span class="glyphicon glyphicon-facetime-video glyph-button" aria-hidden="true" data-bind="click: $parent.communicator.startVideoCall.bind($data), visible: !$parent.communicator.connected()"></span>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="col-sm-6" data-bind="with: communicator">
+    <div class="col-sm-6" data-bind="with: communicator, visible: communicator.isStreaming">
         <h4>Communication with the user</h4>
         <div class="card fullsize">
-            <div class="card-header">
-                <video id="localVideo" autoplay controls width="200" height="200"></video>
-            </div>
             <div class="card-body">
+                <video id="localVideo" class="my-video" autoplay></video>
                 <video id="remoteVideo" class="fullsize" autoplay controls></video>
             </div>
             <div class="card-footer">
+                <span class="glyphicon glyphicon-remove glyph-button" aria-hidden="true" data-bind="click: stopCall.bind($data), visible: connected"></span>
             </div>
         </div>
     </div>
-
 </div>

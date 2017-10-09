@@ -7,12 +7,15 @@
         self.activeTab(tabId);
     };
 
+    // these are the responsive lists of important data
     self.cookings = ko.observableArray(); 
     self.recipes = ko.observableArray();
-
-    self.communicator = new CommunicatorViewModel();
     self.users = ko.observableArray(); 
 
+    // this is the view model for communicating via WebRTC
+    self.communicator = new CommunicatorViewModel();
+
+    // this is the view of not-myself users (for the chefs online)
     self.usersView = ko.computed(function () {
         return self.users().filter(u => u.id !== root.user.id);
     });
@@ -20,6 +23,8 @@
     self.logout = function () {
         ajax.logout(self.parent.user, self.logoutSucceeded.bind(self));
     };
+
+    //#region SignalR initialization and event handlers
 
     var hub = self.parent.hub;
 
@@ -47,6 +52,11 @@
         self.communicator.newMessage(message);
     };
 
+    hub.client.joinRequested = function (action, userIdToConnect) {
+        console.log('Join requested. Media: ' + action + ' user to connect: ' + userIdToConnect);
+        self.communicator.joinRequested(action, userIdToConnect);
+    };
+
     hub.client.usersInitiated = function (users) {
         users.forEach(function (user) {
             self.users.push(new UserViewModel(user));
@@ -72,7 +82,7 @@
             found.transmission = cooking.transmission;
             console.log('Cooking updated: ' + cooking.id + ' transmission: ' + cooking.transmission);
         }
-};
+    };
 
     hub.client.cookingRemoved = function (cookingId) {
         self.cookings.remove(function (cooking) {
@@ -92,7 +102,12 @@
     connection.logging = true;
 
     $.connection.hub.start().done(function () {
+
+        // inform signalr about me as a new hub group
+        hub.server.join(root.user.id);
     });
+
+    //#endregion
 
     self.viewCooking = function (cooking) {
         var model = new CookingViewModel(cooking);
