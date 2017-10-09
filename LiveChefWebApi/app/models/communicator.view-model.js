@@ -88,6 +88,13 @@ CommunicatorViewModel.prototype.closeConnectionAndStreams = function () {
     self.stopMediaStream(self.localStream, 'localVideo', 'localAudio');
 
     // clear local variables
+    self.clear();
+}
+
+CommunicatorViewModel.prototype.clear = function () {
+    var self = this;
+
+    // clear local variables
     self.isStreaming(false);
     self.intendedAction(null);
     self.userIdToConnect(null);

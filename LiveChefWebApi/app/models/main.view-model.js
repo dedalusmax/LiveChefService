@@ -54,6 +54,7 @@
 
     hub.client.joinRequested = function (action, userIdToConnect) {
         console.log('Join requested. Media: ' + action + ' user to connect: ' + userIdToConnect);
+        self.activateTab(4);
         self.communicator.joinRequested(action, userIdToConnect);
     };
 
