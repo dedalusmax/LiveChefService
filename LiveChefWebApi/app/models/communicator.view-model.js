@@ -22,6 +22,12 @@ var CommunicatorViewModel = function (data) {
     self.remoteAudio = null;
     self.remoteVideo = null;
 
+    self.file = ko.observable(null);
+    self.receivedFileData = null;
+
+    self.sendChannel = null;
+    self.receiveChannel = null;
+
     self.startVideoCall = function (user) {
 
         self.intendedAction(MediaAction.VideoCall);
@@ -42,6 +48,21 @@ var CommunicatorViewModel = function (data) {
 
     self.stopCall = function (user) {
         self.closeConnectionAndStreams();
+    }
+
+    self.sendFile = function (user) {
+        self.fileInput = $('input#fileInput');
+        self.fileInput.val('');
+        self.fileInput.click();
+    }
+
+    self.handleFileInputChange = function () {
+        self.file(self.fileInput[0].files[0]);
+        if (!self.file()) {
+            console.log('No file chosen');
+        } else {
+            self.createDataChannel(self.file());
+        }
     }
 
     self.stopLocalStream = function () {
@@ -93,7 +114,7 @@ CommunicatorViewModel.prototype.startCommunication = function () {
             console.log('Local description set to: ' + desc);
 
             // store offer description into the cooking itself and send it to all interested parties
-            root.hub.server.send(self.userIdToConnect(), JSON.stringify({ "sdp": desc }));
+            root.hub.server.sendRtcMessage(self.userIdToConnect(), JSON.stringify({ "sdp": desc }));
         });
     });
 }
@@ -110,6 +131,15 @@ CommunicatorViewModel.prototype.closeConnectionAndStreams = function () {
     // turn off media streams
     self.stopRemoteStream();
     self.stopLocalStream();
+
+    if (self.sendChannel) {
+        self.sendChannel.close();
+        self.sendChannel = null;
+    }
+    if (self.receiveChannel) {
+        self.receiveChannel.close();
+        self.receiveChannel = null;
+    }
 
     // clear local variables
     self.clear();
@@ -128,6 +158,9 @@ CommunicatorViewModel.prototype.clear = function () {
     self.localVideo = null;
     self.remoteAudio = null;
     self.remoteVideo = null;
+
+    self.file(null);
+    self.receivedFileData = null;
 }
 
 CommunicatorViewModel.prototype.stopMediaStream = function (stream, videoElement, audioElement) {
@@ -250,7 +283,7 @@ CommunicatorViewModel.prototype.createConnection = function () {
             console.log('connection.onicecandidate: ', event.candidate.candidate);
 
             // each time the client finds a new candidate, it will send it over to the remote peer
-            root.hub.server.send(self.userIdToConnect(), JSON.stringify({ "candidate": event.candidate }));
+            root.hub.server.sendRtcMessage(self.userIdToConnect(), JSON.stringify({ "candidate": event.candidate }));
         }
     };
 
@@ -322,10 +355,19 @@ CommunicatorViewModel.prototype.createConnection = function () {
         }
     }
 
+    connection.ondatachannel = function (event) {
+        console.log('Receive Channel Callback');
+
+        self.receiveChannel = event.channel;
+        //self.receiveChannel.onopen = self.dataChannelOpened;
+        //self.receiveChannel.onclose = self.dataChannelClosed;
+        self.receiveChannel.onmessage = self.receiveChannelMessageArrived;
+    }
+
     return connection;
 }
 
-CommunicatorViewModel.prototype.newMessage = function (data) {
+CommunicatorViewModel.prototype.rtcMessageReceived = function (data) {
     var self = this;
 
     var message = JSON.parse(data);
@@ -347,7 +389,7 @@ CommunicatorViewModel.prototype.newMessage = function (data) {
                     self.connection.setLocalDescription(desc, function () {
 
                         // And send it to the originator, where it will become their RemoteDescription
-                        root.hub.server.send(self.userIdToConnect(), JSON.stringify({ 'sdp': self.connection.localDescription }));
+                        root.hub.server.sendRtcMessage(self.userIdToConnect(), JSON.stringify({ 'sdp': self.connection.localDescription }));
                     });
                 }, function (error) { console.log('Error creating session description: ' + error); });
             } else if (self.connection.remoteDescription.type == 'answer') {
@@ -360,5 +402,88 @@ CommunicatorViewModel.prototype.newMessage = function (data) {
             console.log('adding ice candidate...');
             self.connection.addIceCandidate(new RTCIceCandidate(message.candidate));
         }
+    }
+};
+
+CommunicatorViewModel.prototype.createDataChannel = function (file) {
+    var self = this;
+
+    //self.sendChannel = self.connection.createDataChannel('sendDataChannel', {
+    //    ordered: false, // do not guarantee order
+    //    maxRetransmitTime: 3000, // in milliseconds
+    //});
+    self.sendChannel = self.connection.createDataChannel('sendDataChannel');
+    console.log('Created send data channel');
+
+    // when the channel exists we call method for send 
+    self.sendChannel.onopen = self.sendChannelOpened;
+    self.sendChannel.onclose = self.sendChannelClosed;
+    //self.sendChannel.onmessage = self.sendChannelMessageArrived;
+
+    // we must inform other party of the incoming message transfer
+    root.hub.server.requestRtcDataTransfer(self.userIdToConnect(), file.name, file.size);
+}
+
+CommunicatorViewModel.prototype.rtcDataTransferRequested = function (filename, size) {
+    var self = this;
+
+    // signalr returns us the information about the file that has been transferred
+    self.receivedFileData = { filename: filename, size: size };
+}
+
+CommunicatorViewModel.prototype.sendChannelOpened = function () {
+    var self = this;
+    console.log('Data channel opened');
+
+    // send file over the WebRTC data channel:
+
+    var file = self.file();
+
+    var chunkSize = 16384; // 16 KB
+    var sliceFile = function (offset) {
+        var reader = new window.FileReader();
+        reader.onload = (function () {
+            return function (e) {
+                self.sendChannel.send(e.target.result);
+                if (file.size > offset + e.target.result.byteLength) {
+                    window.setTimeout(sliceFile, 0, offset + chunkSize);
+                }
+                //sendProgress.value = offset + e.target.result.byteLength;
+            };
+        })(file);
+        var slice = file.slice(offset, offset + chunkSize);
+        reader.readAsArrayBuffer(slice);
+    };
+    sliceFile(0);
+
+    self.sendChannel.close();
+    self.sendChannel = null;
+};
+
+CommunicatorViewModel.prototype.sendChannelClosed = function (event) {
+    var self = this;
+    console.log('Data channel closed');
+};
+
+CommunicatorViewModel.prototype.receiveChannelMessageArrived = function (event) {
+    var self = this;
+    console.log('Data channel message arrived');
+
+    if (self.file) {
+
+        var receiveBuffer = [];
+        receiveBuffer.push(event.data);
+        var received = new window.Blob(receiveBuffer);
+        receiveBuffer = [];
+
+        var downloadAnchor = document.querySelector('#downloadAnchor');
+        downloadAnchor.href = URL.createObjectURL(received);
+        downloadAnchor.download = self.receivedFileData.filename;
+
+        self.receiveChannel.close();
+        self.receiveChannel = null;
+        
+    } else {
+        console.log('Data about the file not arrived!');
     }
 };

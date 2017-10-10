@@ -48,14 +48,18 @@
         console.log('User logged-out: ' + user.displayName);
     };
 
-    hub.client.newMessage = function (message) {
-        self.communicator.newMessage(message);
+    hub.client.rtcMessageReceived = function (message) {
+        self.communicator.rtcMessageReceived(message);
     };
 
     hub.client.joinRequested = function (action, userIdToConnect) {
         console.log('Join requested. Media: ' + action + ' user to connect: ' + userIdToConnect);
         self.activateTab(4);
         self.communicator.joinRequested(action, userIdToConnect);
+    };
+
+    hub.client.rtcDataTransferRequested = function (filename, size) {
+        self.communicator.rtcDataTransferRequested(filename, size);
     };
 
     hub.client.usersInitiated = function (users) {

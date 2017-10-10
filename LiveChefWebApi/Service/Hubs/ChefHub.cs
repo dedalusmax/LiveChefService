@@ -25,9 +25,14 @@ namespace LiveChefService
             this.Clients.Group(userIdToConnect.ToString()).joinRequested(action, userId);
         }
 
-        public void Send(int userId, string message)
+        public void SendRtcMessage(int userId, string message)
         {
-            this.Clients.Group(userId.ToString()).newMessage(message);
+            this.Clients.Group(userId.ToString()).rtcMessageReceived(message);
+        }
+
+        public void RequestRtcDataTransfer(int userId, string filename, int size)
+        {
+            this.Clients.Group(userId.ToString()).rtcDataTransferRequested(filename, size);
         }
 
         public Cooking AddCooking(Cooking data)

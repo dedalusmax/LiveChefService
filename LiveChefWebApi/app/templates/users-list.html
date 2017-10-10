@@ -32,6 +32,11 @@
             </div>
             <div class="card-footer">
                 <span class="glyphicon glyphicon-remove glyph-button" aria-hidden="true" data-bind="click: stopCall.bind($data), visible: connected"></span>
+                <span class="glyphicon glyphicon-file glyph-button" aria-hidden="true" data-bind="click: sendFile.bind($data), visible: connected() && file() == null"></span>
+                <form class="hidden">
+                    <input id="fileInput" type="file" data-bind="event: { change: handleFileInputChange.bind($data) }" />
+                    <a id="downloadAnchor" href=""></a>
+                </form>
             </div>
         </div>
     </div>
