@@ -22,11 +22,10 @@ var CommunicatorViewModel = function (data) {
     self.remoteAudio = null;
     self.remoteVideo = null;
 
-    self.file = ko.observable(null);
-    self.receivedFileData = null;
-
-    self.sendChannel = null;
-    self.receiveChannel = null;
+    self.file = null;
+    self.dataChannel = null;
+    self.receiveBuffer = [];
+    self.receivedSize = 0;
 
     self.startVideoCall = function (user) {
 
@@ -57,11 +56,14 @@ var CommunicatorViewModel = function (data) {
     }
 
     self.handleFileInputChange = function () {
-        self.file(self.fileInput[0].files[0]);
-        if (!self.file()) {
+        var file = self.fileInput[0].files[0];
+        if (!file) {
             console.log('No file chosen');
         } else {
-            self.createDataChannel(self.file());
+            // we must inform other party of the incoming message transfer
+            root.hub.server.requestRtcDataTransfer(self.userIdToConnect(), file.name, file.size);
+            // send the file through the opened RTC data channel
+            self.sendData(file);
         }
     }
 
@@ -122,6 +124,11 @@ CommunicatorViewModel.prototype.startCommunication = function () {
 CommunicatorViewModel.prototype.closeConnectionAndStreams = function () {
     var self = this;
 
+    if (self.dataChannel) {
+        self.dataChannel.close();
+        self.dataChannel = null;
+    }
+
     // turn off connection
     if (self.connection) {
         self.connection.close();
@@ -131,15 +138,6 @@ CommunicatorViewModel.prototype.closeConnectionAndStreams = function () {
     // turn off media streams
     self.stopRemoteStream();
     self.stopLocalStream();
-
-    if (self.sendChannel) {
-        self.sendChannel.close();
-        self.sendChannel = null;
-    }
-    if (self.receiveChannel) {
-        self.receiveChannel.close();
-        self.receiveChannel = null;
-    }
 
     // clear local variables
     self.clear();
@@ -159,8 +157,9 @@ CommunicatorViewModel.prototype.clear = function () {
     self.remoteAudio = null;
     self.remoteVideo = null;
 
-    self.file(null);
-    self.receivedFileData = null;
+    self.file = null;
+    self.receiveBuffer = [];
+    self.receivedSize = 0;
 }
 
 CommunicatorViewModel.prototype.stopMediaStream = function (stream, videoElement, audioElement) {
@@ -278,6 +277,20 @@ CommunicatorViewModel.prototype.createConnection = function () {
     });
     console.log('Created new peer connection.');
 
+    self.dataChannel = connection.createDataChannel('dataChannel', { reliable: false });
+    console.log('Created data channel.');
+
+    var dataChannelStateChange = function (event) {
+        console.log('Send channel state is: ' + event.target.readyState);
+        if (event.target.readyState == 'closed') {
+            self.closeConnectionAndStreams();
+        }
+    }
+
+    // when the channel exists we call method for send 
+    self.dataChannel.onopen = dataChannelStateChange;
+    self.dataChannel.onclose = dataChannelStateChange;
+
     connection.onicecandidate = function (event) {
         if (event.candidate) {
             console.log('connection.onicecandidate: ', event.candidate.candidate);
@@ -358,11 +371,48 @@ CommunicatorViewModel.prototype.createConnection = function () {
     connection.ondatachannel = function (event) {
         console.log('Receive Channel Callback');
 
-        self.receiveChannel = event.channel;
-        //self.receiveChannel.onopen = self.dataChannelOpened;
-        //self.receiveChannel.onclose = self.dataChannelClosed;
-        self.receiveChannel.onmessage = self.receiveChannelMessageArrived;
-    }
+        // receiver receives data channel from the caller 
+
+        //self.dataChannel = event.channel;
+        //self.dataChannel.onopen = self.dataChannelStateChange;
+        //self.dataChannel.onclose = self.dataChannelStateChange;
+        //self.dataChannel.onmessage = self.dataChannelMessageArrived.bind(self, event);
+        event.channel.onmessage = function (event) {
+
+            console.log('Data channel message arrived');
+
+            self.receiveBuffer.push(event.data);
+            self.receivedSize += event.data.byteLength;
+
+            var progressBar = document.querySelector('progress#progressBar');
+            progressBar.value = self.receivedSize;
+
+            if (self.file && self.receivedSize === self.file.size) {
+                console.log('Data transferred completely.');
+
+                var received = new window.Blob(self.receiveBuffer);
+                self.receiveBuffer = [];
+
+                var downloadAnchor = document.querySelector('a#download');
+                downloadAnchor.href = URL.createObjectURL(received);
+                downloadAnchor.download = self.file.filename;
+                downloadAnchor.textContent = 'Click to download \'' + self.file.filename + '\' (' + self.file.size + ' bytes)';
+                downloadAnchor.style.display = 'block';
+
+            } else {
+                console.log('Data incoming: ' + event.data.byteLength + ' bytes');
+            }
+        };
+
+        // clear the anchor tag of previous transfer
+        var downloadAnchor = document.querySelector('a#download');
+        downloadAnchor.textContent = '';
+        downloadAnchor.removeAttribute('download');
+        if (downloadAnchor.href) {
+            URL.revokeObjectURL(downloadAnchor.href);
+            downloadAnchor.removeAttribute('href');
+        }
+    };
 
     return connection;
 }
@@ -371,7 +421,7 @@ CommunicatorViewModel.prototype.rtcMessageReceived = function (data) {
     var self = this;
 
     var message = JSON.parse(data);
-    self.connection = self.connection || self.createConnection();
+    self.connection = self.connection || self.createConnection(true);
 
     // An SDP message contains connection and media information, and is either an 'offer' or an 'answer'
     if (message.sdp) {
@@ -405,85 +455,37 @@ CommunicatorViewModel.prototype.rtcMessageReceived = function (data) {
     }
 };
 
-CommunicatorViewModel.prototype.createDataChannel = function (file) {
-    var self = this;
-
-    //self.sendChannel = self.connection.createDataChannel('sendDataChannel', {
-    //    ordered: false, // do not guarantee order
-    //    maxRetransmitTime: 3000, // in milliseconds
-    //});
-    self.sendChannel = self.connection.createDataChannel('sendDataChannel');
-    console.log('Created send data channel');
-
-    // when the channel exists we call method for send 
-    self.sendChannel.onopen = self.sendChannelOpened;
-    self.sendChannel.onclose = self.sendChannelClosed;
-    //self.sendChannel.onmessage = self.sendChannelMessageArrived;
-
-    // we must inform other party of the incoming message transfer
-    root.hub.server.requestRtcDataTransfer(self.userIdToConnect(), file.name, file.size);
-}
-
 CommunicatorViewModel.prototype.rtcDataTransferRequested = function (filename, size) {
     var self = this;
 
     // signalr returns us the information about the file that has been transferred
-    self.receivedFileData = { filename: filename, size: size };
+    self.file = { filename: filename, size: size };
+
+    var progressBar = document.querySelector('progress#progressBar');
+    progressBar.max = size;
 }
 
-CommunicatorViewModel.prototype.sendChannelOpened = function () {
+CommunicatorViewModel.prototype.sendData = function (file) {
     var self = this;
-    console.log('Data channel opened');
 
     // send file over the WebRTC data channel:
-
-    var file = self.file();
+    var progressBar = document.querySelector('progress#progressBar');
+    progressBar.max = file.size;
 
     var chunkSize = 16384; // 16 KB
     var sliceFile = function (offset) {
         var reader = new window.FileReader();
         reader.onload = (function () {
             return function (e) {
-                self.sendChannel.send(e.target.result);
+                self.dataChannel.send(e.target.result);
                 if (file.size > offset + e.target.result.byteLength) {
                     window.setTimeout(sliceFile, 0, offset + chunkSize);
                 }
-                //sendProgress.value = offset + e.target.result.byteLength;
+                progressBar.value = offset + e.target.result.byteLength;
             };
         })(file);
         var slice = file.slice(offset, offset + chunkSize);
         reader.readAsArrayBuffer(slice);
     };
     sliceFile(0);
-
-    self.sendChannel.close();
-    self.sendChannel = null;
-};
-
-CommunicatorViewModel.prototype.sendChannelClosed = function (event) {
-    var self = this;
-    console.log('Data channel closed');
-};
-
-CommunicatorViewModel.prototype.receiveChannelMessageArrived = function (event) {
-    var self = this;
-    console.log('Data channel message arrived');
-
-    if (self.file) {
-
-        var receiveBuffer = [];
-        receiveBuffer.push(event.data);
-        var received = new window.Blob(receiveBuffer);
-        receiveBuffer = [];
-
-        var downloadAnchor = document.querySelector('#downloadAnchor');
-        downloadAnchor.href = URL.createObjectURL(received);
-        downloadAnchor.download = self.receivedFileData.filename;
-
-        self.receiveChannel.close();
-        self.receiveChannel = null;
-        
-    } else {
-        console.log('Data about the file not arrived!');
-    }
 };

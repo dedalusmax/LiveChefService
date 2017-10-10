@@ -225,14 +225,13 @@ h3 {
     .card .card-footer label {
       vertical-align: text-bottom;
       font-weight: normal; }
-    .card .card-footer .time {
-      margin: 0;
+    .card .card-footer .card-footer-header {
       margin-bottom: 5px;
       padding-bottom: 8px;
       border-bottom: 1px dashed #fefafa; }
-      .card .card-footer .time > div {
+      .card .card-footer .card-footer-header > div {
         display: inline-flex; }
-      .card .card-footer .time small {
+      .card .card-footer .card-footer-header small {
         line-height: 24px; }
     .card .card-footer textarea {
       color: black;
