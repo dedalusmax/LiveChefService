@@ -17,9 +17,15 @@ var CommunicatorViewModel = function (data) {
     self.userIdToConnect = ko.observable(null);
     self.requestedConnection = false;
 
+    self.localAudio = null;
+    self.localVideo = null;
+    self.remoteAudio = null;
+    self.remoteVideo = null;
+
     self.startVideoCall = function (user) {
 
         self.intendedAction(MediaAction.VideoCall);
+        self.setElements('#localVideo', '#remoteVideo', null, null);
         self.userIdToConnect(user.id);
 
         self.startLocalStream();
@@ -28,6 +34,7 @@ var CommunicatorViewModel = function (data) {
     self.startAudioCall = function (user) {
 
         self.intendedAction(MediaAction.AudioCall);
+        self.setElements(null, null, '#localAudio', '#remoteAudio');
         self.userIdToConnect(user.id);
 
         self.startLocalStream();
@@ -36,6 +43,23 @@ var CommunicatorViewModel = function (data) {
     self.stopCall = function (user) {
         self.closeConnectionAndStreams();
     }
+
+    self.stopLocalStream = function () {
+        self.stopMediaStream(self.localStream, self.localVideo, self.localAudio);
+    }
+
+    self.stopRemoteStream = function () {
+        self.stopMediaStream(self.remoteStream, self.remoteVideo, self.remoteAudio);
+    }
+}
+
+CommunicatorViewModel.prototype.setElements = function (localVideoElement, remoteVideoElement, localAudioElement, remoteAudioElement) {
+    var self = this;
+
+    self.localVideo = localVideoElement;
+    self.remoteVideo = remoteVideoElement;
+    self.localAudio = localAudioElement;
+    self.remoteAudio = remoteAudioElement;
 }
 
 CommunicatorViewModel.prototype.startLocalStream = function () {
@@ -84,8 +108,8 @@ CommunicatorViewModel.prototype.closeConnectionAndStreams = function () {
     }
 
     // turn off media streams
-    self.stopMediaStream(self.remoteStream, 'remoteVideo', 'remoteAudio');
-    self.stopMediaStream(self.localStream, 'localVideo', 'localAudio');
+    self.stopRemoteStream();
+    self.stopLocalStream();
 
     // clear local variables
     self.clear();
@@ -99,6 +123,11 @@ CommunicatorViewModel.prototype.clear = function () {
     self.intendedAction(null);
     self.userIdToConnect(null);
     self.requestedConnection = false;
+
+    self.localAudio = null;
+    self.localVideo = null;
+    self.remoteAudio = null;
+    self.remoteVideo = null;
 }
 
 CommunicatorViewModel.prototype.stopMediaStream = function (stream, videoElement, audioElement) {
@@ -111,10 +140,29 @@ CommunicatorViewModel.prototype.stopMediaStream = function (stream, videoElement
         }
     }
 
-    var video = document.querySelector('#' + videoElement);
+    var video = document.querySelector(videoElement);
     if (video) video.srcObject = null;
-    
-    var audio = document.querySelector('#' + audioElement);
+
+    var audio = document.querySelector(audioElement);
+    if (audio) audio.srcObject = null;
+}
+
+CommunicatorViewModel.prototype.stopLocalMediaStream = function () {
+    var self = this;
+
+    self.stopMediaStream(self.localStream, self.localVideo, self.localAudio);
+
+    if (stream) {
+        for (let track of stream.getTracks()) {
+            track.stop();
+            console.log('Stopped streaming ' + track.kind + ' track from getUserMedia.');
+        }
+    }
+
+    var video = document.querySelector(videoElement);
+    if (video) video.srcObject = null;
+
+    var audio = document.querySelector(audioElement);
     if (audio) audio.srcObject = null;
 }
 
@@ -126,12 +174,12 @@ CommunicatorViewModel.prototype.mediaRetrieved = function (stream) {
 
     console.log('Started streaming from getUserMedia.');
     if (self.intendedAction() == MediaAction.VideoCall) {
-        var localVideo = document.querySelector('#localVideo');
+        var localVideo = document.querySelector(self.localVideo);
         localVideo.srcObject = stream;
     } else if (self.intendedAction() == MediaAction.AudioCall) {
         var audioTracks = stream.getAudioTracks();
         console.log('Using audio device: ' + audioTracks[0].label);
-        var localAudio = document.querySelector('#localAudio');
+        var localAudio = document.querySelector(self.localAudio);
         localAudio.srcObject = stream;
     }
 
@@ -162,6 +210,7 @@ CommunicatorViewModel.prototype.joinRequested = function (action, userIdToConnec
     self.requestedConnection = true;
 
     self.intendedAction(action);
+    self.setElements('#localVideo', '#remoteVideo', '#localAudio', '#remoteAudio');
     self.userIdToConnect(userIdToConnect);
 
     self.startLocalStream();
@@ -212,10 +261,10 @@ CommunicatorViewModel.prototype.createConnection = function () {
         self.remoteStream = event.stream;
 
         if (self.intendedAction() == MediaAction.VideoCall) {
-            var remoteVideo = document.querySelector('#remoteVideo');
+            var remoteVideo = document.querySelector(self.remoteVideo);
             remoteVideo.srcObject = event.stream;
         } else {
-            var remoteAudio = document.querySelector('#remoteAudio');
+            var remoteAudio = document.querySelector(self.remoteAudio);
             remoteAudio.srcObject = event.stream;
         }
     };

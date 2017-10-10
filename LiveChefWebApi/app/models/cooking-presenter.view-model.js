@@ -33,13 +33,14 @@
 
     self.startBroadcast = function () {
 
+        communicator.setElements('#myVideo', null, null, null);
         communicator.intendedAction(MediaAction.VideoCall);
         communicator.startLocalStream();
     };
 
     self.stopBroadcast = function () {
 
-        communicator.stopMediaStream(self.localStream, 'localVideo');
+        communicator.stopLocalStream();
         communicator.clear();
     };
 };

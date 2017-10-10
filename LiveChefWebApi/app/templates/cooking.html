@@ -24,15 +24,15 @@
             <button class="btn btn-default" data-bind="click: stopBroadcast, visible: isBroadcasting">Stop broadcast</button>
         </div>
 
-        <div class="col-sm-4" data-bind="with: $parent.communicator">
+        <div class="col-sm-4" data-bind="visible: $parent.main().communicator.isStreaming()">
 
             <h4>My cooking is emitting live!</h4>
             <div class="card fullsize">
-                <div class="card-body" data-bind="if: intendedAction() == 1">
-                    <video id="localVideo" autoplay controls></video>
+                <div class="card-body" data-bind="if: $parent.main().communicator.intendedAction() == 1">
+                    <video id="myVideo" autoplay controls></video>
                 </div>
-                <div class="card-body" data-bind="if: intendedAction() == 2">
-                    <audio id="localAudio" autoplay></audio>
+                <div class="card-body" data-bind="if: $parent.main().communicator.intendedAction() == 2">
+                    <audio id="myAudio" autoplay></audio>
                 </div>
                 <div class="card-footer">
                     <span class="glyphicon glyphicon-camera glyph-button" aria-hidden="true" data-bind="click: takeSnapshot"></span>
