@@ -287,6 +287,18 @@ h3 {
   padding: 10px; }
   .cooking-component .header {
     /*margin: 10px;*/ }
+  .cooking-component .chat-history .card-header {
+    text-align: center; }
+  .cooking-component .chat-history .card-body {
+    height: 400px;
+    position: relative;
+    overflow-y: auto; }
+    .cooking-component .chat-history .card-body .chat-sender {
+      color: rgba(0, 0, 0, 0.3);
+      font-weight: bold;
+      font-size: smaller; }
+    .cooking-component .chat-history .card-body .chat-text {
+      font-size: smaller; }
   .cooking-component .none {
     -webkit-filter: none;
     filter: none; }

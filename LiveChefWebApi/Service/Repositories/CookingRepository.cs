@@ -16,7 +16,7 @@ namespace LiveChefService.Models
             User pero = chefs.Find(u => u.Username == "pero");
             Recipe fishAndChips = recipes.Find(r => r.Id == 1);
             
-            Add(new Cooking { Id = 1, Chef = pero, Dish = fishAndChips, Status = CookingStatus.Ongoing, Settings = new CookingSettings(true, false, false, true), StartedTime = startedTime });
+            Add(new Cooking { Id = 1, Chef = pero, Dish = fishAndChips, Status = CookingStatus.Ongoing, Settings = new CookingSettings(true, false, true, true), StartedTime = startedTime });
 
             User stefica = chefs.Find(u => u.Username == "stefica");
             Recipe pancakes = recipes.Find(r => r.Id == 2);

@@ -58,8 +58,6 @@
 
     self.mediaRecorder = null;
     self.recordedBlobs = [];
-
-    self.chatMessage = ko.observable('');
 };
 
 CookingPresenterViewModel.prototype.close = function () {
@@ -114,20 +112,6 @@ CookingPresenterViewModel.prototype.removeSnapshot = function (self, snapshot) {
 CookingPresenterViewModel.prototype.toggleEditMode = function (self) {
 
     self.editMode(!self.editMode());
-}
-
-CookingPresenterViewModel.prototype.sendChatMessage = function () {
-    var self = this;
-
-    var message = {
-        sender: 'Me',
-        text: self.chatMessage()
-    }
-    self.chatHistory.push(message);
-
-    root.hub.server.sendChatMessage(self.id, message.sender, message.text).done(function () {
-        console.log('Chat message sent to others.');
-    });
 }
 
 CookingPresenterViewModel.prototype.startRecording = function () {

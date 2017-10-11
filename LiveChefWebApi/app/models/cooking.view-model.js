@@ -30,13 +30,32 @@
     self.snapshots = ko.observableArray();
 
     self.chatHistory = ko.observableArray();
+    self.chatMessage = ko.observable('');
+    self.chatMessageFocused = ko.observable(true);
 
     self.addChatMessage = function (sender, text) {
+
         self.chatHistory.push({
             sender: sender,
             text: text
         });
-    }
+    };
+
+    self.sendChatMessage = function () {
+
+        var message = {
+            sender: 'Me',
+            text: self.chatMessage()
+        }
+
+        self.chatHistory.push(message);
+
+        root.hub.server.sendChatMessage(self.id, message.sender, message.text).done(function () {
+            self.chatMessage('');
+            self.chatMessageFocused(true);
+            console.log('Chat message sent to others.');
+        });
+    };
 
     self.open = function() {
         if (self.chefIsMe) {

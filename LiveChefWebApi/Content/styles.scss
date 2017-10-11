@@ -418,6 +418,34 @@ h3 {
         /*margin: 10px;*/
     }
 
+    .chat-history {
+        .card-header {
+            text-align: center;
+        }
+
+        .card-body {
+            height: 400px;
+            position: relative;
+            overflow-y: auto;
+
+            > div {
+            }
+
+            .chat-sender {
+                color: $border-color;
+                font-weight: bold;
+                font-size: smaller;
+            }
+
+            .chat-text {
+                font-size: smaller;
+            }
+        }
+
+        .card-footer {
+        }
+    }
+
     .none {
         -webkit-filter: none;
         filter: none;
