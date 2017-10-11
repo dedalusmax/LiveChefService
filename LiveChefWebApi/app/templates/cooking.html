@@ -21,10 +21,6 @@
 
         <div class="col-sm-3">
             <h4>Broadcast options</h4>
-            <div class="form-group row">
-                <button class="btn btn-primary" data-bind="click: startRecording, visible: !isRecording()">Start recording</button>
-                <button class="btn btn-default" data-bind="click: stopRecording, visible: isRecording">Stop recording</button>
-            </div>
             <div class="form-group row" data-bind="if: settings.allowHelp">
                 <button type="button" class="btn btn-default" data-toggle="button" data-bind="toggle: helpNeeded, click: askForHelp">
                     <span class="glyphicon glyphicon-ok" aria-hidden="true" data-bind="visible: helpNeeded"></span>&nbsp;&nbsp;Help needed!
@@ -55,7 +51,8 @@
             <h4>My cooking is emitting live!</h4>
             <div class="card fullsize">
                 <div class="card-body" data-bind="if: $parent.main().communicator.intendedAction() == 1">
-                    <video id="myVideo" class="fullsize" autoplay controls></video>
+                    <video id="myVideo" class="fullsize" autoplay></video>
+                    <video id="recordedVideo" class="fullsize" controls autoplay loop></video>
                 </div>
                 <div class="card-body" data-bind="if: $parent.main().communicator.intendedAction() == 2">
                     <audio id="myAudio" class="fullsize" autoplay controls></audio>
@@ -64,7 +61,11 @@
                     <span class="glyphicon glyphicon-camera glyph-button" aria-hidden="true" data-bind="visible: $parent.main().communicator.intendedAction() == 1, click: takeSnapshot"></span>
                     <label>Take a snapshot</label>
                     <div>
-                        <!--<span class="glyphicon glyphicon-comment" aria-hidden="true" data-bind="style: { color: settings.allowChat ? 'white' : 'grey' }"></span>-->
+                        <span class="glyphicon glyphicon-film" aria-hidden="true" data-bind="click: startRecording, visible: !isRecording()"></span>
+                        <span class="glyphicon glyphicon-stop" aria-hidden="true" data-bind="click: stopRecording, visible: isRecording"></span>
+                        <span class="glyphicon glyphicon-play" aria-hidden="true" data-bind="click: playRecordedVideo, visible: !isRecording()"></span>
+                        <span class="glyphicon glyphicon-save" aria-hidden="true" data-bind="click: downloadVideo, visible: !isRecording()"></span>
+                        <a id="downloadVideo"></a>
                     </div>
                 </div>
             </div>
@@ -92,7 +93,7 @@
         <!-- /ko -->
 
         <div class="row anti-row">
-            <div class="col-sm-4" data-bind="if: snapshots.length > 0">
+            <div class="col-sm-4">
                 <h4>Snapshots</h4>
                 <div class="card-deck" data-bind="foreach: snapshots">
                     <div class="card">
