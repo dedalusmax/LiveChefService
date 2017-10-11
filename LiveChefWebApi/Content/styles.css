@@ -286,7 +286,32 @@ h3 {
 .cooking-component {
   padding: 10px; }
   .cooking-component .header {
-    /*margin: 10px;*/ }
+    margin-left: 16px; }
+  .cooking-component .recipe .card {
+    width: 100%; }
+  .cooking-component .recipe img {
+    width: 100%; }
+  .cooking-component .video-card {
+    display: grid; }
+    .cooking-component .video-card .card-body > div {
+      padding: 0; }
+    .cooking-component .video-card .record-icon {
+      color: red;
+      position: absolute;
+      top: 5px;
+      left: 5px; }
+    .cooking-component .video-card .card-footer-header {
+      text-align: initial; }
+      .cooking-component .video-card .card-footer-header .right-aligned {
+        float: right;
+        line-height: 26px;
+        margin: 0;
+        margin-left: 5px; }
+  .cooking-component .snapshots {
+    padding: 0; }
+    .cooking-component .snapshots .card {
+      padding: 0;
+      width: 300px; }
   .cooking-component .chat-history .card-header {
     text-align: center; }
   .cooking-component .chat-history .card-body {

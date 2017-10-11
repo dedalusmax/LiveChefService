@@ -415,7 +415,52 @@ h3 {
     padding: 10px;
 
     .header {
-        /*margin: 10px;*/
+        margin-left: 16px;
+    }
+
+    .recipe {
+        .card {
+            width: 100%;
+        }
+
+        img {
+            width: 100%;
+        }
+    }
+
+    .video-card {
+        display: grid;
+
+        .card-body > div {
+            padding: 0;
+        }
+
+        .record-icon {
+            color: red;
+            position: absolute;
+            top: 5px;
+            left: 5px;
+        }
+
+        .card-footer-header {
+            text-align: initial;
+
+            .right-aligned {
+                float: right;
+                line-height: 26px;
+                margin: 0;
+                margin-left: 5px;
+            }
+        }
+    }
+
+    .snapshots {
+        padding: 0;
+
+        .card {
+            padding: 0;
+            width: 300px;
+        }
     }
 
     .chat-history {

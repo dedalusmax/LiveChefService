@@ -20,6 +20,7 @@
 
     self.isRecording = ko.observable(false);
     self.helpNeeded = ko.observable(false);
+    self.recordingAvailable = ko.observable(false);
 
     self.giveUp = function () {
 
@@ -176,6 +177,7 @@ CookingPresenterViewModel.prototype.handleStop = function () {
 
     console.log('Recorder stopped');
     self.isRecording(false);
+    self.recordingAvailable(true);
 }
 
 CookingPresenterViewModel.prototype.playRecordedVideo = function () {
