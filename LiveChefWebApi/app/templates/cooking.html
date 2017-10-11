@@ -2,7 +2,7 @@
 
     <div class="header">
         <!-- ko if: !chefIsMe -->
-        <button class="btn btn-default" data-bind="click: returnToMain">Return</button>
+        <button class="btn btn-default" data-bind="click: close">Return</button>
         <!-- /ko -->
         <!-- ko if: chefIsMe -->
         <button class="btn btn-warning" data-bind="click: giveUp">Give up!</button>
@@ -139,7 +139,7 @@
                 <div class="card-body">
                     <div data-bind="foreach: chatHistory">
                         <div>
-                            <span class="chat-sender" data-bind="text: sender + ':'"></span>
+                            <span class="chat-sender" data-bind="text: sender"></span><span>:</span>
                             <span class="chat-text" data-bind="text: text"></span>
                         </div>
                     </div>

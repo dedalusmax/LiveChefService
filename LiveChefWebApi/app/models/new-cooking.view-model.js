@@ -38,7 +38,7 @@ var NewCookingViewModel = function () {
     self.selectedAudioOutput = ko.observable();
     self.selectedVideoInput = ko.observable();
 
-    self.returnToMain = function () {
+    self.close = function () {
         root.showScreen(Screen.Main);
     };
 

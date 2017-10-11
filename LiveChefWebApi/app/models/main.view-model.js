@@ -54,7 +54,7 @@
 
     hub.client.joinRequested = function (action, userIdToConnect) {
         console.log('Join requested. Media: ' + action + ' user to connect: ' + userIdToConnect);
-        self.activateTab(4);
+        self.activateTab(4); // immediately jump to the Users tab
         self.communicator.joinRequested(action, userIdToConnect);
     };
 
@@ -86,6 +86,7 @@
         if (found) {
             found.status(cooking.status);
             console.log('Cooking updated: ' + cooking.id + ' status: ' + found.statusText());
+            // TODO: update active cooking too!
         }
     };
 
@@ -105,17 +106,16 @@
 
     hub.client.leaveFromCooking = function (cookingId) {
         // report to any possible viewers that the cooking is removed!!
-        var found = self.cookings().find(c => c.id == cookingId);
-        if (found) {
-            found.leave();
-            console.log('Leave from cooking: ' + cookingId);
+        if (root.cooking() && root.cooking().id == cookingId) {
+            root.cooking().leave();
+            console.log('Left cooking: ' + cookingId);
         }
     }
 
     hub.client.chatMessageReceived = function (cookingId, sender, text) {
-        var found = self.cookings().find(c => c.id == cookingId);
-        if (found) {
-            found.addChatMessage(sender, text);
+        // relay message only to active cooking that is that one
+        if (root.cooking() && root.cooking().id == cookingId) {
+            root.cooking().addChatMessage(sender, text);
             console.log('Chat message received for cooking : ' + cookingId + ' from: ' + sender + ' with text: ' + text);
         }
     };
@@ -133,9 +133,9 @@
 
     self.viewCooking = function (cooking) {
         var model = new CookingViewModel(cooking);
+        console.log('Entering cooking: ' + cooking.id);
         model.open();
         root.cooking(model);
-        self.parent.cooking(model);
         self.parent.showScreen(Screen.Cooking);
     };
 

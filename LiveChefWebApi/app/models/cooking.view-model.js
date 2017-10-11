@@ -35,43 +35,41 @@
 
     self.addChatMessage = function (sender, text) {
 
-        self.chatHistory.push({
-            sender: sender,
-            text: text
-        });
+        self.chatHistory.push(new ChatViewModel(sender, text));
+        self.chatHistory.valueHasMutated();
     };
 
     self.sendChatMessage = function () {
 
-        var message = {
-            sender: 'Me',
-            text: self.chatMessage()
-        }
-
+        var messageText = self.chatMessage();
+        var message = new ChatViewModel('Me', messageText);
         self.chatHistory.push(message);
 
-        root.hub.server.sendChatMessage(self.id, message.sender, message.text).done(function () {
+        root.hub.server.sendChatMessage(self.id, root.user.displayName, messageText).done(function () {
             self.chatMessage('');
             self.chatMessageFocused(true);
-            console.log('Chat message sent to others.');
+            console.log('Chat message sent to others in cooking:' + self.id);
         });
     };
 
     self.open = function() {
         if (self.chefIsMe) {
+            console.log('Extending cooking with presenter.');
             $.extend(self, new CookingPresenterViewModel(self));
         } else {
+            console.log('Extending cooking with viewer.');
             $.extend(self, new CookingViewerViewModel(self));
         }
     }
 
     self.leave = function () {
         alert('The cook has finished the cooking. The cooking session will be closed.');
-        self.returnToMain();
+        self.close();
     };
 
-    self.returnToMain = function () {
+    self.close = function () {
         console.log("Cooking closed: " + self.id);
+        root.cooking(null);
         root.showScreen(Screen.Main);
     };
 
