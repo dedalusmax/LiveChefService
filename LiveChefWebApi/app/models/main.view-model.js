@@ -67,14 +67,14 @@
             self.users.push(new UserViewModel(user));
             console.log('User updated: ' + user.displayName);
         });
-    }
+    };
 
     hub.client.recipesInitiated = function (recipes) {
         recipes.forEach(function (recipe) {
             self.recipes.push(new RecipeViewModel(recipe));
             console.log('Recipe initiated: ' + recipe.name);
         });
-    }
+    };
 
     hub.client.cookingAdded = function (cooking) {
         self.cookings.push(new CookingViewModel(cooking));
@@ -84,8 +84,8 @@
     hub.client.cookingUpdated = function (cooking) {
         var found = self.cookings().find(c => c.id == cooking.id);
         if (found) {
-            found.transmission = cooking.transmission;
-            console.log('Cooking updated: ' + cooking.id + ' transmission: ' + cooking.transmission);
+            found.status(cooking.status);
+            console.log('Cooking updated: ' + cooking.id + ' status: ' + found.statusText());
         }
     };
 
@@ -101,7 +101,24 @@
             self.cookings.push(new CookingViewModel(cooking));
             console.log('Cooking initiated: ' + cooking.dish.name);
         });
+    };
+
+    hub.client.leaveFromCooking = function (cookingId) {
+        // report to any possible viewers that the cooking is removed!!
+        var found = self.cookings().find(c => c.id == cookingId);
+        if (found) {
+            found.leave();
+            console.log('Leave from cooking: ' + cookingId);
+        }
     }
+
+    hub.client.chatMessageReceived = function (cookingId, sender, text) {
+        var found = self.cookings().find(c => c.id == cookingId);
+        if (found) {
+            found.addChatMessage(sender, text);
+            console.log('Chat message received for cooking : ' + cookingId + ' from: ' + sender + ' with text: ' + text);
+        }
+    };
 
     var connection = $.hubConnection();
     connection.logging = true;

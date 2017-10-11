@@ -6,6 +6,7 @@
         <!-- /ko -->
         <!-- ko if: chefIsMe -->
         <button class="btn btn-warning" data-bind="click: giveUp">Give up!</button>
+        <button class="btn btn-primary" data-bind="click: finish">Dish is finished!</button>
         <!-- /ko -->
     </div>
 
@@ -18,27 +19,52 @@
 
         <!-- ko if: chefIsMe -->
 
-        <div class="col-sm-4">
+        <div class="col-sm-3">
             <h4>Broadcast options</h4>
-            <button class="btn btn-primary" data-bind="click: startBroadcast, visible: !isBroadcasting()">Start broadcast</button>
-            <button class="btn btn-default" data-bind="click: stopBroadcast, visible: isBroadcasting">Stop broadcast</button>
+            <div class="form-group row">
+                <button class="btn btn-primary" data-bind="click: startRecording, visible: !isRecording()">Start recording</button>
+                <button class="btn btn-default" data-bind="click: stopRecording, visible: isRecording">Stop recording</button>
+            </div>
+            <div class="form-group row" data-bind="if: settings.allowHelp">
+                <button type="button" class="btn btn-default" data-toggle="button" data-bind="toggle: helpNeeded, click: askForHelp">
+                    <span class="glyphicon glyphicon-ok" aria-hidden="true" data-bind="visible: helpNeeded"></span>&nbsp;&nbsp;Help needed!
+                </button>
+            </div>
+            <div class="form-group" data-bind="if: settings.useChat">
+                <h3>Live Chat with viewers</h3>
+                <div class="row">
+                    <span>Chat History</span>
+                    <div data-bind="foreach: chatHistory">
+                        <span class="chat-sender" data-bind="text: sender"></span>
+                        <span class="chat-text" data-bind="text: text"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-8">
+                        <input type="text" data-bind="value: chatMessage" />
+                    </div>
+                    <div class="col-sm-4">
+                        <button class="btn btn-primary" data-bind="click: sendChatMessage, enable: chatMessage().trim() != ''">Send</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="col-sm-4" data-bind="visible: $parent.main().communicator.isStreaming()">
+        <div class="col-sm-5" data-bind="visible: $parent.main().communicator.isStreaming()">
 
             <h4>My cooking is emitting live!</h4>
             <div class="card fullsize">
                 <div class="card-body" data-bind="if: $parent.main().communicator.intendedAction() == 1">
-                    <video id="myVideo" autoplay controls></video>
+                    <video id="myVideo" class="fullsize" autoplay controls></video>
                 </div>
                 <div class="card-body" data-bind="if: $parent.main().communicator.intendedAction() == 2">
-                    <audio id="myAudio" autoplay></audio>
+                    <audio id="myAudio" class="fullsize" autoplay controls></audio>
                 </div>
                 <div class="card-footer">
-                    <span class="glyphicon glyphicon-camera glyph-button" aria-hidden="true" data-bind="click: takeSnapshot"></span>
+                    <span class="glyphicon glyphicon-camera glyph-button" aria-hidden="true" data-bind="visible: $parent.main().communicator.intendedAction() == 1, click: takeSnapshot"></span>
                     <label>Take a snapshot</label>
                     <div>
-                        <span class="glyphicon glyphicon-comment" aria-hidden="true" data-bind="style: { color: settings.allowChat ? 'white' : 'grey' }"></span>
+                        <!--<span class="glyphicon glyphicon-comment" aria-hidden="true" data-bind="style: { color: settings.allowChat ? 'white' : 'grey' }"></span>-->
                     </div>
                 </div>
             </div>

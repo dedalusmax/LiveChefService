@@ -123,7 +123,6 @@
     <Content Include="app\services\ajax.service.js" />
     <Content Include="app\models\main.view-model.js" />
     <Content Include="app\index.js" />
-    <Content Include="app\services\signalr.service.js" />
     <Content Include="app\services\tools.service.js" />
     <Content Include="app\templates\recipe-card.html" />
     <Content Include="app\templates\cooking.html" />

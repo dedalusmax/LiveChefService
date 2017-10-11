@@ -15,10 +15,7 @@ namespace LiveChefService
 
     public class ChefHub : Hub
     {
-        public void Join(int userId)
-        {
-            this.Groups.Add(this.Context.ConnectionId, userId.ToString());
-        }
+        #region WebRTC related methods
 
         public void RequestForJoin(int userId, MediaAction action, int userIdToConnect)
         {
@@ -34,6 +31,10 @@ namespace LiveChefService
         {
             this.Clients.Group(userId.ToString()).rtcDataTransferRequested(filename, size);
         }
+
+        #endregion
+
+        #region Data related methods
 
         public Cooking AddCooking(Cooking data)
         {
@@ -52,15 +53,33 @@ namespace LiveChefService
             return cooking;
         }
 
-        public void UpdateCooking(Cooking item)
+        public void NeedHelpInCooking(int cookingId, bool isHelpNeeded)
         {
-            WebApiApplication.CookingRepository.Change(item);
-            this.Clients.All.cookingUpdated(item);
+            var cooking = WebApiApplication.CookingRepository.GetById(cookingId);
+            if (cooking != null)
+            {
+                cooking.Status = CookingStatus.NeedHelp;
+                WebApiApplication.CookingRepository.Change(cooking);
+                this.Clients.Others.cookingUpdated(cooking);
+            }
+        }
+
+        public void FinishCooking(int cookingId)
+        {
+            var cooking = WebApiApplication.CookingRepository.GetById(cookingId);
+            if (cooking != null)
+            {
+                cooking.Status = CookingStatus.Finished;
+                WebApiApplication.CookingRepository.Change(cooking);
+                this.Clients.All.cookingUpdated(cooking);
+                this.Clients.Others.leaveFromCooking(cookingId);
+            }
         }
 
         public void AbortCooking(int cookingId)
         {
             WebApiApplication.CookingRepository.Remove(cookingId);
+            this.Clients.Others.leaveFromCooking(cookingId);
             this.Clients.All.cookingRemoved(cookingId);
         }
 
@@ -85,6 +104,20 @@ namespace LiveChefService
             this.Clients.Caller.getStoredCookings(WebApiApplication.CookingRepository.GetFinishedCookings());
         }
 
+        #endregion
+
+        #region SignalR related methods
+
+        public void Join(int userId)
+        {
+            this.Groups.Add(this.Context.ConnectionId, userId.ToString());
+        }
+
+        public void SendChatMessage(int cookingId, string sender, string text)
+        {
+            this.Clients.Others.chatMessageReceived(cookingId, sender, text);
+        }
+
         public override Task OnConnected()
         {
             this.Clients.Caller.usersInitiated(WebApiApplication.UserRepository.GetAll());
@@ -102,5 +135,7 @@ namespace LiveChefService
 
             return base.OnDisconnected(stopCalled);
         }
+
+        #endregion
     }
 }

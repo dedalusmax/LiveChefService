@@ -15,40 +15,80 @@
 
     var communicator = root.main().communicator;
 
-    self.isBroadcasting = ko.computed(function () {
-        return communicator.isStreaming();
-    });
+    self.localVideo = '#myVideo';
+    self.localAudio = '#myAudio';
+
+    self.isRecording = ko.observable(false);
+    self.helpNeeded = ko.observable(false);
 
     self.giveUp = function () {
 
-        if (self.isBroadcasting()) {
-            self.stopBroadcast();
-        }
-
         root.hub.server.abortCooking(self.id).done(function () {
-            console.log("Cooking aborted: " + self.id);
-            root.showScreen(Screen.Main);
+            console.log('Cooking aborted: ' + self.id);
+            self.close();
         });
     };
 
-    self.startBroadcast = function () {
+    self.finish = function () {
 
-        communicator.setElements('#myVideo', null, null, null);
-        communicator.intendedAction(MediaAction.VideoCall);
+        // TODO: update cooking on the server!
+        root.hub.server.finishCooking(self.id).done(function () {
+            console.log('Cooking finished: ' + self.id);
+            self.close();
+        });
+    }
+
+    $(document).ready(function () {
+
+        communicator.setElements(self.localVideo, null, self.localAudio, null);
+        if (self.settings.useCamera) {
+            communicator.intendedAction(MediaAction.VideoCall);
+        } else if (self.settings.useMicrophone) {
+            communicator.intendedAction(MediaAction.AudioCall);
+        }
         communicator.startLocalStream();
+    });
+
+    self.askForHelp = function () {
+
+        root.hub.server.needHelpInCooking(self.id, self.helpNeeded()).done(function () {
+            console.log('Ask for help message sent, help needed: ' + self.helpNeeded());
+        });
+    }
+
+    self.startRecording = function () {
+
+        //communicator.stopLocalStream();
+        //communicator.clear();
     };
 
-    self.stopBroadcast = function () {
+    self.stopRecording = function () {
 
-        communicator.stopLocalStream();
-        communicator.clear();
+        //communicator.stopLocalStream();
+        //communicator.clear();
     };
+
+    self.chatMessage = ko.observable('');
+};
+
+CookingPresenterViewModel.prototype.close = function () {
+    var self = this;
+    var communicator = root.main().communicator;
+
+    if (self.isRecording()) {
+        self.stopRecording();
+    }
+
+    communicator.stopLocalStream();
+    communicator.clear();
+
+    root.showScreen(Screen.Main);
 };
 
 CookingPresenterViewModel.prototype.takeSnapshot = function () {
     var self = this;
 
-    var video = document.querySelector('video');
+    var video = document.querySelector(self.localVideo);
 
     self.snapshotId++;
 
@@ -67,7 +107,7 @@ CookingPresenterViewModel.prototype.takeSnapshot = function () {
 
     self.snapshots.push(snapshot);
 
-    var canvas = document.querySelector('#' + snapshot.snapshotId);
+    var canvas = document.querySelector('#canvas' + snapshot.snapshotId);
 
     canvas.getContext('2d').
         drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -83,4 +123,18 @@ CookingPresenterViewModel.prototype.removeSnapshot = function (self, snapshot) {
 CookingPresenterViewModel.prototype.toggleEditMode = function (self) {
 
     self.editMode(!self.editMode());
+}
+
+CookingPresenterViewModel.prototype.sendChatMessage = function () {
+    var self = this;
+
+    var message = {
+        sender: 'Me',
+        text: self.chatMessage()
+    }
+    self.chatHistory.push(message);
+
+    root.hub.server.sendChatMessage(self.id, message.sender, message.text).done(function () {
+        console.log('Chat message sent to others.');
+    });
 }

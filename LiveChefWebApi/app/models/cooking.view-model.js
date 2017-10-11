@@ -29,6 +29,15 @@
 
     self.snapshots = ko.observableArray();
 
+    self.chatHistory = ko.observableArray();
+
+    self.addChatMessage = function (sender, text) {
+        self.chatHistory.push({
+            sender: sender,
+            text: text
+        });
+    }
+
     self.open = function() {
         if (self.chefIsMe) {
             $.extend(self, new CookingPresenterViewModel(self));
@@ -36,6 +45,11 @@
             $.extend(self, new CookingViewerViewModel(self));
         }
     }
+
+    self.leave = function () {
+        alert('The cook has finished the cooking. The cooking session will be closed.');
+        self.returnToMain();
+    };
 
     self.returnToMain = function () {
         console.log("Cooking closed: " + self.id);
