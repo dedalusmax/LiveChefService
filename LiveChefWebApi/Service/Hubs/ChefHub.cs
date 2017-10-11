@@ -123,6 +123,7 @@ namespace LiveChefService
             this.Clients.Caller.usersInitiated(WebApiApplication.UserRepository.GetAll());
             this.Clients.Caller.cookingsInitiated(WebApiApplication.CookingRepository.GetActiveCookings());
             this.Clients.Caller.recipesInitiated(WebApiApplication.RecipeRepository.GetAll());
+            this.Clients.Caller.recordedCookingsInitiated(WebApiApplication.CookingRepository.GetFinishedCookings());
 
             return base.OnConnected();
         }

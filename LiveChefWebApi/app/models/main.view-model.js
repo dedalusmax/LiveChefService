@@ -105,6 +105,13 @@
         });
     };
 
+    hub.client.recordedCookingsInitiated = function (cookings) {
+        cookings.forEach(function (cooking) {
+            self.recordedCookings.push(new CookingViewModel(cooking));
+            console.log('Recorded cooking initiated: ' + cooking.dish.name);
+        });
+    };
+
     hub.client.leaveFromCooking = function (cookingId) {
         // report to any possible viewers that the cooking is removed!!
         if (root.cooking() && root.cooking().id == cookingId) {

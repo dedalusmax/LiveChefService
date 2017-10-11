@@ -125,6 +125,7 @@
     <Content Include="app\models\main.view-model.js" />
     <Content Include="app\index.js" />
     <Content Include="app\services\tools.service.js" />
+    <Content Include="app\templates\cooking-card.html" />
     <Content Include="app\templates\recipe-card.html" />
     <Content Include="app\templates\cooking.html" />
     <Content Include="app\templates\cookings-list.html" />
