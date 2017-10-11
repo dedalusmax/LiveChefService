@@ -181,6 +181,8 @@ h3 {
     animation: infinite 1s alternate-reverse hot-button; }
   .main-component .content {
     margin-top: 50px; }
+  .main-component .card .card-footer-header > div {
+    padding: 0; }
 
 .card-deck {
   display: flex;
@@ -343,6 +345,9 @@ h3 {
 .users-list-component .my-video {
   width: 25%;
   position: absolute; }
+
+.users-list-component .card-deck .card:hover {
+  margin: 10px; }
 
 /* Smaller monitors (for tiny adjustments) */
 @media (max-width: 1250px) {

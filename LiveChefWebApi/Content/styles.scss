@@ -261,6 +261,14 @@ h3 {
     .content {
         margin-top: 50px;
     }
+
+    .card {
+        .card-footer-header {
+            > div {
+                padding: 0;
+            }
+        }
+    }
 }
 
 .card-deck {
@@ -522,6 +530,12 @@ h3 {
     .my-video {
         width: 25%;
         position: absolute;
+    }
+
+    .card-deck {
+        .card:hover {
+            margin: 10px;
+        }
     }
 }
 

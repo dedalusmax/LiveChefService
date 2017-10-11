@@ -10,6 +10,7 @@
     // these are the responsive lists of important data
     self.cookings = ko.observableArray(); 
     self.recipes = ko.observableArray();
+    self.recordedCookings = ko.observableArray(); 
     self.users = ko.observableArray(); 
 
     // this is the view model for communicating via WebRTC

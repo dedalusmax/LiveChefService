@@ -8,8 +8,8 @@
     self.dish = new RecipeViewModel(data.dish, true);
     self.chefIsMe = chefIsMe || false;
 
-    self.timeStarted = new Date(data.startedTime);
-    self.timeStartedText = formatTimeFromDate(self.timeStarted);
+    self.timeStarted = moment(data.startedTime);
+    self.timeStartedText = self.timeStarted.format('HH:mm:ss');
 
     self.currentTime = ko.observable('');
 
@@ -74,7 +74,7 @@
     };
 
     self.refreshTime = function (now) {
-        var diff = Math.abs(now - self.timeStarted);
-        self.currentTime(formatTimeFromDate(new Date(diff)));
+        var diff = moment(now).from(self.timeStarted);
+        self.currentTime(diff);
     }
 };
