@@ -10,7 +10,9 @@
 
     $(document).ready(function () {
 
-        communicator.setElements(self.localVideo, self.remoteVideo, self.localAudio, self.remoteAudio);
+        communicator.isConference = true;
+
+        communicator.setElements(null, self.remoteVideo, null, self.remoteAudio);
         if (self.settings.useCamera) {
             communicator.intendedAction(MediaAction.VideoCall);
         } else if (self.settings.useMicrophone) {
@@ -19,6 +21,7 @@
 
         communicator.userIdToConnect(self.chef.id);
 
-        communicator.startLocalStream();
+        console.log('Request for join, caller: ' + root.user.id + ' callee: ' + self.chef.id);
+        root.hub.server.requestForJoin(root.user.id, communicator.intendedAction(), self.chef.id);
     });
 }

@@ -41,6 +41,8 @@
 
     $(document).ready(function () {
 
+        communicator.isConference = true;
+
         communicator.setElements(self.localVideo, null, self.localAudio, null);
         if (self.settings.useCamera) {
             communicator.intendedAction(MediaAction.VideoCall);

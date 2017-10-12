@@ -16,6 +16,7 @@ var CommunicatorViewModel = function (data) {
     self.intendedAction = ko.observable(null);
     self.userIdToConnect = ko.observable(null);
     self.requestedConnection = false;
+    self.isConference = false;
 
     self.localAudio = null;
     self.localVideo = null;
@@ -105,20 +106,32 @@ CommunicatorViewModel.prototype.startCommunication = function () {
 
     // adding the stream we received from 'getUserMedia' into the connection object
     self.connection.addStream(self.localStream);
-    console.log('Added stream to peer connection.');
+    console.log('Added stream local stream.');
+
+    var options = null;
+    // we have to suppress the incoming video and audio since we won't get it
+    if (self.isConference) {
+        options = {
+            offerToReceiveVideo: false,
+            offerToReceiveAudio: false
+        };
+    }
 
     // we need to create and send a WebRTC offer over to the peer we would like to connect with
     self.connection.createOffer(function (desc) {
-        console.log('Created offer for the peers.');
+        console.log('Created offer.');
 
         // set the generated SDP to be our local session description
         self.connection.setLocalDescription(desc, function () {
-            console.log('Local description set to: ' + desc);
+            console.log('Local description set.');
 
             // store offer description into the cooking itself and send it to all interested parties
             root.hub.server.sendRtcMessage(self.userIdToConnect(), JSON.stringify({ "sdp": desc }));
+            console.log('Sending RTC message with SDP.');
         });
-    });
+    }, function (error) {
+        console.log('Error in creating offer: ' + error);
+    }, options);
 }
 
 CommunicatorViewModel.prototype.closeConnectionAndStreams = function () {
@@ -160,6 +173,8 @@ CommunicatorViewModel.prototype.clear = function () {
     self.file = null;
     self.receiveBuffer = [];
     self.receivedSize = 0;
+
+    self.isConference = false;
 }
 
 CommunicatorViewModel.prototype.stopMediaStream = function (stream, videoElement, audioElement) {
@@ -299,6 +314,7 @@ CommunicatorViewModel.prototype.createConnection = function () {
 
             // each time the client finds a new candidate, it will send it over to the remote peer
             root.hub.server.sendRtcMessage(self.userIdToConnect(), JSON.stringify({ "candidate": event.candidate }));
+            console.log('Sending RTC message with candidate.');
         }
     };
 
@@ -328,6 +344,7 @@ CommunicatorViewModel.prototype.createConnection = function () {
 
         // turn off remote video  
         if (event.target.iceConnectionState == 'disconnected') {
+            console.log('Closing connections and streams.');
             self.closeConnectionAndStreams();
         }
     }
@@ -421,38 +438,53 @@ CommunicatorViewModel.prototype.createConnection = function () {
 
 CommunicatorViewModel.prototype.rtcMessageReceived = function (data) {
     var self = this;
+    console.log('Received RTC message.');
 
     var message = JSON.parse(data);
     self.connection = self.connection || self.createConnection(true);
 
     // An SDP message contains connection and media information, and is either an 'offer' or an 'answer'
     if (message.sdp) {
-        self.connection.setRemoteDescription(new RTCSessionDescription(message.sdp), function () {
-            if (self.connection.remoteDescription.type == 'offer') {
-                console.log('received offer, sending answer...');
+        console.log('RTC message contains SDP.');
 
-                // Add our stream to the connection to be shared
-                self.connection.addStream(self.localStream);
+        self.connection.setRemoteDescription(new RTCSessionDescription(message.sdp), function () {
+            console.log('Remote description set.');
+
+            if (self.connection.remoteDescription.type == 'offer') {
+                console.log('Remote description callback fired with type offer.');
+
+                if (!self.isConference) {
+                    // Add our stream to the connection to be shared
+                    self.connection.addStream(self.localStream);
+                    console.log('Added local stream.');
+                } else {
+                    console.log('Adding local stream supressed due to conference.');
+                }
 
                 // Create an SDP response
                 self.connection.createAnswer(function (desc) {
+                    console.log('Created answer.');
 
                     // Which becomes our local session description
                     self.connection.setLocalDescription(desc, function () {
+                        console.log('Local description set.');
 
                         // And send it to the originator, where it will become their RemoteDescription
                         root.hub.server.sendRtcMessage(self.userIdToConnect(), JSON.stringify({ 'sdp': self.connection.localDescription }));
+                        console.log('Sending RTC message with SDP.');
                     });
                 }, function (error) { console.log('Error creating session description: ' + error); });
             } else if (self.connection.remoteDescription.type == 'answer') {
-                console.log('got an answer');
+                console.log('Remote description callback fired with type answer.');
             }
         });
     } else if (message.candidate) {
+        console.log('RTC message contains candidate.');
+
         // to set ice candidate there has to be remote connection
         if (!self.connection || self.connection.remoteDescription.type) {
-            console.log('adding ice candidate...');
             self.connection.addIceCandidate(new RTCIceCandidate(message.candidate));
+            console.log('Adding ICE candidate.');
         }
     }
 };
