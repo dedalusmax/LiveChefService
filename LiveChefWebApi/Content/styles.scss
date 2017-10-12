@@ -135,6 +135,11 @@ h3 {
     margin-top: 0;
 }
 
+.my-video {
+    width: 25%;
+    position: absolute;
+}
+
 .poster {
     background-image: url("./images/backgroundImage.jpg");
     text-align: center;
@@ -526,11 +531,6 @@ h3 {
 }
 
 .users-list-component {
-
-    .my-video {
-        width: 25%;
-        position: absolute;
-    }
 
     .card-deck {
         .card:hover {

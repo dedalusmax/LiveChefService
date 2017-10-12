@@ -220,8 +220,10 @@ CommunicatorViewModel.prototype.mediaRetrieved = function (stream) {
     };
 
     if (self.requestedConnection) {
+        console.log('Connection is requested, starting communication');
         self.startCommunication();
     } else {
+        console.log('Request for join, caller: ' + root.user.id + ' callee: ' + self.userIdToConnect());
         root.hub.server.requestForJoin(root.user.id, self.intendedAction(), self.userIdToConnect());
     }
 }

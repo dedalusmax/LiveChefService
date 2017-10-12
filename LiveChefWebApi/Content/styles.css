@@ -89,6 +89,10 @@ h3 {
   text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
   margin-top: 0; }
 
+.my-video {
+  width: 25%;
+  position: absolute; }
+
 .poster {
   background-image: url("images/backgroundImage.jpg");
   text-align: center;
@@ -341,10 +345,6 @@ h3 {
   .cooking-component .sepia {
     -webkit-filter: sepia(1);
     filter: sepia(1); }
-
-.users-list-component .my-video {
-  width: 25%;
-  position: absolute; }
 
 .users-list-component .card-deck .card:hover {
   margin: 10px; }

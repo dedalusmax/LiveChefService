@@ -74,8 +74,13 @@
 
             <h4>Media stream from the presenter</h4>
             <div class="card fullsize">
-                <div class="card-body">
-                    <video class="fullsize" autoplay></video>
+                <div class="card-body" data-bind="if: $parent.main().communicator.intendedAction() == 1">
+                    <video id="viewerVideo" class="my-video" autoplay></video>
+                    <video id="presenterVideo" class="fullsize" autoplay controls></video>
+                </div>
+                <div class="card-body" data-bind="if: $parent.main().communicator.intendedAction() == 2">
+                    <audio id="viewerAudio" class="my-audio" autoplay></audio>
+                    <audio id="presenterAudio" class="fullsize" autoplay controls></audio>
                 </div>
                 <div class="card-footer">
                     <div>
@@ -86,7 +91,7 @@
                 </div>
             </div>
 
-            <!-- /ko -->
+          <!-- /ko -->
 
             <div>
                 <h4>Snapshots</h4>
