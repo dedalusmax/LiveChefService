@@ -85,8 +85,18 @@
     hub.client.cookingUpdated = function (cooking) {
         var found = self.cookings().find(c => c.id == cooking.id);
         if (found) {
-            found.status(cooking.status);
-            console.log('Cooking updated: ' + cooking.id + ' status: ' + found.statusText());
+            if (cooking.status == 4) {
+                // remove from live cooking
+                self.cookings.remove(function (cooking) {
+                    return cooking.id == cooking.id;
+                });
+                // and add it to recorded cookings
+                self.recordedCookings.push(new CookingViewModel(cooking));
+                console.log('Recorded cooking added: ' + cooking.dish.name);
+            } else {
+                found.status(cooking.status);
+                console.log('Cooking updated: ' + cooking.id + ' status: ' + found.statusText());
+            }
             // TODO: update active cooking too!
         }
     };
@@ -140,10 +150,10 @@
     //#endregion
 
     self.viewCooking = function (cooking) {
-        var model = new CookingViewModel(cooking);
+        //var model = new CookingViewModel(cooking);
         console.log('Entering cooking: ' + cooking.id);
-        model.open();
-        root.cooking(model);
+        cooking.open();
+        root.cooking(cooking);
         self.parent.showScreen(Screen.Cooking);
     };
 

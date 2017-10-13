@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace LiveChefService.Models
 {
@@ -26,10 +27,13 @@ namespace LiveChefService.Models
         }
     }
 
-    public class TransmissionData
+    public class Snapshot
     {
-        public string SDP { get; set; }
-        public string ICECandidate { get; set; }
+        public int Id { get; set; }
+        public DateTime TimeTaken { get; set; }
+        public string Description { get; set; }
+        //public Byte[] Image { get; set; }
+        public string Image { get; set; }
     }
 
     public class Cooking : IModel
@@ -40,12 +44,12 @@ namespace LiveChefService.Models
         public CookingSettings Settings { get; set; }
         public CookingStatus Status { get; set; }
         public DateTime StartedTime { get; set; }
-        public DateTime Finishedtime { get; set; }
-        public TransmissionData Transmission { get; set; }
+        public DateTime FinishedTime { get; set; }
+        public List<Snapshot> Snapshots { get; set; }
 
         public Cooking()
         {
-            this.Transmission = new TransmissionData();
+            this.Snapshots = new List<Snapshot>();
         }
     }
 }

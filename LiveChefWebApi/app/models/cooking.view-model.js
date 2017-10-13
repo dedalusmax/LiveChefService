@@ -27,8 +27,6 @@
         }
     });
 
-    self.snapshots = ko.observableArray();
-
     self.chatHistory = ko.observableArray();
     self.chatMessage = ko.observable('');
     self.chatMessageFocused = ko.observable(true);
@@ -52,13 +50,19 @@
         });
     };
 
-    self.open = function() {
-        if (self.chefIsMe) {
-            console.log('Extending cooking with presenter.');
-            $.extend(self, new CookingPresenterViewModel(self));
+    self.open = function () {
+        if (self.status() == 4) {
+            console.log('Extending cooking with recorded.');
+            $.extend(self, new CookingRecordedViewModel(self));
+           
         } else {
-            console.log('Extending cooking with viewer.');
-            $.extend(self, new CookingViewerViewModel(self));
+            if (self.chefIsMe) {
+                console.log('Extending cooking with presenter.');
+                $.extend(self, new CookingPresenterViewModel(self));
+            } else {
+                console.log('Extending cooking with viewer.');
+                $.extend(self, new CookingViewerViewModel(self));
+            }
         }
     }
 

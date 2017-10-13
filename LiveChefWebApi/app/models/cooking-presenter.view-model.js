@@ -1,6 +1,8 @@
 ﻿var CookingPresenterViewModel = function (data) {
     var self = data;
 
+    self.snapshots = ko.observableArray();
+
     self.selectedAudioInput = null;
     self.selectedAudioOutput = null;
     self.selectedVideoInput = null;
@@ -32,10 +34,28 @@
 
     self.finish = function () {
 
+        // shape snapshots for the transmission
+        var snapshots = [];
+        self.snapshots().forEach(function (snapshot) {
+
+            var canvas = document.querySelector('#' + snapshot.snapshotId);
+            var myDataURL = canvas.toDataURL('image/png');// could also be 'image/jpg' format
+            var myBase64Data = myDataURL.split(',')[1];// removes everything up to and including first comma
+
+            snapshots.push({
+                id: snapshot.id,
+                timeTaken: snapshot.timeTaken,
+                description: snapshot.description(),
+                image: myBase64Data
+            });
+        });
+
         // TODO: update cooking on the server!
-        root.hub.server.finishCooking(self.id).done(function () {
+        root.hub.server.finishCooking(self.id, snapshots).done(function () {
             console.log('Cooking finished: ' + self.id);
             self.close();
+        }).fail(function (error) {
+            console.log(error);
         });
     }
 
@@ -88,6 +108,7 @@ CookingPresenterViewModel.prototype.takeSnapshot = function () {
     var timeTaken = new Date(Math.abs(now - self.timeStarted));
 
     var snapshot = {
+        id: self.snapshotId,
         snapshotId: 'snapshot' + self.snapshotId,
         timeTaken: timeTaken,
         timeTakenText: formatTimeFromDate(timeTaken),

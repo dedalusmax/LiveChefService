@@ -82,6 +82,9 @@
                     <audio id="viewerAudio" class="my-audio" autoplay></audio>
                     <audio id="presenterAudio" class="fullsize" autoplay controls></audio>
                 </div>
+                <div class="card-body " data-bind="if: status() == 4">
+                    <video id="archivedVideo" class="fullsize" autoplay></video>
+                </div>
                 <div class="card-footer">
                     <div>
                         <span class="glyphicon glyphicon-camera" aria-hidden="true" data-bind="style: { color: settings.usecamera ? 'white' : 'grey' }"></span>
@@ -91,40 +94,62 @@
                 </div>
             </div>
 
-          <!-- /ko -->
+            <!-- /ko -->
 
             <div>
                 <h4>Snapshots</h4>
-                <div class="card-deck snapshots" data-bind="foreach: snapshots">
-                    <div class="card">
-                        <div class="card-body">
-                            <canvas class="fullsize" data-bind="attr: { id: snapshotId, width: width, height: height }"></canvas>
-                        </div>
-                        <div class="card-footer">
-                            <div class="card-footer-header row">
-                                <div class="col-sm-10">
-                                    <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
-                                    <small data-bind="text: 'Taken at: ' + timeTakenText"></small>
+                <div data-bind="if: status() != 4">
+                    <div class="card-deck snapshots" data-bind="foreach: snapshots">
+                        <div class="card">
+                            <div class="card-body">
+                                <canvas class="fullsize" data-bind="attr: { id: snapshotId, width: width, height: height }"></canvas>
+                            </div>
+                            <div class="card-footer">
+                                <div class="card-footer-header row">
+                                    <div class="col-sm-10">
+                                        <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+                                        <small data-bind="text: 'Taken at: ' + timeTakenText"></small>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <span class="glyphicon glyphicon-trash" aria-hidden="true" data-bind="click: $parent.removeSnapshot.bind($data, $parent)"></span>
+                                    </div>
                                 </div>
-                                <div class="col-sm-2">
-                                    <span class="glyphicon glyphicon-trash" aria-hidden="true" data-bind="click: $parent.removeSnapshot.bind($data, $parent)"></span>
+                                <div>
+                                    <div data-bind="if: editMode">
+                                        <div class="col-sm-10">
+                                            <textarea data-bind="value: description" />
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <span class="glyphicon glyphicon-check" aria-hidden="true" data-bind="click: $parent.toggleEditMode"></span>
+                                        </div>
+                                    </div>
+                                    <div data-bind="if: editMode() == false">
+                                        <div class="col-sm-10">
+                                            <small data-bind="text: description"></small>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <span class="glyphicon glyphicon-edit" aria-hidden="true" data-bind="click: $parent.toggleEditMode"></span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div>
-                                <div data-bind="if: editMode">
-                                    <div class="col-sm-10">
-                                        <textarea data-bind="value: description" />
+                        </div>
+                    </div>
+                </div>
+                <div data-bind="if: status() == 4">
+                    <div class="card-deck snapshots" data-bind="foreach: storedSnapshots">
+                        <div class="card">
+                            <div class="card-body">
+                                <canvas class="fullsize" data-bind="attr: { id: snapshotId, width: width, height: height }"></canvas>
+                            </div>
+                            <div class="card-footer">
+                                <div class="card-footer">
+                                    <div class="card-footer-header row">
+                                        <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+                                        <small data-bind="text: 'Taken at: ' + timeTakenText"></small>
                                     </div>
-                                    <div class="col-sm-2">
-                                        <span class="glyphicon glyphicon-check" aria-hidden="true" data-bind="click: $parent.toggleEditMode"></span>
-                                    </div>
-                                </div>
-                                <div data-bind="if: editMode() == false">
-                                    <div class="col-sm-10">
+                                    <div class="row">
                                         <small data-bind="text: description"></small>
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <span class="glyphicon glyphicon-edit" aria-hidden="true" data-bind="click: $parent.toggleEditMode"></span>
                                     </div>
                                 </div>
                             </div>
@@ -132,7 +157,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
 
         <div class="col-sm-4" data-bind="if: settings.useChat">

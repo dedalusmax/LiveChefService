@@ -64,12 +64,20 @@ namespace LiveChefService
             }
         }
 
-        public void FinishCooking(int cookingId)
+        public void FinishCooking(int cookingId, Snapshot[] snapshots)
         {
             var cooking = WebApiApplication.CookingRepository.GetById(cookingId);
             if (cooking != null)
             {
                 cooking.Status = CookingStatus.Finished;
+                cooking.FinishedTime = DateTime.Now;
+
+                var e = snapshots.GetEnumerator();
+                while (e.MoveNext())
+                {
+                    cooking.Snapshots.Add(e.Current as Snapshot);
+                }
+
                 WebApiApplication.CookingRepository.Change(cooking);
                 this.Clients.All.cookingUpdated(cooking);
                 this.Clients.Others.leaveFromCooking(cookingId);

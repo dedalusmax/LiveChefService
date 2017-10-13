@@ -1,6 +1,8 @@
 ﻿var CookingViewerViewModel = function (data) {
     var self = data;
 
+    self.snapshots = ko.observableArray();
+
     var communicator = root.main().communicator;
 
     self.localVideo = '#viewerVideo';

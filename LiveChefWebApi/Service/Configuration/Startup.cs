@@ -25,6 +25,8 @@ namespace LiveChefService
             hubConfiguration.EnableJavaScriptProxies = true;
             hubConfiguration.EnableJSONP = true;
 
+            GlobalHost.Configuration.MaxIncomingWebSocketMessageSize = null;
+
             app.MapSignalR("/signalr", hubConfiguration);
         }
     }

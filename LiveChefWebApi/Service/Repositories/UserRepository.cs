@@ -11,8 +11,8 @@ namespace LiveChefService.Models
             Add(new User { Id = 3, Username = "pero", Password = "123", DisplayName = "Pero Papričica" });
             Add(new User { Id = 4, Username = "stefica", Password = "123", DisplayName = "Štefica Jambrek" });
             Add(new User { Id = 5, Username = "mico", Password = "123", DisplayName = "Mićo Skuhani" });
-            Add(new User { Id = 6, Username = "jura", Password = "123", DisplayName = "Jura Mutikaša" });
-            Add(new User { Id = 6, Username = "simun", Password = "123", DisplayName = "Šimun Ćosić" });
+            //Add(new User { Id = 6, Username = "jura", Password = "123", DisplayName = "Jura Mutikaša" });
+            //Add(new User { Id = 6, Username = "simun", Password = "123", DisplayName = "Šimun Ćosić" });
         }
 
         public IEnumerable<User> GetActiveUsers()

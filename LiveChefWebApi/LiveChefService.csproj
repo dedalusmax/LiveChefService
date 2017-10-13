@@ -114,6 +114,7 @@
   <ItemGroup>
     <Content Include="app\models\chat.view-model.js" />
     <Content Include="app\models\communicator.view-model.js" />
+    <Content Include="app\models\cooking-recorded.view-model.js" />
     <Content Include="app\models\cooking.view-model.js" />
     <Content Include="app\models\login.view-model.js" />
     <Content Include="app\models\new-cooking.view-model.js" />
