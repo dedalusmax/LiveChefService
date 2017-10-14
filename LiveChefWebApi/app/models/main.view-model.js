@@ -4,7 +4,9 @@
 
     self.activeTab = ko.observable(1);
     self.activateTab = function (tabId) {
-        self.activeTab(tabId);
+        self.activeTab(tabId);   
+      //  var navbarToogle = document.querySelector('.navbar-toggle');
+      //  navbarToogle.click(); 
     };
 
     // these are the responsive lists of important data
@@ -128,7 +130,7 @@
             root.cooking().leave();
             console.log('Left cooking: ' + cookingId);
         }
-    }
+    };
 
     hub.client.chatMessageReceived = function (cookingId, sender, text) {
         // relay message only to active cooking that is that one
@@ -160,7 +162,10 @@
     self.addNewCooking = function () {
         self.parent.newCooking(new NewCookingViewModel());
         self.parent.showScreen(Screen.NewCooking);
-    }
+
+        //  var navbarToogle = document.querySelector('.navbar-toggle');
+        //  navbarToogle.click(); 
+    };
 
     var timer = window.setInterval(function () {
         var now = new Date();

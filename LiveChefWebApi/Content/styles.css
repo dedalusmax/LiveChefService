@@ -254,7 +254,6 @@ h3 {
 
 .new-cooking-component .logo {
   width: 240px;
-  margin-left: -50px;
   margin-top: -50px; }
 
 .new-cooking-component h1 {
@@ -345,9 +344,20 @@ h3 {
   .cooking-component .sepia {
     -webkit-filter: sepia(1);
     filter: sepia(1); }
+  .cooking-component .need-help {
+    animation: infinite 1s alternate-reverse hot-button; }
 
 .users-list-component .card-deck .card:hover {
   margin: 10px; }
+
+progress {
+  background-color: #fff !important; }
+
+progress::-moz-progress-bar {
+  background-image: -45deg, transparent 33%, rgba(0, 0, 0, 0.1) 33%, rgba(0, 0, 0, 0.1) 66%, transparent 66%; }
+
+progress::-webkit-progress-value {
+  background-image: -webkit-linear-gradient(-45deg, transparent 33%, rgba(0, 0, 0, 0.1) 33%, rgba(0, 0, 0, 0.1) 66%, transparent 66%), -webkit-linear-gradient(top, rgba(255, 255, 255, 0.25), rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(left, #09c, #f44) !important; }
 
 /* Smaller monitors (for tiny adjustments) */
 @media (max-width: 1250px) {
@@ -395,6 +405,11 @@ h3 {
   .main-component .add-button {
     width: 10% !important;
     padding-top: 10px; }
+  .container-fluid {
+    padding-right: 15px; }
   .new-cooking-component > div {
-    display: block; } }
-
+    display: block; }
+  .new-cooking-component.poster .logo {
+    width: 250px; }
+  .new-cooking-component .card-img-top {
+    width: 100%; } }

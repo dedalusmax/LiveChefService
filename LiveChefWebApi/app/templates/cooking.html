@@ -71,6 +71,7 @@
 
             <!-- /ko -->
             <!-- ko if: !chefIsMe -->
+            <button class="btn btn-primary need-help" data-bind="click: sendHelp, visible: helpNeeded() == 3">Chef needs help!</button>
 
             <h4>Media stream from the presenter</h4>
             <div class="card fullsize">

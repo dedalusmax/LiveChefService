@@ -3,6 +3,10 @@
 
     self.snapshots = ko.observableArray();
 
+    self.helpNeeded = ko.computed(function () {
+        return self.status();
+    });
+
     var communicator = root.main().communicator;
 
     self.localVideo = '#viewerVideo';
@@ -26,4 +30,16 @@
         console.log('Request for join, caller: ' + root.user.id + ' callee: ' + self.chef.id);
         root.hub.server.requestForJoin(root.user.id, communicator.intendedAction(), self.chef.id);
     });
-}
+
+    self.sendHelp = function () {
+
+        var messageText = root.user.displayName + ' wants to help you!';
+        
+        var message = new ChatViewModel('Me', messageText);
+        self.chatHistory.push(message);
+
+        root.hub.server.sendChatMessage(self.id, root.user.id, messageText).done(function () {
+            console.log(messageText);
+        });
+    };
+};

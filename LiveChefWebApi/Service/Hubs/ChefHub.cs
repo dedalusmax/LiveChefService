@@ -64,6 +64,17 @@ namespace LiveChefService
             }
         }
 
+        public void HelpInCookingAccepted(int cookingId, bool isHelpAccepted)
+        {
+            var cooking = WebApiApplication.CookingRepository.GetById(cookingId);
+            if (cooking != null)
+            {
+                cooking.Status = CookingStatus.Ongoing;
+                WebApiApplication.CookingRepository.Change(cooking);
+                this.Clients.Others.cookingUpdated(cooking);
+            }
+        }
+
         public void FinishCooking(int cookingId, Snapshot[] snapshots)
         {
             var cooking = WebApiApplication.CookingRepository.GetById(cookingId);

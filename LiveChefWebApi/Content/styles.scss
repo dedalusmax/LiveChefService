@@ -101,6 +101,7 @@ video {
         transform: rotate(-2deg);
         -webkit-transform: rotate(-2deg);
     }
+
     100% {
         background-color: $highlight-color;
         border-color: $border-color;
@@ -374,7 +375,7 @@ h3 {
 
     .logo {
         width: 240px;
-        margin-left: -50px;
+       // margin-left: -50px;
         margin-top: -50px;
     }
 
@@ -528,6 +529,10 @@ h3 {
         -webkit-filter: sepia(1);
         filter: sepia(1);
     }
+
+    .need-help {
+        animation: infinite 1s alternate-reverse hot-button;
+    }
 }
 
 .users-list-component {
@@ -537,6 +542,18 @@ h3 {
             margin: 10px;
         }
     }
+}
+
+progress {
+    background-color: #fff !important;
+}
+
+progress::-moz-progress-bar {
+    background-image: (-45deg, transparent 33%, rgba(0, 0, 0, .1) 33%, rgba(0,0, 0, .1) 66%, transparent 66%),
+}
+
+progress::-webkit-progress-value {
+    background-image: -webkit-linear-gradient(-45deg, transparent 33%, rgba(0, 0, 0, .1) 33%, rgba(0,0, 0, .1) 66%, transparent 66%), -webkit-linear-gradient(top, rgba(255, 255, 255, .25), rgba(0, 0, 0, .25)), -webkit-linear-gradient(left, #09c, #f44) !important;
 }
 
 /* Smaller monitors (for tiny adjustments) */
@@ -616,13 +633,25 @@ h3 {
         .add-button {
             width: 10% !important;
             padding-top: 10px;
-        }
+        }      
+    }
+
+    .container-fluid {
+        padding-right: 15px;
     }
 
     .new-cooking-component {
 
         > div {
             display: block;
+        }
+
+        &.poster .logo {
+           width: 250px;
+        }
+
+        .card-img-top{
+            width: 100%;
         }
     }
 }

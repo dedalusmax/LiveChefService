@@ -57,7 +57,7 @@
         }).fail(function (error) {
             console.log(error);
         });
-    }
+    };
 
     $(document).ready(function () {
 
@@ -74,10 +74,18 @@
 
     self.askForHelp = function () {
 
-        root.hub.server.needHelpInCooking(self.id, self.helpNeeded()).done(function () {
-            console.log('Ask for help message sent, help needed: ' + self.helpNeeded());
-        });
-    }
+        if (self.helpNeeded() == true) {
+            root.hub.server.needHelpInCooking(self.id, self.helpNeeded()).done(function () {
+                console.log('Ask for help message sent, help needed: ' + self.helpNeeded());
+            });
+        }
+        else {
+            root.hub.server.helpInCookingAccepted(self.id, self.helpNeeded()).done(function () {
+                console.log('Ask for help message sent, help accepted: ' + self.helpNeeded());
+            });
+        }
+
+    };
 
     self.mediaRecorder = null;
     self.recordedBlobs = [];
@@ -124,19 +132,19 @@ CookingPresenterViewModel.prototype.takeSnapshot = function () {
 
     canvas.getContext('2d').
         drawImage(video, 0, 0, canvas.width, canvas.height);
-}
+};
 
 CookingPresenterViewModel.prototype.removeSnapshot = function (self, snapshot) {
 
     self.snapshots.remove(function (s) {
         return s.snapshotId == snapshot.snapshotId;
     });
-}
+};
 
 CookingPresenterViewModel.prototype.toggleEditMode = function (self) {
 
     self.editMode(!self.editMode());
-}
+};
 
 CookingPresenterViewModel.prototype.startRecording = function () {
     var self = this;
@@ -186,14 +194,14 @@ CookingPresenterViewModel.prototype.handleDataAvailable = function (e) {
         self.recordedBlobs.push(event.data);
     }
     console.log('Recorded Blobs: ', self.recordedBlobs);
-}
+};
 
 CookingPresenterViewModel.prototype.stopRecording = function () {
     var self = this;
 
     self.mediaRecorder.stop();
     console.log('Recorded Blobs: ', self.recordedBlobs);
-}
+};
 
 CookingPresenterViewModel.prototype.handleStop = function () {
     var self = this;
@@ -201,7 +209,7 @@ CookingPresenterViewModel.prototype.handleStop = function () {
     console.log('Recorder stopped');
     self.isRecording(false);
     self.recordingAvailable(true);
-}
+};
 
 CookingPresenterViewModel.prototype.playRecordedVideo = function () {
     var self = this;
@@ -209,7 +217,7 @@ CookingPresenterViewModel.prototype.playRecordedVideo = function () {
     var superBuffer = new Blob(self.recordedBlobs, { type: 'video/webm' });
     var recordedVideo = document.querySelector('#recordedVideo');
     recordedVideo.src = window.URL.createObjectURL(superBuffer);
-}
+};
 
 CookingPresenterViewModel.prototype.downloadVideo = function () {
     var self = this;
@@ -230,7 +238,7 @@ CookingPresenterViewModel.prototype.downloadVideo = function () {
     downloadAnchor.download = 'chefRecord.webm';
     downloadAnchor.style.display = 'none';
     downloadAnchor.click();
-}
+};
 
 CookingPresenterViewModel.prototype.handleSourceOpen = function () {
     var self = this;
@@ -238,5 +246,5 @@ CookingPresenterViewModel.prototype.handleSourceOpen = function () {
     console.log('MediaSource opened');
     self.sourceBuffer = mediaSource.addSourceBuffer('video/webm; codecs="vp8"');
     console.log('Source buffer: ', self.sourceBuffer);
-}
+};
 

@@ -24,6 +24,7 @@ var CommunicatorViewModel = function (data) {
     self.remoteVideo = null;
 
     self.file = null;
+    self.chooseFile = ko.observable(false);
     self.dataChannel = null;
     self.receiveBuffer = [];
     self.receivedSize = 0;
@@ -33,49 +34,52 @@ var CommunicatorViewModel = function (data) {
         self.intendedAction(MediaAction.VideoCall);
         self.setElements('#localVideo', '#remoteVideo', null, null);
         self.userIdToConnect(user.id);
+        self.chooseFile(false);
 
         self.startLocalStream();
-    }
+    };
 
     self.startAudioCall = function (user) {
 
         self.intendedAction(MediaAction.AudioCall);
         self.setElements(null, null, '#localAudio', '#remoteAudio');
         self.userIdToConnect(user.id);
+        self.chooseFile(false);
 
         self.startLocalStream();
-    }
+    };
 
     self.stopCall = function (user) {
         self.closeConnectionAndStreams();
-    }
+    };
 
     self.sendFile = function (user) {
         self.fileInput = $('input#fileInput');
         self.fileInput.val('');
         self.fileInput.click();
-    }
+    };
 
     self.handleFileInputChange = function () {
         var file = self.fileInput[0].files[0];
         if (!file) {
             console.log('No file chosen');
         } else {
+            self.chooseFile(true);
             // we must inform other party of the incoming message transfer
             root.hub.server.requestRtcDataTransfer(self.userIdToConnect(), file.name, file.size);
             // send the file through the opened RTC data channel
             self.sendData(file);
         }
-    }
+    };
 
     self.stopLocalStream = function () {
         self.stopMediaStream(self.localStream, self.localVideo, self.localAudio);
-    }
+    };
 
     self.stopRemoteStream = function () {
         self.stopMediaStream(self.remoteStream, self.remoteVideo, self.remoteAudio);
-    }
-}
+    };
+};
 
 CommunicatorViewModel.prototype.setElements = function (localVideoElement, remoteVideoElement, localAudioElement, remoteAudioElement) {
     var self = this;
@@ -84,7 +88,7 @@ CommunicatorViewModel.prototype.setElements = function (localVideoElement, remot
     self.remoteVideo = remoteVideoElement;
     self.localAudio = localAudioElement;
     self.remoteAudio = remoteAudioElement;
-}
+};
 
 CommunicatorViewModel.prototype.startLocalStream = function () {
     var self = this;
@@ -97,7 +101,7 @@ CommunicatorViewModel.prototype.startLocalStream = function () {
 
     navigator.mediaDevices.getUserMedia(constraints).
         then(self.mediaRetrieved.bind(self)).catch(self.mediaError.bind(self));
-}
+};
 
 CommunicatorViewModel.prototype.startCommunication = function () {
     var self = this;
@@ -132,7 +136,7 @@ CommunicatorViewModel.prototype.startCommunication = function () {
     }, function (error) {
         console.log('Error in creating offer: ' + error);
     }, options);
-}
+};
 
 CommunicatorViewModel.prototype.closeConnectionAndStreams = function () {
     var self = this;
@@ -154,7 +158,7 @@ CommunicatorViewModel.prototype.closeConnectionAndStreams = function () {
 
     // clear local variables
     self.clear();
-}
+};
 
 CommunicatorViewModel.prototype.clear = function () {
     var self = this;
@@ -175,7 +179,7 @@ CommunicatorViewModel.prototype.clear = function () {
     self.receivedSize = 0;
 
     self.isConference = false;
-}
+};
 
 CommunicatorViewModel.prototype.stopMediaStream = function (stream, videoElement, audioElement) {
     var self = this;
@@ -192,7 +196,7 @@ CommunicatorViewModel.prototype.stopMediaStream = function (stream, videoElement
 
     var audio = document.querySelector(audioElement);
     if (audio) audio.srcObject = null;
-}
+};
 
 CommunicatorViewModel.prototype.stopLocalMediaStream = function () {
     var self = this;
@@ -211,7 +215,7 @@ CommunicatorViewModel.prototype.stopLocalMediaStream = function () {
 
     var audio = document.querySelector(audioElement);
     if (audio) audio.srcObject = null;
-}
+};
 
 CommunicatorViewModel.prototype.mediaRetrieved = function (stream) {
     var self = this;
@@ -241,7 +245,7 @@ CommunicatorViewModel.prototype.mediaRetrieved = function (stream) {
         console.log('Request for join, caller: ' + root.user.id + ' callee: ' + self.userIdToConnect());
         root.hub.server.requestForJoin(root.user.id, self.intendedAction(), self.userIdToConnect());
     }
-}
+};
 
 CommunicatorViewModel.prototype.mediaError = function (error) {
     var self = this;
@@ -250,7 +254,7 @@ CommunicatorViewModel.prototype.mediaError = function (error) {
     self.requestedConnection = false;
 
     console.log('navigator.mediaDevices.getUserMedia error: ', error);
-}
+};
 
 CommunicatorViewModel.prototype.joinRequested = function (action, userIdToConnect) {
     // a caller sent a message through SignalR that he wants to start communicating with me
@@ -263,7 +267,7 @@ CommunicatorViewModel.prototype.joinRequested = function (action, userIdToConnec
     self.userIdToConnect(userIdToConnect);
 
     self.startLocalStream();
-}
+};
 
 CommunicatorViewModel.prototype.createConnection = function () {
     var self = this;
@@ -302,7 +306,7 @@ CommunicatorViewModel.prototype.createConnection = function () {
         if (event.target.readyState == 'closed') {
             self.closeConnectionAndStreams();
         }
-    }
+    };
 
     // when the channel exists we call method for send 
     self.dataChannel.onopen = dataChannelStateChange;
@@ -347,15 +351,15 @@ CommunicatorViewModel.prototype.createConnection = function () {
             console.log('Closing connections and streams.');
             self.closeConnectionAndStreams();
         }
-    }
+    };
 
     connection.onicegatheringstatechange = function (event) {
         console.log('connection.oniceconnectionstatechange: ', event.target.iceGatheringState);
-    }
+    };
 
     connection.onnegotiationneeded = function (event) {
         console.log('connection.onnegotiationneeded.');
-    }
+    };
 
     connection.onsignalingstatechange = function (event) {
         console.log('connection.onsignalingstatechange: ', event.target.signalingState);
@@ -366,14 +370,14 @@ CommunicatorViewModel.prototype.createConnection = function () {
         }
         // calling someone
         if (event.target.signalingState == 'have-local-offer') {
-            console.log('Calling..')
+            console.log('Calling..');
         }
 
         // hang up
         if (event.target.signalingState == 'closed') {
             console.log('Call ended..');
         }
-    }
+    };
 
     // media stream was closed
     connection.onremovestream = function (event) {
@@ -385,7 +389,7 @@ CommunicatorViewModel.prototype.createConnection = function () {
                 console.log('Stopped streaming ' + track.kind + ' track from getUserMedia.');
             }
         }
-    }
+    };
 
     connection.ondatachannel = function (event) {
         console.log('Receive Channel Callback');
@@ -397,11 +401,11 @@ CommunicatorViewModel.prototype.createConnection = function () {
         //self.dataChannel.onclose = self.dataChannelStateChange;
         //self.dataChannel.onmessage = self.dataChannelMessageArrived.bind(self, event);
         event.channel.onmessage = function (event) {
-
             console.log('Data channel message arrived');
 
             self.receiveBuffer.push(event.data);
             self.receivedSize += event.data.byteLength;
+            self.chooseFile(true);
 
             var progressBar = document.querySelector('progress#progressBar');
             progressBar.value = self.receivedSize;
@@ -417,6 +421,7 @@ CommunicatorViewModel.prototype.createConnection = function () {
                 downloadAnchor.download = self.file.filename;
                 downloadAnchor.textContent = 'Click to download \'' + self.file.filename + '\' (' + self.file.size + ' bytes)';
                 downloadAnchor.style.display = 'block';
+                downloadAnchor.click();
 
             } else {
                 console.log('Data incoming: ' + event.data.byteLength + ' bytes');
@@ -434,7 +439,7 @@ CommunicatorViewModel.prototype.createConnection = function () {
     };
 
     return connection;
-}
+};
 
 CommunicatorViewModel.prototype.rtcMessageReceived = function (data) {
     var self = this;
@@ -497,7 +502,7 @@ CommunicatorViewModel.prototype.rtcDataTransferRequested = function (filename, s
 
     var progressBar = document.querySelector('progress#progressBar');
     progressBar.max = size;
-}
+};
 
 CommunicatorViewModel.prototype.sendData = function (file) {
     var self = this;
