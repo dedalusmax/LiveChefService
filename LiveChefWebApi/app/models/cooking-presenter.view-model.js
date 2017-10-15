@@ -19,7 +19,7 @@
 
     self.localVideo = '#myVideo';
     self.localAudio = '#myAudio';
-
+    
     self.isRecording = ko.observable(false);
     self.helpNeeded = ko.observable(false);
     self.recordingAvailable = ko.observable(false);
@@ -70,6 +70,13 @@
             communicator.intendedAction(MediaAction.AudioCall);
         }
         communicator.startLocalStream();
+
+        var filterSelect = document.querySelector('select#filter');
+        var video = document.querySelector('#myVideo');
+
+        filterSelect.onchange = function () {
+           video.className = filterSelect.value;
+        };
     });
 
     self.askForHelp = function () {

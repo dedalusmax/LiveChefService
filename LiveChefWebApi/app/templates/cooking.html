@@ -27,6 +27,16 @@
                     <span class="glyphicon glyphicon-ok" aria-hidden="true" data-bind="visible: helpNeeded"></span>&nbsp;&nbsp;Help needed!
                 </button>
             </div>
+            <div class="form-group row">
+               <label for="select">Filter </label>
+                <select id="filter">
+                    <option value="none">None</option>
+                    <option value="blur">Blur</option>
+                    <option value="grayscale">Grayscale</option>
+                    <option value="invert">Invert</option>
+                    <option value="sepia">Sepia</option>
+                </select>
+            </div>
 
             <div data-bind="visible: $parent.main().communicator.isStreaming()">
 
