@@ -75,7 +75,7 @@ namespace LiveChefService
             }
         }
 
-        public void FinishCooking(int cookingId, Snapshot[] snapshots)
+        public void FinishCooking(int cookingId, Snapshot[] snapshots, ChatMessage[] chatHistory)
         {
             var cooking = WebApiApplication.CookingRepository.GetById(cookingId);
             if (cooking != null)
@@ -87,6 +87,12 @@ namespace LiveChefService
                 while (e.MoveNext())
                 {
                     cooking.Snapshots.Add(e.Current as Snapshot);
+                }
+
+                var enumerator = chatHistory.GetEnumerator();
+                while (enumerator.MoveNext())
+                {
+                    cooking.ChatHistory.Add(enumerator.Current as ChatMessage);
                 }
 
                 WebApiApplication.CookingRepository.Change(cooking);

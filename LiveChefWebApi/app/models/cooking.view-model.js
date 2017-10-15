@@ -27,21 +27,23 @@
         }
     });
 
-    self.chatHistory = ko.observableArray();
+    self.chattingHistory = ko.observableArray();
     self.chatMessage = ko.observable('');
     self.chatMessageFocused = ko.observable(true);
 
     self.addChatMessage = function (sender, text) {
 
-        self.chatHistory.push(new ChatViewModel(sender, text));
-        self.chatHistory.valueHasMutated();
+        self.chattingHistory.push(new ChatViewModel(sender, text));
+        self.chattingHistory.valueHasMutated();
     };
 
     self.sendChatMessage = function () {
 
         var messageText = self.chatMessage();
-        var message = new ChatViewModel('Me', messageText);
-        self.chatHistory.push(message);
+        if (chefIsMe) var message = new ChatViewModel('Chef', messageText);
+        if (!chefIsMe) var message = new ChatViewModel('Me', messageText);
+
+        self.chattingHistory.push(message);
 
         root.hub.server.sendChatMessage(self.id, root.user.displayName, messageText).done(function () {
             self.chatMessage('');
@@ -80,5 +82,9 @@
     self.refreshTime = function (now) {
         var diff = moment(now).from(self.timeStarted);
         self.currentTime(diff);
+    }
+    // TODO: new html for video 
+    self.helpNeeded = ko.observable();
+    self.sendHelp = function () {
     }
 };

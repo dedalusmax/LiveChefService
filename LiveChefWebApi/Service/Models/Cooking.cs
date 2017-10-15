@@ -36,6 +36,13 @@ namespace LiveChefService.Models
         public string Image { get; set; }
     }
 
+    public class ChatMessage
+    {
+        public string Sender { get; set; }
+        public string Text { get; set; }
+
+    }
+
     public class Cooking : IModel
     {
         public int Id { get; set; }
@@ -46,10 +53,12 @@ namespace LiveChefService.Models
         public DateTime StartedTime { get; set; }
         public DateTime FinishedTime { get; set; }
         public List<Snapshot> Snapshots { get; set; }
+        public List<ChatMessage> ChatHistory { get; set; }
 
         public Cooking()
         {
             this.Snapshots = new List<Snapshot>();
+            this.ChatHistory = new List<ChatMessage>();
         }
     }
 }

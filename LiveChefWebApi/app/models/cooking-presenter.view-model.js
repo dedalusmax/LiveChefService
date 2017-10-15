@@ -51,7 +51,7 @@
         });
 
         // TODO: update cooking on the server!
-        root.hub.server.finishCooking(self.id, snapshots).done(function () {
+        root.hub.server.finishCooking(self.id, snapshots, self.chattingHistory()).done(function () {
             console.log('Cooking finished: ' + self.id);
             self.close();
         }).fail(function (error) {
@@ -235,7 +235,7 @@ CookingPresenterViewModel.prototype.downloadVideo = function () {
     }
 
     downloadAnchor.href = url;
-    downloadAnchor.download = 'chefRecord.webm';
+    downloadAnchor.download = 'cooking_'+self.id+'.webm';
     downloadAnchor.style.display = 'none';
     downloadAnchor.click();
 };

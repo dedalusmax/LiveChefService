@@ -117,12 +117,12 @@
         });
     };
 
-    hub.client.recordedCookingsInitiated = function (cookings) {
-        cookings.forEach(function (cooking) {
-            self.recordedCookings.push(new CookingViewModel(cooking));
-            console.log('Recorded cooking initiated: ' + cooking.dish.name);
-        });
-    };
+    //hub.client.recordedCookingsInitiated = function (cookings) {
+    //    cookings.forEach(function (cooking) {
+    //        self.recordedCookings.push(new CookingViewModel(cooking));
+    //        console.log('Recorded cooking initiated: ' + cooking.dish.name);
+    //    });
+    //};
 
     hub.client.leaveFromCooking = function (cookingId) {
         // report to any possible viewers that the cooking is removed!!
@@ -135,6 +135,7 @@
     hub.client.chatMessageReceived = function (cookingId, sender, text) {
         // relay message only to active cooking that is that one
         if (root.cooking() && root.cooking().id == cookingId) {
+          //  var found = self.users().find(c => c.id == sender);
             root.cooking().addChatMessage(sender, text);
             console.log('Chat message received for cooking : ' + cookingId + ' from: ' + sender + ' with text: ' + text);
         }

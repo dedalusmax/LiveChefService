@@ -32,13 +32,13 @@
 
                 <h4>This is me, cooking</h4>
                 <p><i>Note: the stream will not be emitted (seen by others), unless it is recorded by clicking the record button below.</i></p>
-                <div class="card fullsize video-card">
+                <div class="card video-card" data-bind="css: {'fullsize': recordingAvailable()}">
                     <div class="card-body" data-bind="if: $parent.main().communicator.intendedAction() == 1">
                         <div class="col-sm-6">
-                            <video id="myVideo" class="fullsize" autoplay></video>
+                            <video id="myVideo" autoplay data-bind="css: {'fullsize': recordingAvailable()}"></video>
                             <span class="glyphicon glyphicon-record record-icon live" aria-hidden="true" data-bind="visible: isRecording"></span>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-6" data-bind="visible: recordingAvailable()">
                             <video id="recordedVideo" class="fullsize" controls autoplay loop>Not recorded yet!</video>
                         </div>
                     </div>
@@ -48,22 +48,21 @@
                     <div class="card-footer">
                         <div class="card-footer-header">
                             <span class="glyphicon glyphicon-film glyph-button" aria-hidden="true" data-bind="click: startRecording, visible: !isRecording()"></span>
-                            <label data-bind="visible: !isRecording()">Start recording</label>
+                            <!--<label data-bind="visible: !isRecording()">Start recording</label>-->
 
                             <span class="glyphicon glyphicon-stop glyph-button" aria-hidden="true" data-bind="click: stopRecording, visible: isRecording"></span>
-                            <label data-bind="visible: isRecording">Stop recording</label>
-
-                            <label class="right-aligned" data-bind="visible: recordingAvailable">Download video</label>
+                            <!--<label data-bind="visible: isRecording">Stop recording</label>-->
+                            <!--<label class="right-aligned" data-bind="visible: recordingAvailable">Download video</label>-->
                             <span class="glyphicon glyphicon-save glyph-button right-aligned" aria-hidden="true" data-bind="click: downloadVideo, visible: recordingAvailable"></span>
 
-                            <label class="right-aligned" data-bind="visible: recordingAvailable">Play recorded video</label>
+                            <!--<label class="right-aligned" data-bind="visible: recordingAvailable">Play recorded video</label>-->
                             <span class="glyphicon glyphicon-play glyph-button right-aligned" aria-hidden="true" data-bind="click: playRecordedVideo, visible: recordingAvailable"></span>
 
                             <a id="downloadVideo"></a>
                         </div>
                         <div>
                             <span class="glyphicon glyphicon-camera glyph-button" aria-hidden="true" data-bind="visible: $parent.main().communicator.intendedAction() == 1, click: takeSnapshot"></span>
-                            <label>Take a snapshot</label>
+                            <!--<label>Take a snapshot</label>-->
                         </div>
                     </div>
                 </div>
@@ -156,18 +155,33 @@
                             </div>
                         </div>
                     </div>
+
+                        <h4>Chat history</h4>
+                        <div class="card fullsize chat-history">
+                            <div class="card-header">
+                                <small>Chat History</small>
+                            </div>
+                            <div class="card-body">
+                                <div data-bind="foreach: storedChatHistory">
+                                    <div>
+                                        <span class="chat-sender" data-bind="text: sender"></span><span>:</span>
+                                        <span class="chat-text" data-bind="text: text"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-sm-4" data-bind="if: settings.useChat">
+        <div class="col-sm-4" data-bind="if: settings.useChat && status() != 4">
             <h4>Live Chat</h4>
             <div class="card fullsize chat-history">
                 <div class="card-header">
                     <small>Chat History</small>
                 </div>
                 <div class="card-body">
-                    <div data-bind="foreach: chatHistory">
+                    <div data-bind="foreach: chattingHistory">
                         <div>
                             <span class="chat-sender" data-bind="text: sender"></span><span>:</span>
                             <span class="chat-text" data-bind="text: text"></span>

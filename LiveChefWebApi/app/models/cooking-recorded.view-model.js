@@ -2,6 +2,7 @@
     var self = data;
 
     self.storedSnapshots = ko.observableArray();
+    self.storedChatHistory = ko.observableArray();
 
     $(document).ready(function () {
 
@@ -31,6 +32,15 @@
                 ctx.drawImage(this, 0, 0, s.width, s.height);
             };
             image.src = 'data:image/png;base64,' + snapshot.image;
+        });
+
+        var c = self.chatHistory;
+        c.forEach(function (chatMessage) {
+
+            var c = new ChatViewModel(chatMessage.sender, chatMessage.text);
+
+            self.storedChatHistory.push(c);
+          
         });
     });
 }

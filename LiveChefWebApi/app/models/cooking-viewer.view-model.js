@@ -33,12 +33,12 @@
 
     self.sendHelp = function () {
 
-        var messageText = root.user.displayName + ' wants to help you!';
+        var messageText = 'I want to help you!';
         
         var message = new ChatViewModel('Me', messageText);
         self.chatHistory.push(message);
 
-        root.hub.server.sendChatMessage(self.id, root.user.id, messageText).done(function () {
+        root.hub.server.sendChatMessage(self.id, root.user.displayName, messageText).done(function () {
             console.log(messageText);
         });
     };
