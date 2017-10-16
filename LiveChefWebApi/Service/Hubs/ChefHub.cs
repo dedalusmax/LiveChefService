@@ -131,6 +131,69 @@ namespace LiveChefService
 
         #endregion
 
+        #region Blob related methods
+
+        public void StartMediaStreamTransfer(int cookingId)
+        {
+            var cookingMedia = new CookingMedia
+            {
+                CookingId = cookingId,
+                Status = MediaStreamTransfer.Started
+            };
+
+            WebApiApplication.CookingMediaRepository.Add(cookingMedia);
+        }
+
+        public void SendMediaStreamTransfer(int cookingId, dynamic data)
+        {
+            var cookingMedia = WebApiApplication.CookingMediaRepository.GetByCookingId(cookingId);
+
+            cookingMedia.Status = MediaStreamTransfer.Pending;
+            //cookingMedia.Data.SetValue(data, cookingMedia.Data.Length);
+            cookingMedia.Blobs.Add(data);
+
+            WebApiApplication.CookingMediaRepository.Change(cookingMedia);
+        }
+
+        public void EndMediaStreamTransfer(int cookingId)
+        {
+            var cookingMedia = WebApiApplication.CookingMediaRepository.GetByCookingId(cookingId);
+            cookingMedia.Status = MediaStreamTransfer.Finished;
+
+            WebApiApplication.CookingMediaRepository.Change(cookingMedia);
+        }
+
+        public void GetCookingMedia(int cookingId)
+        {
+            var cookingMedia = WebApiApplication.CookingMediaRepository.GetByCookingId(cookingId);
+
+            this.Clients.Caller.cookingMediaTransferStarted(cookingId);
+
+            foreach(var blob in cookingMedia.Blobs)
+            {
+                this.Clients.Caller.cookingMediaTransferSend(cookingId, blob);
+            }
+
+            //var blob = cookingMedia.Data;
+            //const int blockSize = 16384; // 16 KB
+
+            //for (var index = 0; index >= cookingMedia.Data.Length; index += blockSize)
+            //{
+            //    if (index > cookingMedia.Data.Length)
+            //    {
+            //        index = index - cookingMedia.Data.Length;
+            //    }
+
+            //    var block = blob.GetValue(index, blockSize);
+
+            //    this.Clients.Caller.cookingMediaTransferSend(cookingId, block);
+            //}
+
+            this.Clients.Caller.cookingMediaTransferEnded(cookingId);
+        }
+
+        #endregion
+
         #region SignalR related methods
 
         public void Join(int userId)

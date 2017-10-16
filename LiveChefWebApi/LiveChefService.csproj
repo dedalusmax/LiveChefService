@@ -16,7 +16,7 @@
     <RootNamespace>LiveChefService</RootNamespace>
     <AssemblyName>LiveChefService</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -194,10 +194,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Service\Models\CookingMedia.cs" />
     <Compile Include="Service\Models\IModel.cs" />
     <Compile Include="Service\Models\Ingredient.cs" />
     <Compile Include="Service\Repositories\BaseRepository.cs" />
     <Compile Include="Service\Models\Cooking.cs" />
+    <Compile Include="Service\Repositories\CookingMediaRepository.cs" />
     <Compile Include="Service\Repositories\CookingRepository.cs" />
     <Compile Include="Service\Models\Recipe.cs" />
     <Compile Include="Service\Repositories\RecipeRepository.cs" />

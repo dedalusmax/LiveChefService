@@ -13,6 +13,7 @@ namespace LiveChefService
         internal static readonly UserRepository UserRepository = new UserRepository();
         internal static readonly RecipeRepository RecipeRepository = new RecipeRepository();
         internal static readonly CookingRepository CookingRepository = new CookingRepository();
+        internal static readonly CookingMediaRepository CookingMediaRepository = new CookingMediaRepository();
 
         protected void Application_Start()
         {

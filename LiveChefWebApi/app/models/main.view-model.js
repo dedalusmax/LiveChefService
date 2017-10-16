@@ -141,6 +141,27 @@
         }
     };
 
+    hub.client.cookingMediaTransferStarted = function (cookingId) {
+        if (root.cooking() && root.cooking().id == cookingId) {
+            console.log('cookingMediaTransferStarted: ' + cookingId);
+            root.cooking().cookingMediaTransferStarted(cookingId);
+        }
+    };
+
+    hub.client.cookingMediaTransferSend = function (cookingId, blob) {
+        if (root.cooking() && root.cooking().id == cookingId) {
+            console.log('cookingMediaTransferSend: ' + cookingId);
+            root.cooking().cookingMediaTransferSend(cookingId, blob);
+        }
+    };
+
+    hub.client.cookingMediaTransferEnded = function (cookingId) {
+        if (root.cooking() && root.cooking().id == cookingId) {
+            console.log('cookingMediaTransferStarted: ' + cookingId);
+            root.cooking().cookingMediaTransferEnded(cookingId);
+        }
+    };
+
     var connection = $.hubConnection();
     connection.logging = true;
 

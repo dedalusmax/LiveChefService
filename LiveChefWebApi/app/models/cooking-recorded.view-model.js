@@ -4,6 +4,8 @@
     self.storedSnapshots = ko.observableArray();
     self.storedChatHistory = ko.observableArray();
 
+    self.recordedBlobs = [];
+
     $(document).ready(function () {
 
         var video = document.querySelector('#archivedVideo');
@@ -42,5 +44,32 @@
             self.storedChatHistory.push(c);
           
         });
+
+        root.hub.server.getCookingMedia(self.id).done(function () {
+            console.log('Media stream transfer requested: ' + self.id);
+        }).fail(function (error) {
+            console.log(error);
+        });
     });
 }
+
+CookingRecordedViewModel.prototype.cookingMediaTransferStarted = function (cookingId) {
+    var self = this;
+
+    self.recordedBlobs = [];
+}
+
+CookingRecordedViewModel.prototype.cookingMediaTransferSend = function (cookingId, blob) {
+    var self = this;
+
+    self.recordedBlobs.push(blob);
+}
+
+CookingRecordedViewModel.prototype.cookingMediaTransferEnded = function (cookingId) {
+    var self = this;
+
+    var superBuffer = new Blob(self.recordedBlobs, { type: 'video/webm' });
+    var archivedVideo = document.querySelector('#archivedVideo');
+    archivedVideo.src = window.URL.createObjectURL(superBuffer);
+}
+

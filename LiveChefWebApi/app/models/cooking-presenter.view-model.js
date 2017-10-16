@@ -50,6 +50,30 @@
             });
         });
 
+        if (self.recordedBlobs.length > 0) {
+
+            root.hub.server.startMediaStreamTransfer(self.id).done(function () {
+                console.log('Media stream transfer started: ' + self.id);
+            }).fail(function (error) {
+                console.log(error);
+            });
+
+            self.recordedBlobs.forEach(function (blob) {
+
+                root.hub.server.sendMediaStreamTransfer(self.id, blob).done(function () {
+                    console.log('Media stream transfer sent: ' + self.id);
+                }).fail(function (error) {
+                    console.log(error);
+                });
+            });
+
+            root.hub.server.endMediaStreamTransfer(self.id).done(function () {
+                console.log('Media stream transfer ended: ' + self.id);
+            }).fail(function (error) {
+                console.log(error);
+            });
+        }
+
         // TODO: update cooking on the server!
         root.hub.server.finishCooking(self.id, snapshots, self.chattingHistory()).done(function () {
             console.log('Cooking finished: ' + self.id);
