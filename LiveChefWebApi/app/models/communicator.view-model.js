@@ -419,8 +419,7 @@ CommunicatorViewModel.prototype.createConnection = function () {
                 var downloadAnchor = document.querySelector('a#download');
                 downloadAnchor.href = URL.createObjectURL(received);
                 downloadAnchor.download = self.file.filename;
-                downloadAnchor.textContent = 'Click to download \'' + self.file.filename + '\' (' + self.file.size + ' bytes)';
-                downloadAnchor.style.display = 'block';
+                downloadAnchor.style.display = 'none';
                 downloadAnchor.click();
 
             } else {

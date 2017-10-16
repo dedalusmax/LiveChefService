@@ -34,11 +34,13 @@
     self.sendHelp = function () {
 
         var messageText = 'I want to help you!';
+
+        var timeNowText = moment().format('HH:mm:ss');
         
-        var message = new ChatViewModel('Me', messageText);
+        var message = new ChatViewModel('Me', messageText, timeNowText);
         self.chatHistory.push(message);
 
-        root.hub.server.sendChatMessage(self.id, root.user.displayName, messageText).done(function () {
+        root.hub.server.sendChatMessage(self.id, root.user.displayName, messageText, timeNowText).done(function () {
             console.log(messageText);
         });
     };

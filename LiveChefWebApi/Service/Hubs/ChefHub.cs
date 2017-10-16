@@ -201,9 +201,9 @@ namespace LiveChefService
             this.Groups.Add(this.Context.ConnectionId, userId.ToString());
         }
 
-        public void SendChatMessage(int cookingId, string sender, string text)
+        public void SendChatMessage(int cookingId, string sender, string text, string time)
         {
-            this.Clients.Others.chatMessageReceived(cookingId, sender, text);
+            this.Clients.Others.chatMessageReceived(cookingId, sender, text, time);
         }
 
         public override Task OnConnected()

@@ -27,8 +27,8 @@
                     <span class="glyphicon glyphicon-ok" aria-hidden="true" data-bind="visible: helpNeeded"></span>&nbsp;&nbsp;Help needed!
                 </button>
             </div>
-            <div class="form-group row">
-               <label for="select">Filter </label>
+            <div class="form-group row" data-bind="visible: !recordingAvailable()">
+                <label for="select">Filter </label>
                 <select id="filter">
                     <option value="none">None</option>
                     <option value="blur">Blur</option>
@@ -165,24 +165,27 @@
                             </div>
                         </div>
                     </div>
-
-                        <h4>Chat history</h4>
-                        <div class="card fullsize chat-history">
-                            <div class="card-header">
-                                <small>Chat History</small>
-                            </div>
-                            <div class="card-body">
-                                <div data-bind="foreach: storedChatHistory">
-                                    <div>
-                                        <span class="chat-sender" data-bind="text: sender"></span><span>:</span>
-                                        <span class="chat-text" data-bind="text: text"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                 </div>
             </div>
         </div>
+
+            <div data-bind="if: status() == 4" class="col-sm-4">
+                <h4>Chat history</h4>
+                <div class="card fullsize chat-history">
+                    <div class="card-header">
+                        <small>Chat History</small>
+                    </div>
+                    <div class="card-body">
+                        <div data-bind="foreach: storedChatHistory">
+                            <div>
+                                <span class="small" data-bind="text: '[' + time + ']'"></span>
+                                <span class="chat-sender" data-bind="text: sender"></span><span>:</span>
+                                <span class="chat-text" data-bind="text: text"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         <div class="col-sm-4" data-bind="if: settings.useChat && status() != 4">
             <h4>Live Chat</h4>
@@ -193,6 +196,7 @@
                 <div class="card-body">
                     <div data-bind="foreach: chattingHistory">
                         <div>
+                            <span class="small" data-bind="text: '[' + time + ']'"></span>
                             <span class="chat-sender" data-bind="text: sender"></span><span>:</span>
                             <span class="chat-text" data-bind="text: text"></span>
                         </div>
