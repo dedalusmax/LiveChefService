@@ -133,12 +133,13 @@ namespace LiveChefService
 
         #region Blob related methods
 
-        public void StartMediaStreamTransfer(int cookingId)
+        public void StartMediaStreamTransfer(int cookingId, long size)
         {
             var cookingMedia = new CookingMedia
             {
                 CookingId = cookingId,
-                Status = MediaStreamTransfer.Started
+                Status = MediaStreamTransfer.Started,
+                Data = new Byte[size]
             };
 
             WebApiApplication.CookingMediaRepository.Add(cookingMedia);
@@ -149,7 +150,7 @@ namespace LiveChefService
             var cookingMedia = WebApiApplication.CookingMediaRepository.GetByCookingId(cookingId);
 
             cookingMedia.Status = MediaStreamTransfer.Pending;
-            //cookingMedia.Data.SetValue(data, cookingMedia.Data.Length);
+            cookingMedia.Data.SetValue(data, cookingMedia.Data.Length - 1);
             cookingMedia.Blobs.Add(data);
 
             WebApiApplication.CookingMediaRepository.Change(cookingMedia);
