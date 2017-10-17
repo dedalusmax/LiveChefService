@@ -93,7 +93,6 @@
                     return c.id == cooking.id;
                 });
                 // and add it to recorded cookings
-                // TODO: set currentTime()
                 self.recordedCookings.push(new CookingViewModel(cooking));
                 console.log('Recorded cooking added: ' + cooking.dish.name);
             } else {
