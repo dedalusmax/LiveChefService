@@ -89,8 +89,8 @@
         if (found) {
             if (cooking.status == 4) {
                 // remove from live cooking
-                self.cookings.remove(function (cooking) {
-                    return cooking.id == cooking.id;
+                self.cookings.remove(function (c) {
+                    return c.id == cooking.id;
                 });
                 // and add it to recorded cookings
                 // TODO: set currentTime()
