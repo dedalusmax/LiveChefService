@@ -39,7 +39,7 @@
         var c = self.chatHistory;
         c.forEach(function (chatMessage) {
 
-            var c = new ChatViewModel(chatMessage.sender, chatMessage.text);
+            var c = new ChatViewModel(chatMessage.sender, chatMessage.text, chatMessage.time);
 
             self.storedChatHistory.push(c);
           
@@ -51,6 +51,7 @@
             console.log(error);
         });
     });
+
 }
 
 CookingRecordedViewModel.prototype.cookingMediaTransferStarted = function (cookingId) {

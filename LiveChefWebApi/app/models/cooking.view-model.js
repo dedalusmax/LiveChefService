@@ -31,21 +31,21 @@
     self.chatMessage = ko.observable('');
     self.chatMessageFocused = ko.observable(true);
 
-    self.addChatMessage = function (sender, text) {
+    self.addChatMessage = function (sender, text, time) {
 
-        self.chattingHistory.push(new ChatViewModel(sender, text));
+        self.chattingHistory.push(new ChatViewModel(sender, text, time));
         self.chattingHistory.valueHasMutated();
     };
 
     self.sendChatMessage = function () {
 
         var messageText = self.chatMessage();
-        if (chefIsMe) var message = new ChatViewModel('Chef', messageText);
-        if (!chefIsMe) var message = new ChatViewModel('Me', messageText);
+        if (chefIsMe) var message = new ChatViewModel('Chef', messageText, moment().format('HH:mm:ss'));
+        if (!chefIsMe) var message = new ChatViewModel('Me', messageText, moment().format('HH:mm:ss'));
 
         self.chattingHistory.push(message);
 
-        root.hub.server.sendChatMessage(self.id, root.user.displayName, messageText).done(function () {
+        root.hub.server.sendChatMessage(self.id, root.user.displayName, messageText, moment().format('HH:mm:ss')).done(function () {
             self.chatMessage('');
             self.chatMessageFocused(true);
             console.log('Chat message sent to others in cooking:' + self.id);

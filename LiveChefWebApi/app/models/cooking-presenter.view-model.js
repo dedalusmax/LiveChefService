@@ -19,7 +19,9 @@
 
     self.localVideo = '#myVideo';
     self.localAudio = '#myAudio';
-    
+
+    self.selectedFilter = ko.observable();
+
     self.isRecording = ko.observable(false);
     self.helpNeeded = ko.observable(false);
     self.recordingAvailable = ko.observable(false);
@@ -76,10 +78,11 @@
         communicator.startLocalStream();
 
         var filterSelect = document.querySelector('select#filter');
-        var video = document.querySelector('#myVideo');
+        var video = document.querySelector(self.localVideo);
 
         filterSelect.onchange = function () {
-           video.className = filterSelect.value;
+            self.selectedFilter(filterSelect.value);
+            video.className = self.selectedFilter();
         };
     });
 
@@ -141,14 +144,24 @@ CookingPresenterViewModel.prototype.takeSnapshot = function () {
 
     var canvas = document.querySelector('#' + snapshot.snapshotId);
 
+    canvas.className = self.selectedFilter();
+
     canvas.getContext('2d').
         drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    root.hub.server.sendChatMessage(self.id, root.user.displayName, 'Chef takes snapshots.', moment().format('HH:mm:ss')).done(function () {
+        console.log('Chef takes snapshots.');
+    });
 };
 
 CookingPresenterViewModel.prototype.removeSnapshot = function (self, snapshot) {
 
     self.snapshots.remove(function (s) {
         return s.snapshotId == snapshot.snapshotId;
+    });
+
+    root.hub.server.sendChatMessage(self.id, root.user.displayName, 'Chef remove snapshot.', moment().format('HH:mm:ss')).done(function () {
+        console.log('Chef remove snapshot');
     });
 };
 
@@ -162,6 +175,11 @@ CookingPresenterViewModel.prototype.startRecording = function () {
 
     self.recordedBlobs = [];
 
+    // remove css from video 
+    self.selectedFilter('none');
+    var video = document.querySelector(self.localVideo);
+    video.className = self.selectedFilter();
+   
     var mediaSource = new MediaSource();
     mediaSource.addEventListener('sourceopen', self.handleSourceOpen, false);
 
@@ -194,6 +212,10 @@ CookingPresenterViewModel.prototype.startRecording = function () {
     console.log('MediaRecorder started', self.mediaRecorder);
     self.isRecording(true);
 
+    root.hub.server.sendChatMessage(self.id, root.user.displayName, 'Chef starts recording.', moment().format('HH:mm:ss')).done(function () {
+        console.log('Chef starts recording.');
+    });
+
     self.mediaRecorder.onstop = self.handleStop.bind(self);
     self.mediaRecorder.addEventListener('dataavailable', self.handleDataAvailable.bind(self, event));
 };
@@ -212,6 +234,10 @@ CookingPresenterViewModel.prototype.stopRecording = function () {
 
     self.mediaRecorder.stop();
     console.log('Recorded Blobs: ', self.recordedBlobs);
+
+    root.hub.server.sendChatMessage(self.id, root.user.displayName, 'Chef stops recording.', moment().format('HH:mm:ss')).done(function () {
+        console.log('Chef stops recording.');
+    });
 };
 
 CookingPresenterViewModel.prototype.handleStop = function () {

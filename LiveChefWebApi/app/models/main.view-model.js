@@ -89,10 +89,11 @@
         if (found) {
             if (cooking.status == 4) {
                 // remove from live cooking
-                self.cookings.remove(function (cooking) {
-                    return cooking.id == cooking.id;
+                self.cookings.remove(function (c) {
+                    return c.id == cooking.id;
                 });
                 // and add it to recorded cookings
+                // TODO: set currentTime()
                 self.recordedCookings.push(new CookingViewModel(cooking));
                 console.log('Recorded cooking added: ' + cooking.dish.name);
             } else {
@@ -117,12 +118,12 @@
         });
     };
 
-    //hub.client.recordedCookingsInitiated = function (cookings) {
-    //    cookings.forEach(function (cooking) {
-    //        self.recordedCookings.push(new CookingViewModel(cooking));
-    //        console.log('Recorded cooking initiated: ' + cooking.dish.name);
-    //    });
-    //};
+    hub.client.recordedCookingsInitiated = function (cookings) {
+        cookings.forEach(function (cooking) {
+            self.recordedCookings.push(new CookingViewModel(cooking));
+            console.log('Recorded cooking initiated: ' + cooking.dish.name);
+        });
+    };
 
     hub.client.leaveFromCooking = function (cookingId) {
         // report to any possible viewers that the cooking is removed!!
@@ -132,11 +133,10 @@
         }
     };
 
-    hub.client.chatMessageReceived = function (cookingId, sender, text) {
+    hub.client.chatMessageReceived = function (cookingId, sender, text, time) {
         // relay message only to active cooking that is that one
         if (root.cooking() && root.cooking().id == cookingId) {
-          //  var found = self.users().find(c => c.id == sender);
-            root.cooking().addChatMessage(sender, text);
+            root.cooking().addChatMessage(sender, text, time);
             console.log('Chat message received for cooking : ' + cookingId + ' from: ' + sender + ' with text: ' + text);
         }
     };
