@@ -94,7 +94,7 @@ h3 {
   position: absolute; }
 
 .poster {
-  background-image: url("images/backgroundImage.jpg");
+  background-image: url("../assets/backgroundImage.jpg");
   text-align: center;
   background-size: cover;
   background-position: 50% 50%;
@@ -216,7 +216,7 @@ h3 {
   .card .card-img-top {
     background-color: #fefafa;
     border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-    width: -webkit-fill-available; }
+    width: inherit; }
   .card .card-block {
     padding: 10px; }
   .card span.glyphicon {
@@ -416,3 +416,4 @@ progress::-webkit-progress-value {
     width: 250px; }
   .new-cooking-component .card-img-top {
     width: 100%; } }
+

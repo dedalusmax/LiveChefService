@@ -142,7 +142,7 @@ h3 {
 }
 
 .poster {
-    background-image: url("./images/backgroundImage.jpg");
+    background-image: url("../assets/backgroundImage.jpg");
     text-align: center;
     background-size: cover;
     background-position: 50% 50%;
@@ -315,7 +315,7 @@ h3 {
     .card-img-top {
         background-color: $panel-color;
         border-bottom: 1px solid $border-color;
-        width: -webkit-fill-available;
+        width: inherit;
     }
 
     .card-block {

@@ -140,13 +140,13 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\images\backgroundImage.jpg" />
-    <Content Include="Content\images\chef.png" />
-    <Content Include="Content\images\recipes\page1-img1.jpg" />
-    <Content Include="Content\images\recipes\page1-img2.jpg" />
-    <Content Include="Content\images\recipes\page1-img3.jpg" />
-    <Content Include="Content\images\recipes\page1-img4.jpg" />
-    <Content Include="Content\images\small-logo.png" />
+    <Content Include="assets\backgroundImage.jpg" />
+    <Content Include="assets\chef.png" />
+    <Content Include="assets\recipes\page1-img1.jpg" />
+    <Content Include="assets\recipes\page1-img2.jpg" />
+    <Content Include="assets\recipes\page1-img3.jpg" />
+    <Content Include="assets\recipes\page1-img4.jpg" />
+    <Content Include="assets\small-logo.png" />
     <Content Include="Content\styles.css" />
     <Content Include="Content\styles.min.css">
       <DependentUpon>styles.css</DependentUpon>

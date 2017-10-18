@@ -21,7 +21,7 @@ namespace LiveChefService.Models
                 new Ingredient { Name = "Cherry tomatoes", Quantity = 100, QuantityType = "g" }
             };
 
-            Add(new Recipe { Id = 1, Name = "Fish and Chips", Description = description, DifficultyLevel = Difficulty.Intermediate, Time = 30, Ingredients = ingredients, Image = "./Content/images/recipes/page1-img1.jpg" });
+            Add(new Recipe { Id = 1, Name = "Fish and Chips", Description = description, DifficultyLevel = Difficulty.Intermediate, Time = 30, Ingredients = ingredients, Image = "./assets/recipes/page1-img1.jpg" });
 
             ingredients = new List<Ingredient>
             {
@@ -34,7 +34,7 @@ namespace LiveChefService.Models
                 new Ingredient { Name = "Salt", Quantity = 1, QuantityType = "teaspoon" }
             };
 
-            Add(new Recipe { Id = 2, Name = "Pancakes", Description = description, DifficultyLevel = Difficulty.Beginner, Time = 90, Ingredients = ingredients, Image = "./Content/images/recipes/page1-img4.jpg" });
+            Add(new Recipe { Id = 2, Name = "Pancakes", Description = description, DifficultyLevel = Difficulty.Beginner, Time = 90, Ingredients = ingredients, Image = "./assets/recipes/page1-img4.jpg" });
 
             ingredients = new List<Ingredient>
             {
@@ -46,7 +46,7 @@ namespace LiveChefService.Models
                 new Ingredient { Name = "Salt", Quantity = 1, QuantityType = "teaspoon" }
             };
 
-            Add(new Recipe { Id = 3, Name = "Lasagne bolognese", Description = description, DifficultyLevel = Difficulty.Beginner, Time = 90, Ingredients = ingredients, Image = "./Content/images/recipes/page1-img3.jpg" });
+            Add(new Recipe { Id = 3, Name = "Lasagne bolognese", Description = description, DifficultyLevel = Difficulty.Beginner, Time = 90, Ingredients = ingredients, Image = "./assets/recipes/page1-img3.jpg" });
 
             ingredients = new List<Ingredient>
             {
@@ -61,7 +61,7 @@ namespace LiveChefService.Models
                 new Ingredient { Name = "Chocolate", Quantity = 200, QuantityType = "g" }
             };
 
-            Add(new Recipe { Id = 4, Name = "Chocolate Muffins", Description = description, DifficultyLevel = Difficulty.Beginner, Time = 90, Ingredients = ingredients, Image = "./Content/images/recipes/page1-img2.jpg" });
+            Add(new Recipe { Id = 4, Name = "Chocolate Muffins", Description = description, DifficultyLevel = Difficulty.Beginner, Time = 90, Ingredients = ingredients, Image = "./assets/recipes/page1-img2.jpg" });
         }
     }
 }
