@@ -139,21 +139,22 @@ namespace LiveChefService
             {
                 CookingId = cookingId,
                 Status = MediaStreamTransfer.Started,
-                Data = new Byte[size]
+                Data = new Byte[0]
             };
 
             WebApiApplication.CookingMediaRepository.Add(cookingMedia);
         }
 
-        public void SendMediaStreamTransfer(int cookingId, dynamic data)
+        public void SendMediaStreamTransfer(int cookingId, Byte[] data)
         {
-            var cookingMedia = WebApiApplication.CookingMediaRepository.GetByCookingId(cookingId);
+            //var cookingMedia = WebApiApplication.CookingMediaRepository.GetByCookingId(cookingId);
 
-            cookingMedia.Status = MediaStreamTransfer.Pending;
-            cookingMedia.Data.SetValue(data, cookingMedia.Data.Length - 1);
-            cookingMedia.Blobs.Add(data);
+            //cookingMedia.Status = MediaStreamTransfer.Pending;
 
-            WebApiApplication.CookingMediaRepository.Change(cookingMedia);
+            //Array.Resize(ref cookingMedia.Data, cookingMedia.Data.Length + data.Length);
+            //Array.Copy(data, 0, cookingMedia.Data, cookingMedia.Data.Length - data.Length, data.Length);
+
+            //WebApiApplication.CookingMediaRepository.Change(cookingMedia);
         }
 
         public void EndMediaStreamTransfer(int cookingId)
@@ -170,10 +171,10 @@ namespace LiveChefService
 
             this.Clients.Caller.cookingMediaTransferStarted(cookingId);
 
-            foreach(var blob in cookingMedia.Blobs)
-            {
-                this.Clients.Caller.cookingMediaTransferSend(cookingId, blob);
-            }
+            //foreach(var blob in cookingMedia.Blobs)
+            //{
+            //    this.Clients.Caller.cookingMediaTransferSend(cookingId, blob);
+            //}
 
             //var blob = cookingMedia.Data;
             //const int blockSize = 16384; // 16 KB

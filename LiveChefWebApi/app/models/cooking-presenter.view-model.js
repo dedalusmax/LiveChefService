@@ -300,7 +300,15 @@ CookingPresenterViewModel.prototype.uploadVideo = function () {
         binary: true,
         chunk_read_callback: (block) => {
 
-            root.hub.server.sendMediaStreamTransfer(self.id, block).done(function () {
+            var bufView = new Uint16Array(block);
+            var bufstring = JSON.stringify(bufView, function (k, v) {
+                if (v instanceof ArrayBuffer) {
+                    return Array.apply([], v);
+                }
+                return v;
+            });
+
+            root.hub.server.sendMediaStreamTransfer(self.id, JSON.parse(bufstring)).done(function () {
                 console.log('Media stream transfer sent: ' + self.id);
             }).fail(function (error) {
                 console.log(error);
