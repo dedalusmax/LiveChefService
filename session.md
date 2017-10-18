@@ -15,23 +15,25 @@
 - rebuild projekta i probati rad
 - otvoriti prezentaciju i startati 
 - povećalo: WIN + PLUS i kretanje s mišem
+- otkriti IP adresu prvog laptopa
+- otkriti kako se prespajaju dva laptopa za display (ako bude potrebe)
 
 ## UVOD (5:00)
 
-- početni slajdovi do arhitekture
+- R: početni slajdovi do arhitekture
 
 ## DEMO (3:00)
 
-- pokrenuti projekt
+- A: pokrenuti projekt
 - objasniti što smo željeli postići i kako radi
 - prikazati strukturu projekta i tehnologije (povećalo!)
 - objasniti serversku stranu (modeli, repo, kontroleri)
 - objasniti klijentsku stranu
 
-## MEDIA STREAM (cca. 4:00)
+## MEDIA STREAM (?)
 
-- ispričati arhitekturu, sadržaj i media stream (R)
-- nastaviti na aplikaciji (novo kuhanje) (A)
+- R: ispričati arhitekturu, sadržaj i media stream
+- A: nastaviti na aplikaciji (novo kuhanje)
 - pokazati postavke audia/video u aplikaciji
 - u projektu: new-cooking.view-model.js (enumerateDevices i handler)
 - pokrenuti kuhanje u apl, pokazati što smo zamislili pod kuhanjem
@@ -40,4 +42,29 @@
 - u aplikaciji prikazati filtriranje i snapshotiranje
 - odustati od kuhanja
 
-## SIGNALLING 
+## SIGNALLING i PEER CONNECTION (05:00 + )
+
+- R: ispričati o signallingu
+- ispričati o rtc peer connection
+
+- A: u projektu pokazati serverski dio SignalR (ChefHub)
+- na klijentskom dijelu: root.vm, main.vm i objasniti root.hub
+- A: na drugom laptopu spojiti se na aplikaciju, tipa: https://192.168.1.35/livechefservice
+- R: na prvom laptopu odlogirati se i prijaviti kao "ratko"
+- otići na users i uspostaviti video i audio call
+- R: nastavlja pokazivati kod umjesto A
+- ...
+
+## DATA CHANNEL
+
+- A
+
+## MEDIA RECORDER
+
+- A
+
+## ZAKLJUČAK 
+
+- R
+
+
