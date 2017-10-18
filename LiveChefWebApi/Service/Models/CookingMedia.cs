@@ -19,11 +19,8 @@ namespace LiveChefService.Models
 
         public Byte[] Data;
 
-        public List<dynamic> Blobs;
-
         public CookingMedia()
         {
-            this.Blobs = new List<dynamic>();
         }
     }
 }

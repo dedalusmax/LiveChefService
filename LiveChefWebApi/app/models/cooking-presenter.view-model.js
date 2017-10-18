@@ -53,27 +53,7 @@
         });
 
         if (self.recordedBlobs.length > 0) {
-
-            root.hub.server.startMediaStreamTransfer(self.id).done(function () {
-                console.log('Media stream transfer started: ' + self.id);
-            }).fail(function (error) {
-                console.log(error);
-            });
-
-            self.recordedBlobs.forEach(function (blob) {
-
-                root.hub.server.sendMediaStreamTransfer(self.id, blob).done(function () {
-                    console.log('Media stream transfer sent: ' + self.id);
-                }).fail(function (error) {
-                    console.log(error);
-                });
-            });
-
-            root.hub.server.endMediaStreamTransfer(self.id).done(function () {
-                console.log('Media stream transfer ended: ' + self.id);
-            }).fail(function (error) {
-                console.log(error);
-            });
+            self.uploadVideo();
         }
 
         // TODO: update cooking on the server!
@@ -305,3 +285,44 @@ CookingPresenterViewModel.prototype.handleSourceOpen = function () {
     console.log('Source buffer: ', self.sourceBuffer);
 };
 
+CookingPresenterViewModel.prototype.uploadVideo = function () {
+    var self = this;
+
+    var blob = new Blob(self.recordedBlobs, { type: 'video/webm' });
+
+    root.hub.server.startMediaStreamTransfer(self.id, blob.size).done(function () {
+        console.log('Media stream transfer started: ' + self.id);
+    }).fail(function (error) {
+        console.log(error);
+        });
+
+    parseFile(blob, {
+        binary: true,
+        chunk_read_callback: (block) => {
+
+            var bufView = new Uint16Array(block);
+            var bufstring = JSON.stringify(bufView, function (k, v) {
+                if (v instanceof ArrayBuffer) {
+                    return Array.apply([], v);
+                }
+                return v;
+            });
+
+            root.hub.server.sendMediaStreamTransfer(self.id, JSON.parse(bufstring)).done(function () {
+                console.log('Media stream transfer sent: ' + self.id);
+            }).fail(function (error) {
+                console.log(error);
+            });
+        },
+        error_callback: (error) => {
+            console.log(error);
+        },
+        success: () => {
+            root.hub.server.endMediaStreamTransfer(self.id).done(function () {
+                console.log('Media stream transfer ended: ' + self.id);
+            }).fail(function (error) {
+                console.log(error);
+            });
+        }
+    });
+};

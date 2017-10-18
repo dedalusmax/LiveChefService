@@ -27,6 +27,10 @@
         }
     });
 
+    if (self.status() == 4) {
+        self.timeFinishedText = moment(data.timeFinished).format('HH:mm:ss');
+    }
+
     self.chattingHistory = ko.observableArray();
     self.chatMessage = ko.observable('');
     self.chatMessageFocused = ko.observable(true);
