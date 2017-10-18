@@ -4,9 +4,8 @@
 
     self.activeTab = ko.observable(1);
     self.activateTab = function (tabId) {
-        self.activeTab(tabId);   
-      //  var navbarToogle = document.querySelector('.navbar-toggle');
-      //  navbarToogle.click(); 
+        self.activeTab(tabId);  
+        self.closeNavbar();
     };
 
     // these are the responsive lists of important data
@@ -183,9 +182,7 @@
     self.addNewCooking = function () {
         self.parent.newCooking(new NewCookingViewModel());
         self.parent.showScreen(Screen.NewCooking);
-
-        //  var navbarToogle = document.querySelector('.navbar-toggle');
-        //  navbarToogle.click(); 
+        self.closeNavbar();
     };
 
     var timer = window.setInterval(function () {
@@ -201,3 +198,12 @@ MainViewModel.prototype.logoutSucceeded = function (user) {
     $.connection.hub.stop();
     location.reload();
 };
+
+MainViewModel.prototype.closeNavbar = function () {
+    var navbarToogle = document.querySelector('.navbar-toggle');
+    if ($(navbarToogle).is(':visible')) {
+        navbarToogle.click();
+    }
+};
+
+
