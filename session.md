@@ -30,7 +30,7 @@
 - objasniti serversku stranu (modeli, repo, kontroleri)
 - objasniti klijentsku stranu
 
-## MEDIA STREAM (?)
+## MEDIA STREAM (5:00)
 
 - R: ispričati arhitekturu, sadržaj i media stream
 - A: nastaviti na aplikaciji (novo kuhanje)
@@ -42,29 +42,31 @@
 - u aplikaciji prikazati filtriranje i snapshotiranje
 - odustati od kuhanja
 
-## SIGNALLING i PEER CONNECTION (05:00 + )
+## SIGNALLING i PEER CONNECTION (9:30)
 
 - R: ispričati o signallingu
 - ispričati o rtc peer connection
-
 - A: u projektu pokazati serverski dio SignalR (ChefHub)
 - na klijentskom dijelu: root.vm, main.vm i objasniti root.hub
 - A: na drugom laptopu spojiti se na aplikaciju, tipa: https://192.168.1.35/livechefservice
 - R: na prvom laptopu odlogirati se i prijaviti kao "ratko"
 - otići na users i uspostaviti video i audio call
 - R: nastavlja pokazivati kod umjesto A
-- ...
+- communicator: startLocalStream, mediaRetrieved
+- ChefHub: Join
+- communicator: joinRequested, natrag na mediaRetrieved, startCommunication, rtcMessageReceived, createConnection
+- vraćamo se na apl, i probati audio stream
 
-## DATA CHANNEL
+## DATA CHANNEL I MEDIA RECORDER (7:30)
 
-- A
+- A: prezentacija data channela
+- pokazati kod koji je u komunikatoru
+- u aplikaciji s drugog laptopa poslati datoteku
+- A: prezentacija media recordera
+- pokazati kod koji je u presenteru
+- pokazati kod u vieweru da se vidi kako je to kod gledatelja
+- A na drugom laptopu, R uzima kapu i kuha na prvom laptopu
+- nakon gotovog kuhanja je kraj
 
-## MEDIA RECORDER
-
-- A
-
-## ZAKLJUČAK 
-
-- R
-
+## ZAKLJUČAK (1:00)
 
