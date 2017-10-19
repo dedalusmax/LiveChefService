@@ -1,6 +1,8 @@
 ﻿var CookingPresenterViewModel = function (data) {
     var self = data;
 
+    self.snapshots = ko.observableArray();
+
     self.selectedAudioInput = null;
     self.selectedAudioOutput = null;
     self.selectedVideoInput = null;
@@ -11,112 +13,116 @@
         self.selectedVideoInput = JSON.parse(getCookie('videoInput'));
     }
 
-    self.stream = null;
-    self.connection = null;
-
     self.snapshotId = self.snapshots().length;
-    
+
+    var communicator = root.main().communicator;
+
+    self.localVideo = '#myVideo';
+    self.localAudio = '#myAudio';
+
+    self.selectedFilter = ko.observable();
+
+    self.isRecording = ko.observable(false);
+    self.helpNeeded = ko.observable(false);
+    self.recordingAvailable = ko.observable(false);
+
     self.giveUp = function () {
 
-        self.stopStream();
-
         root.hub.server.abortCooking(self.id).done(function () {
-            console.log("Cooking aborted: " + self.id);
-            root.showScreen(Screen.Main);
+            console.log('Cooking aborted: ' + self.id);
+            self.close();
         });
     };
 
-    // chat implementation
+    self.finish = function () {
+
+        // shape snapshots for the transmission
+        var snapshots = [];
+        self.snapshots().forEach(function (snapshot) {
+
+            var canvas = document.querySelector('#' + snapshot.snapshotId);
+            var myDataURL = canvas.toDataURL('image/png');// could also be 'image/jpg' format
+            var myBase64Data = myDataURL.split(',')[1];// removes everything up to and including first comma
+
+            snapshots.push({
+                id: snapshot.id,
+                timeTaken: snapshot.timeTaken,
+                description: snapshot.description(),
+                image: myBase64Data
+            });
+        });
+
+        if (self.recordedBlobs.length > 0) {
+            self.uploadVideo();
+        }
+
+        // TODO: update cooking on the server!
+        root.hub.server.finishCooking(self.id, snapshots, self.chattingHistory()).done(function () {
+            console.log('Cooking finished: ' + self.id);
+            self.close();
+        }).fail(function (error) {
+            console.log(error);
+        });
+    };
+
     $(document).ready(function () {
 
-        if (self.settings.useMicrophone || self.settings.useCamera) {
+        communicator.isConference = true;
 
-            var audioSource = self.selectedAudioInput.deviceId;
-            var videoSource = self.selectedVideoInput.deviceId;
-
-            var constraints = {
-                audio: self.settings.useMicrophone ? { deviceId: audioSource } : false,
-                video: self.settings.useCamera ? { deviceId: videoSource } : false
-            };
-
-            // obtains and displays video and audio streams from the local webcam
-            navigator.mediaDevices.getUserMedia(constraints).
-                then(self.mediaRetrieved.bind(self)).catch(self.mediaError);
+        communicator.setElements(self.localVideo, null, self.localAudio, null);
+        if (self.settings.useCamera) {
+            communicator.intendedAction(MediaAction.VideoCall);
+        } else if (self.settings.useMicrophone) {
+            communicator.intendedAction(MediaAction.AudioCall);
         }
+        communicator.startLocalStream();
+
+        var filterSelect = document.querySelector('select#filter');
+        var video = document.querySelector(self.localVideo);
+
+        filterSelect.onchange = function () {
+            self.selectedFilter(filterSelect.value);
+            video.className = self.selectedFilter();
+        };
     });
-};
 
-CookingPresenterViewModel.prototype.mediaRetrieved = function (stream) {
-    var self = this;
+    self.askForHelp = function () {
 
-    console.log('Started streaming from getUserMedia.');
-    var video = document.querySelector('video');
-    self.stream = stream;
-    video.srcObject = stream;
-
-    // peer connection is going to handle negotiating a network connection with another client, 
-    // and keep an open session allowing the two to communicate directly
-    self.connection = new RTCPeerConnection(null);
-    console.log('Created new peer connection.');
-
-    // adding the stream we received from 'getUserMedia' into the connection object
-    self.connection.addStream(stream);
-    console.log('Added stream to peer connection.');
-
-    self.connection.onicecandidate = function (event) {
-        if (event.candidate) {
-
-            // each time the client finds a new candidate, it will send it over to the remote peer
-            var candidate = JSON.stringify(event.candidate);
-            root.hub.server.setIceCandidate(self.id, candidate).done(function () {
-                console.log("ICE candidate send to the server: " + candidate);
+        if (self.helpNeeded() == true) {
+            root.hub.server.needHelpInCooking(self.id, self.helpNeeded()).done(function () {
+                console.log('Ask for help message sent, help needed: ' + self.helpNeeded());
             });
         }
+        else {
+            root.hub.server.helpInCookingAccepted(self.id, self.helpNeeded()).done(function () {
+                console.log('Ask for help message sent, help accepted: ' + self.helpNeeded());
+            });
+        }
+
     };
 
-    // we need to create and send a WebRTC offer over to the peer we would like to connect with
-    self.connection.createOffer(function (desc) {
-        console.log('Created offer for the peers.');
+    self.mediaRecorder = null;
+    self.recordedBlobs = [];
+};
 
-        // set the generated SDP to be our local session description
-        self.connection.setLocalDescription(desc, function () {
-            console.log('Local description set to: ' + desc);
-
-            // store offer description into the cooking itself and send it to all interested parties
-
-            var sdp = JSON.stringify(desc);
-            root.hub.server.setRdp(self.id, sdp).done(function () {
-                console.log("SDP send to the server: " + sdp);
-            });
-        });
-    });
-}
-
-CookingPresenterViewModel.prototype.mediaError = function (error) {
-
-    console.log('navigator.mediaDevices.getUserMedia error: ', error);
-}
-
-CookingPresenterViewModel.prototype.stopStream = function () {
+CookingPresenterViewModel.prototype.close = function () {
     var self = this;
+    var communicator = root.main().communicator;
 
-    if (self.stream) {
-        for (let track of self.stream.getTracks()) {
-            track.stop();
-            console.log('Stopped streaming ' + track.kind + ' track from getUserMedia.');
-        }
+    if (self.isRecording()) {
+        self.stopRecording();
     }
 
-    if (self.connection) {
-        self.connection.close();
-        console.log('Stopped peer connection.');
-    }
-}
+    communicator.stopLocalStream();
+    communicator.clear();
+
+    root.showScreen(Screen.Main);
+};
 
 CookingPresenterViewModel.prototype.takeSnapshot = function () {
     var self = this;
 
-    var video = document.querySelector('video');
+    var video = document.querySelector(self.localVideo);
 
     self.snapshotId++;
 
@@ -124,6 +130,7 @@ CookingPresenterViewModel.prototype.takeSnapshot = function () {
     var timeTaken = new Date(Math.abs(now - self.timeStarted));
 
     var snapshot = {
+        id: self.snapshotId,
         snapshotId: 'snapshot' + self.snapshotId,
         timeTaken: timeTaken,
         timeTakenText: formatTimeFromDate(timeTaken),
@@ -137,18 +144,185 @@ CookingPresenterViewModel.prototype.takeSnapshot = function () {
 
     var canvas = document.querySelector('#' + snapshot.snapshotId);
 
+    canvas.className = self.selectedFilter();
+
     canvas.getContext('2d').
         drawImage(video, 0, 0, canvas.width, canvas.height);
-}
+
+    root.hub.server.sendChatMessage(self.id, root.user.displayName, 'Chef takes snapshots.', moment().format('HH:mm:ss')).done(function () {
+        console.log('Chef takes snapshots.');
+    });
+};
 
 CookingPresenterViewModel.prototype.removeSnapshot = function (self, snapshot) {
 
     self.snapshots.remove(function (s) {
         return s.snapshotId == snapshot.snapshotId;
     });
-}
+
+    root.hub.server.sendChatMessage(self.id, root.user.displayName, 'Chef remove snapshot.', moment().format('HH:mm:ss')).done(function () {
+        console.log('Chef remove snapshot');
+    });
+};
 
 CookingPresenterViewModel.prototype.toggleEditMode = function (self) {
 
     self.editMode(!self.editMode());
-}
+};
+
+CookingPresenterViewModel.prototype.startRecording = function () {
+    var self = this;
+
+    self.recordedBlobs = [];
+
+    // remove css from video 
+    self.selectedFilter('none');
+    var video = document.querySelector(self.localVideo);
+    video.className = self.selectedFilter();
+   
+    var mediaSource = new MediaSource();
+    mediaSource.addEventListener('sourceopen', self.handleSourceOpen, false);
+
+    var communicator = root.main().communicator;
+
+    var options = { mimeType: 'video/webm;codecs=vp9' };
+    if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+        console.log(options.mimeType + ' is not Supported');
+        options = { mimeType: 'video/webm;codecs=vp8' };
+        if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+            console.log(options.mimeType + ' is not Supported');
+            options = { mimeType: 'video/webm' };
+            if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+                console.log(options.mimeType + ' is not Supported');
+                options = { mimeType: '' };
+            }
+        }
+    }
+    try {
+        self.mediaRecorder = new MediaRecorder(communicator.localStream, options);
+    } catch (e) {
+        console.error('Exception while creating MediaRecorder: ' + e);
+        alert('Exception while creating MediaRecorder: '
+            + e + '. mimeType: ' + options.mimeType);
+        return;
+    }
+    console.log('Created MediaRecorder', self.mediaRecorder, 'with options', options);
+
+    self.mediaRecorder.start(10); // collect 10ms of data
+    console.log('MediaRecorder started', self.mediaRecorder);
+    self.isRecording(true);
+
+    root.hub.server.sendChatMessage(self.id, root.user.displayName, 'Chef starts recording.', moment().format('HH:mm:ss')).done(function () {
+        console.log('Chef starts recording.');
+    });
+
+    self.mediaRecorder.onstop = self.handleStop.bind(self);
+    self.mediaRecorder.addEventListener('dataavailable', self.handleDataAvailable.bind(self, event));
+};
+
+CookingPresenterViewModel.prototype.handleDataAvailable = function (e) {
+    var self = this;
+
+    if (event.data && event.data.size > 0) {
+        self.recordedBlobs.push(event.data);
+    }
+    console.log('Recorded Blobs: ', self.recordedBlobs);
+};
+
+CookingPresenterViewModel.prototype.stopRecording = function () {
+    var self = this;
+
+    self.mediaRecorder.stop();
+    console.log('Recorded Blobs: ', self.recordedBlobs);
+
+    root.hub.server.sendChatMessage(self.id, root.user.displayName, 'Chef stops recording.', moment().format('HH:mm:ss')).done(function () {
+        console.log('Chef stops recording.');
+    });
+};
+
+CookingPresenterViewModel.prototype.handleStop = function () {
+    var self = this;
+
+    console.log('Recorder stopped');
+    self.isRecording(false);
+    self.recordingAvailable(true);
+};
+
+CookingPresenterViewModel.prototype.playRecordedVideo = function () {
+    var self = this;
+
+    var superBuffer = new Blob(self.recordedBlobs, { type: 'video/webm' });
+    var recordedVideo = document.querySelector('#recordedVideo');
+    recordedVideo.src = window.URL.createObjectURL(superBuffer);
+};
+
+CookingPresenterViewModel.prototype.downloadVideo = function () {
+    var self = this;
+
+    var blob = new Blob(self.recordedBlobs, { type: 'video/webm' });
+    var url = window.URL.createObjectURL(blob);
+
+    var downloadAnchor = document.querySelector('a#downloadVideo');
+
+    // clear the anchor tag of previous transfer
+    downloadAnchor.removeAttribute('download');
+    if (downloadAnchor.href) {
+        URL.revokeObjectURL(downloadAnchor.href);
+        downloadAnchor.removeAttribute('href');
+    }
+
+    downloadAnchor.href = url;
+    downloadAnchor.download = 'cooking_'+self.id+'.webm';
+    downloadAnchor.style.display = 'none';
+    downloadAnchor.click();
+};
+
+CookingPresenterViewModel.prototype.handleSourceOpen = function () {
+    var self = this;
+
+    console.log('MediaSource opened');
+    self.sourceBuffer = mediaSource.addSourceBuffer('video/webm; codecs="vp8"');
+    console.log('Source buffer: ', self.sourceBuffer);
+};
+
+CookingPresenterViewModel.prototype.uploadVideo = function () {
+    var self = this;
+
+    var blob = new Blob(self.recordedBlobs, { type: 'video/webm' });
+
+    root.hub.server.startMediaStreamTransfer(self.id, blob.size).done(function () {
+        console.log('Media stream transfer started: ' + self.id);
+    }).fail(function (error) {
+        console.log(error);
+        });
+
+    parseFile(blob, {
+        binary: true,
+        chunk_read_callback: (block) => {
+
+            var bufView = new Uint16Array(block);
+            var bufstring = JSON.stringify(bufView, function (k, v) {
+                if (v instanceof ArrayBuffer) {
+                    return Array.apply([], v);
+                }
+                return v;
+            });
+
+            root.hub.server.sendMediaStreamTransfer(self.id, JSON.parse(bufstring)).done(function () {
+                console.log('Media stream transfer sent: ' + self.id);
+            }).fail(function (error) {
+                console.log(error);
+            });
+        },
+        error_callback: (error) => {
+            console.log(error);
+        },
+        success: () => {
+            root.hub.server.endMediaStreamTransfer(self.id).done(function () {
+                console.log('Media stream transfer ended: ' + self.id);
+            }).fail(function (error) {
+                console.log(error);
+            });
+        }
+    });
+};

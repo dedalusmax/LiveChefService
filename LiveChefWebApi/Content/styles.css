@@ -89,8 +89,12 @@ h3 {
   text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
   margin-top: 0; }
 
+.my-video {
+  width: 25%;
+  position: absolute; }
+
 .poster {
-  background-image: url("images/backgroundImage.jpg");
+  background-image: url("../assets/backgroundImage.jpg");
   text-align: center;
   background-size: cover;
   background-position: 50% 50%;
@@ -181,6 +185,8 @@ h3 {
     animation: infinite 1s alternate-reverse hot-button; }
   .main-component .content {
     margin-top: 50px; }
+  .main-component .card .card-footer-header > div {
+    padding: 0; }
 
 .card-deck {
   display: flex;
@@ -210,7 +216,7 @@ h3 {
   .card .card-img-top {
     background-color: #fefafa;
     border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-    width: -webkit-fill-available; }
+    width: inherit; }
   .card .card-block {
     padding: 10px; }
   .card span.glyphicon {
@@ -225,14 +231,13 @@ h3 {
     .card .card-footer label {
       vertical-align: text-bottom;
       font-weight: normal; }
-    .card .card-footer .time {
-      margin: 0;
+    .card .card-footer .card-footer-header {
       margin-bottom: 5px;
       padding-bottom: 8px;
       border-bottom: 1px dashed #fefafa; }
-      .card .card-footer .time > div {
+      .card .card-footer .card-footer-header > div {
         display: inline-flex; }
-      .card .card-footer .time small {
+      .card .card-footer .card-footer-header small {
         line-height: 24px; }
     .card .card-footer textarea {
       color: black;
@@ -249,7 +254,6 @@ h3 {
 
 .new-cooking-component .logo {
   width: 240px;
-  margin-left: -50px;
   margin-top: -50px; }
 
 .new-cooking-component h1 {
@@ -287,7 +291,44 @@ h3 {
 .cooking-component {
   padding: 10px; }
   .cooking-component .header {
-    /*margin: 10px;*/ }
+    margin-left: 16px; }
+  .cooking-component .recipe .card {
+    width: 100%; }
+  .cooking-component .recipe img {
+    width: 100%; }
+  .cooking-component .video-card {
+    display: grid; }
+    .cooking-component .video-card .card-body > div {
+      padding: 0; }
+    .cooking-component .video-card .record-icon {
+      color: red;
+      position: absolute;
+      top: 5px;
+      left: 5px; }
+    .cooking-component .video-card .card-footer-header {
+      text-align: initial; }
+      .cooking-component .video-card .card-footer-header .right-aligned {
+        float: right;
+        line-height: 26px;
+        margin: 0;
+        margin-left: 5px; }
+  .cooking-component .snapshots {
+    padding: 0; }
+    .cooking-component .snapshots .card {
+      padding: 0;
+      width: 300px; }
+  .cooking-component .chat-history .card-header {
+    text-align: center; }
+  .cooking-component .chat-history .card-body {
+    height: 400px;
+    position: relative;
+    overflow-y: auto; }
+    .cooking-component .chat-history .card-body .chat-sender {
+      color: rgba(0, 0, 0, 0.3);
+      font-weight: bold;
+      font-size: smaller; }
+    .cooking-component .chat-history .card-body .chat-text {
+      font-size: smaller; }
   .cooking-component .none {
     -webkit-filter: none;
     filter: none; }
@@ -303,10 +344,21 @@ h3 {
   .cooking-component .sepia {
     -webkit-filter: sepia(1);
     filter: sepia(1); }
+  .cooking-component .need-help {
+    animation: infinite 1s alternate-reverse hot-button; }
 
-.users-list-component .my-video {
-  width: 25%;
-  position: absolute; }
+.users-list-component .card-deck .card:hover {
+  margin: 10px; }
+
+progress {
+  background-color: #fff !important;
+  width: 100%; }
+
+progress::-moz-progress-bar {
+  background-image: -45deg, transparent 33%, rgba(0, 0, 0, 0.1) 33%, rgba(0, 0, 0, 0.1) 66%, transparent 66%; }
+
+progress::-webkit-progress-value {
+  background-image: -webkit-linear-gradient(-45deg, transparent 33%, rgba(0, 0, 0, 0.1) 33%, rgba(0, 0, 0, 0.1) 66%, transparent 66%), -webkit-linear-gradient(top, rgba(255, 255, 255, 0.25), rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(left, #09c, #f44) !important; }
 
 /* Smaller monitors (for tiny adjustments) */
 @media (max-width: 1250px) {
@@ -335,6 +387,8 @@ h3 {
     margin-left: 0;
     margin-right: 0;
     width: 100%; }
+  #myVideo {
+    width: 100%; }
   .main-component .content {
     margin-top: 40px; }
   .main-component .navbar {
@@ -354,6 +408,12 @@ h3 {
   .main-component .add-button {
     width: 10% !important;
     padding-top: 10px; }
+  .container-fluid {
+    padding-right: 15px; }
   .new-cooking-component > div {
-    display: block; } }
+    display: block; }
+  .new-cooking-component.poster .logo {
+    width: 250px; }
+  .new-cooking-component .card-img-top {
+    width: 100%; } }
 

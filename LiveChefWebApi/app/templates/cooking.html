@@ -2,48 +2,98 @@
 
     <div class="header">
         <!-- ko if: !chefIsMe -->
-        <button class="btn btn-default" data-bind="click: returnToMain">Return</button>
+        <button class="btn btn-default" data-bind="click: close">Return</button>
         <!-- /ko -->
         <!-- ko if: chefIsMe -->
         <button class="btn btn-warning" data-bind="click: giveUp">Give up!</button>
+        <button class="btn btn-primary" data-bind="click: finish">Dish is finished!</button>
         <!-- /ko -->
     </div>
 
-    <div class="row">
+    <div class="row anti-row">
 
-        <div class="col-sm-4">
+        <div class="col-sm-2">
             <h4>Cooking details</h4>
-            <div data-bind="template: { name: 'recipe-card', data: dish }"></div>
+            <div class="recipe" data-bind="template: { name: 'recipe-card', data: dish }"></div>
         </div>
 
-        <!-- ko if: chefIsMe -->
+        <div class="col-sm-6">
 
-        <div class="col-sm-4" data-bind="visible: settings.useCamera">
-            <h4>My cooking is emitting live!</h4>
-            <div class="card fullsize">
-                <div class="card-body">
-                    <video class="fullsize" autoplay controls></video>
-                </div>
-                <div class="card-footer">
-                    <span class="glyphicon glyphicon-camera glyph-button" aria-hidden="true" data-bind="click: takeSnapshot"></span>
-                    <label>Take a snapshot</label>
-                    <div>
-                        <!--<span class="glyphicon glyphicon-camera" aria-hidden="true" data-bind="style: { color: settings.useCamera ? 'white' : 'grey' }"></span>
-                        <span class="glyphicon glyphicon-volume-up" aria-hidden="true" data-bind="style: { color: settings.useMicrophone ? 'white' : 'grey' }"></span>
-                        <span class="glyphicon glyphicon-comment" aria-hidden="true" data-bind="style: { color: settings.allowChat ? 'white' : 'grey' }"></span>-->
+            <!-- ko if: chefIsMe -->
+
+            <h4>Broadcast options</h4>
+            <div class="form-group row" data-bind="if: settings.allowHelp">
+                <button type="button" class="btn btn-default" data-toggle="button" data-bind="toggle: helpNeeded, click: askForHelp">
+                    <span class="glyphicon glyphicon-ok" aria-hidden="true" data-bind="visible: helpNeeded"></span>&nbsp;&nbsp;Help needed!
+                </button>
+            </div>
+            <div class="form-group row" data-bind="visible: !recordingAvailable()">
+                <label for="select">Filter </label>
+                <select id="filter">
+                    <option value="none">None</option>
+                    <option value="blur">Blur</option>
+                    <option value="grayscale">Grayscale</option>
+                    <option value="invert">Invert</option>
+                    <option value="sepia">Sepia</option>
+                </select>
+            </div>
+
+            <div data-bind="visible: $parent.main().communicator.isStreaming()">
+
+                <h4>This is me, cooking</h4>
+                <p><i>Note: the stream will not be emitted (seen by others), unless it is recorded by clicking the record button below.</i></p>
+                <div class="card video-card" data-bind="css: {'fullsize': recordingAvailable()}">
+                    <div class="card-body" data-bind="if: $parent.main().communicator.intendedAction() == 1">
+                        <div class="col-sm-6">
+                            <video id="myVideo" autoplay data-bind="css: {'fullsize': recordingAvailable()}"></video>
+                            <span class="glyphicon glyphicon-record record-icon live" aria-hidden="true" data-bind="visible: isRecording"></span>
+                        </div>
+                        <div class="col-sm-6" data-bind="visible: recordingAvailable()">
+                            <video id="recordedVideo" class="fullsize" controls autoplay loop>Not recorded yet!</video>
+                        </div>
+                    </div>
+                    <div class="card-body" data-bind="if: $parent.main().communicator.intendedAction() == 2">
+                        <audio id="myAudio" class="fullsize" autoplay controls></audio>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-footer-header">
+                            <span class="glyphicon glyphicon-film glyph-button" aria-hidden="true" data-bind="click: startRecording, visible: !isRecording()"></span>
+                            <!--<label data-bind="visible: !isRecording()">Start recording</label>-->
+
+                            <span class="glyphicon glyphicon-stop glyph-button" aria-hidden="true" data-bind="click: stopRecording, visible: isRecording"></span>
+                            <!--<label data-bind="visible: isRecording">Stop recording</label>-->
+                            <!--<label class="right-aligned" data-bind="visible: recordingAvailable">Download video</label>-->
+                            <span class="glyphicon glyphicon-save glyph-button right-aligned" aria-hidden="true" data-bind="click: downloadVideo, visible: recordingAvailable"></span>
+
+                            <!--<label class="right-aligned" data-bind="visible: recordingAvailable">Play recorded video</label>-->
+                            <span class="glyphicon glyphicon-play glyph-button right-aligned" aria-hidden="true" data-bind="click: playRecordedVideo, visible: recordingAvailable"></span>
+
+                            <a id="downloadVideo"></a>
+                        </div>
+                        <div>
+                            <span class="glyphicon glyphicon-camera glyph-button" aria-hidden="true" data-bind="visible: $parent.main().communicator.intendedAction() == 1, click: takeSnapshot"></span>
+                            <!--<label>Take a snapshot</label>-->
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- /ko -->
-        <!-- ko if: !chefIsMe -->
+            <!-- /ko -->
+            <!-- ko if: !chefIsMe -->
+            <button class="btn btn-primary need-help" data-bind="click: sendHelp, visible: helpNeeded() == 3">Chef needs help!</button>
 
-        <div class="col-sm-4">
             <h4>Media stream from the presenter</h4>
             <div class="card fullsize">
-                <div class="card-body">
-                    <video class="fullsize" autoplay controls></video>
+                <div class="card-body" data-bind="if: $parent.main().communicator.intendedAction() == 1">
+                    <video id="viewerVideo" class="my-video" autoplay></video>
+                    <video id="presenterVideo" class="fullsize" autoplay controls></video>
+                </div>
+                <div class="card-body" data-bind="if: $parent.main().communicator.intendedAction() == 2">
+                    <audio id="viewerAudio" class="my-audio" autoplay></audio>
+                    <audio id="presenterAudio" class="fullsize" autoplay controls></audio>
+                </div>
+                <div class="card-body " data-bind="if: status() == 4">
+                    <video id="archivedVideo" class="fullsize" autoplay></video>
                 </div>
                 <div class="card-footer">
                     <div>
@@ -53,42 +103,64 @@
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- /ko -->
+            <!-- /ko -->
 
-        <div class="col-sm-4" data-bind="if: snapshots">
-            <h4>Snapshots</h4>
-            <div class="card-deck" data-bind="foreach: snapshots">
-                <div class="card">
-                    <div class="card-body">
-                        <canvas class="fullsize" data-bind="attr: { id: snapshotId, width: width, height: height }"></canvas>
-                    </div>
-                    <div class="card-footer">
-                        <div class="time row">
-                            <div class="col-sm-10">
-                                <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
-                                <small data-bind="text: 'Taken at: ' + timeTakenText"></small>
+            <div>
+                <h4>Snapshots</h4>
+                <div data-bind="if: status() != 4">
+                    <div class="card-deck snapshots" data-bind="foreach: snapshots">
+                        <div class="card">
+                            <div class="card-body">
+                                <canvas class="fullsize" data-bind="attr: { id: snapshotId, width: width, height: height }"></canvas>
                             </div>
-                            <div class="col-sm-2">
-                                <span class="glyphicon glyphicon-trash" aria-hidden="true" data-bind="click: $parent.removeSnapshot.bind($data, $parent)"></span>
+                            <div class="card-footer">
+                                <div class="card-footer-header row">
+                                    <div class="col-sm-10">
+                                        <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+                                        <small data-bind="text: 'Taken at: ' + timeTakenText"></small>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <span class="glyphicon glyphicon-trash" aria-hidden="true" data-bind="click: $parent.removeSnapshot.bind($data, $parent)"></span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div data-bind="if: editMode">
+                                        <div class="col-sm-10">
+                                            <textarea data-bind="value: description" />
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <span class="glyphicon glyphicon-check" aria-hidden="true" data-bind="click: $parent.toggleEditMode"></span>
+                                        </div>
+                                    </div>
+                                    <div data-bind="if: editMode() == false">
+                                        <div class="col-sm-10">
+                                            <small data-bind="text: description"></small>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <span class="glyphicon glyphicon-edit" aria-hidden="true" data-bind="click: $parent.toggleEditMode"></span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div>
-                            <div data-bind="if: editMode">
-                                <div class="col-sm-10">
-                                    <textarea data-bind="value: description" />
-                                </div>
-                                <div class="col-sm-2">
-                                    <span class="glyphicon glyphicon-check" aria-hidden="true" data-bind="click: $parent.toggleEditMode"></span>
-                                </div>
+                    </div>
+                </div>
+                <div data-bind="if: status() == 4">
+                    <div class="card-deck snapshots" data-bind="foreach: storedSnapshots">
+                        <div class="card">
+                            <div class="card-body">
+                                <canvas class="fullsize" data-bind="attr: { id: snapshotId, width: width, height: height }"></canvas>
                             </div>
-                            <div data-bind="if: editMode() == false">
-                                <div class="col-sm-10">
-                                    <small data-bind="text: description"></small>
-                                </div>
-                                <div class="col-sm-2">
-                                    <span class="glyphicon glyphicon-edit" aria-hidden="true" data-bind="click: $parent.toggleEditMode"></span>
+                            <div class="card-footer">
+                                <div class="card-footer">
+                                    <div class="card-footer-header row">
+                                        <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+                                        <small data-bind="text: 'Taken at: ' + timeTakenText"></small>
+                                    </div>
+                                    <div class="row">
+                                        <small data-bind="text: description"></small>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -97,6 +169,51 @@
             </div>
         </div>
 
+            <div data-bind="if: status() == 4" class="col-sm-4">
+                <h4>Chat history</h4>
+                <div class="card fullsize chat-history">
+                    <div class="card-header">
+                        <small>Chat History</small>
+                    </div>
+                    <div class="card-body">
+                        <div data-bind="foreach: storedChatHistory">
+                            <div>
+                                <span class="small" data-bind="text: '[' + time + ']'"></span>
+                                <span class="chat-sender" data-bind="text: sender"></span><span>:</span>
+                                <span class="chat-text" data-bind="text: text"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <div class="col-sm-4" data-bind="if: settings.useChat && status() != 4">
+            <h4>Live Chat</h4>
+            <div class="card fullsize chat-history">
+                <div class="card-header">
+                    <small>Chat History</small>
+                </div>
+                <div class="card-body">
+                    <div data-bind="foreach: chattingHistory">
+                        <div>
+                            <span class="small" data-bind="text: '[' + time + ']'"></span>
+                            <span class="chat-sender" data-bind="text: sender"></span><span>:</span>
+                            <span class="chat-text" data-bind="text: text"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer row">
+                    <div class="col-sm-10">
+                        <textarea data-bind="value: chatMessage, valueUpdate: 'keyup', hasFocus: chatMessageFocused" />
+                    </div>
+                    <div class="col-sm-2">
+                        <span class="glyphicon glyphicon-send glyph-button" aria-hidden="true" data-bind="click: sendChatMessage, enable: chatMessage().trim() != ''"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
 </div>
+

@@ -101,6 +101,7 @@ video {
         transform: rotate(-2deg);
         -webkit-transform: rotate(-2deg);
     }
+
     100% {
         background-color: $highlight-color;
         border-color: $border-color;
@@ -135,8 +136,13 @@ h3 {
     margin-top: 0;
 }
 
+.my-video {
+    width: 25%;
+    position: absolute;
+}
+
 .poster {
-    background-image: url("./images/backgroundImage.jpg");
+    background-image: url("../assets/backgroundImage.jpg");
     text-align: center;
     background-size: cover;
     background-position: 50% 50%;
@@ -261,6 +267,14 @@ h3 {
     .content {
         margin-top: 50px;
     }
+
+    .card {
+        .card-footer-header {
+            > div {
+                padding: 0;
+            }
+        }
+    }
 }
 
 .card-deck {
@@ -301,7 +315,7 @@ h3 {
     .card-img-top {
         background-color: $panel-color;
         border-bottom: 1px solid $border-color;
-        width: -webkit-fill-available;
+        width: inherit;
     }
 
     .card-block {
@@ -325,8 +339,7 @@ h3 {
             font-weight: normal;
         }
 
-        .time {
-            margin: 0;
+        .card-footer-header {
             margin-bottom: 5px;
             padding-bottom: 8px;
             border-bottom: 1px dashed $panel-color;
@@ -362,7 +375,7 @@ h3 {
 
     .logo {
         width: 240px;
-        margin-left: -50px;
+       // margin-left: -50px;
         margin-top: -50px;
     }
 
@@ -416,7 +429,80 @@ h3 {
     padding: 10px;
 
     .header {
-        /*margin: 10px;*/
+        margin-left: 16px;
+    }
+
+    .recipe {
+        .card {
+            width: 100%;
+        }
+
+        img {
+            width: 100%;
+        }
+    }
+
+    .video-card {
+        display: grid;
+
+        .card-body > div {
+            padding: 0;
+        }
+
+        .record-icon {
+            color: red;
+            position: absolute;
+            top: 5px;
+            left: 5px;
+        }
+
+        .card-footer-header {
+            text-align: initial;
+
+            .right-aligned {
+                float: right;
+                line-height: 26px;
+                margin: 0;
+                margin-left: 5px;
+            }
+        }
+    }
+
+    .snapshots {
+        padding: 0;
+
+        .card {
+            padding: 0;
+            width: 300px;
+        }
+    }
+
+    .chat-history {
+        .card-header {
+            text-align: center;
+        }
+
+        .card-body {
+            height: 400px;
+            position: relative;
+            overflow-y: auto;
+
+            > div {
+            }
+
+            .chat-sender {
+                color: $border-color;
+                font-weight: bold;
+                font-size: smaller;
+            }
+
+            .chat-text {
+                font-size: smaller;
+            }
+        }
+
+        .card-footer {
+        }
     }
 
     .none {
@@ -443,14 +529,32 @@ h3 {
         -webkit-filter: sepia(1);
         filter: sepia(1);
     }
+
+    .need-help {
+        animation: infinite 1s alternate-reverse hot-button;
+    }
 }
 
 .users-list-component {
 
-    .my-video {
-        width: 25%;
-        position: absolute;
+    .card-deck {
+        .card:hover {
+            margin: 10px;
+        }
     }
+}
+
+progress {
+    background-color: #fff !important;
+    width: 100%;
+}
+
+progress::-moz-progress-bar {
+    background-image: (-45deg, transparent 33%, rgba(0, 0, 0, .1) 33%, rgba(0,0, 0, .1) 66%, transparent 66%),
+}
+
+progress::-webkit-progress-value {
+    background-image: -webkit-linear-gradient(-45deg, transparent 33%, rgba(0, 0, 0, .1) 33%, rgba(0,0, 0, .1) 66%, transparent 66%), -webkit-linear-gradient(top, rgba(255, 255, 255, .25), rgba(0, 0, 0, .25)), -webkit-linear-gradient(left, #09c, #f44) !important;
 }
 
 /* Smaller monitors (for tiny adjustments) */
@@ -498,6 +602,9 @@ h3 {
         width: 100%;
     }
 
+    #myVideo {
+        width: 100%;
+    }
     .main-component {
         .content {
             margin-top: 40px;
@@ -530,13 +637,25 @@ h3 {
         .add-button {
             width: 10% !important;
             padding-top: 10px;
-        }
+        }      
+    }
+
+    .container-fluid {
+        padding-right: 15px;
     }
 
     .new-cooking-component {
 
         > div {
             display: block;
+        }
+
+        &.poster .logo {
+           width: 250px;
+        }
+
+        .card-img-top{
+            width: 100%;
         }
     }
 }

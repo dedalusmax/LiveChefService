@@ -1,1 +1,3 @@
-﻿<p>Recorded Cookings</p>
+﻿<div class="card-deck" data-bind="foreach: recordedCookings">
+    <div data-bind="template: { name: 'cooking-card' }"></div>
+</div>

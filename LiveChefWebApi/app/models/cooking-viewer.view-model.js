@@ -1,57 +1,47 @@
 ﻿var CookingViewerViewModel = function (data) {
     var self = data;
 
-    self.stream = null;
-    self.connection = null;
+    self.snapshots = ko.observableArray();
 
-    // chat implementation
+    self.helpNeeded = ko.computed(function () {
+        return self.status();
+    });
+
+    var communicator = root.main().communicator;
+
+    self.localVideo = '#viewerVideo';
+    self.remoteVideo = '#presenterVideo';
+    self.localAudio = '#viewerAudio';
+    self.remoteAudio = '#presenterAudio';
+
     $(document).ready(function () {
 
-        // peer connection is going to handle negotiating a network connection with another client, 
-        // and keep an open session allowing the two to communicate directly
-        self.connection = new RTCPeerConnection(null);
-        console.log('Created new peer connection.');
+        communicator.isConference = true;
 
-        self.connection.onicecandidate = function (event) {
-            if (event.candidate) {
-
-                // each time the client finds a new candidate, it will send it over to the remote peer
-                var candidate = JSON.stringify(event.candidate);
-                root.hub.server.setIceCandidate(self.id, candidate).done(function () {
-                    console.log("ICE candidate send to the server: " + candidate);
-                });
-            }
-        };
-
-        // new remote media stream is added
-        self.connection.onaddstream = function (event) {
-
-            console.log('Remote media stream retrieved added.');
-            var video = document.querySelector('video');
-            self.stream = event.stream;
-            video.srcObject = event.stream;
+        communicator.setElements(null, self.remoteVideo, null, self.remoteAudio);
+        if (self.settings.useCamera) {
+            communicator.intendedAction(MediaAction.VideoCall);
+        } else if (self.settings.useMicrophone) {
+            communicator.intendedAction(MediaAction.AudioCall);
         }
 
-        // remote media stream is added
-        self.connection.onremovestream = function (event) {
+        communicator.userIdToConnect(self.chef.id);
 
-            console.log('Remote media stream retrieved removed.');
-        }
-
-        if (self.transmission.sdp) {
-            var desc = JSON.parse(self.transmission.sdp);
-
-            // set the generated SDP to be the very remote session description that initiated the session
-            self.connection.setRemoteDescription(desc, function () {
-                console.log('Remote description set to: ' + desc);
-
-            });
-        }
-
-        // we need to create and send a WebRTC offer over to the peer we would like to connect with
-        //self.connection.createOffer(function (desc) {
-        //    console.log('Created answer for the caller.');
-
-        //});
+        console.log('Request for join, caller: ' + root.user.id + ' callee: ' + self.chef.id);
+        root.hub.server.requestForJoin(root.user.id, communicator.intendedAction(), self.chef.id);
     });
-}
+
+    self.sendHelp = function () {
+
+        var messageText = 'I want to help you!';
+
+        var timeNowText = moment().format('HH:mm:ss');
+        
+        var message = new ChatViewModel('Me', messageText, timeNowText);
+        self.chatHistory.push(message);
+
+        root.hub.server.sendChatMessage(self.id, root.user.displayName, messageText, timeNowText).done(function () {
+            console.log(messageText);
+        });
+    };
+};

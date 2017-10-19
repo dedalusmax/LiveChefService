@@ -31,7 +31,24 @@
                 <audio id="remoteAudio" class="fullsize" autoplay controls></audio>
             </div>
             <div class="card-footer">
-                <span class="glyphicon glyphicon-remove glyph-button" aria-hidden="true" data-bind="click: stopCall.bind($data), visible: connected"></span>
+                <div class="card-footer-header row anti-row">
+                    <form class="hidden">
+                        <input id="fileInput" type="file" data-bind="event: { change: handleFileInputChange.bind($data) }" />
+                    </form>
+                    <!--<div class="progress">
+                        <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                            <span class="sr-only">40% Complete (success)</span>
+                        </div>
+                    </div>-->                    
+                        <progress id="progressBar" value="0" data-bind="visible: chooseFile()"></progress>                    
+                        <div id="bitrate"></div>
+                        <a id="download"></a>
+                        <span id="status"></span>
+                    </div>
+                <div>
+                    <span class="glyphicon glyphicon-remove glyph-button" aria-hidden="true" data-bind="click: stopCall.bind($data), visible: connected"></span>
+                    <span class="glyphicon glyphicon-file glyph-button" aria-hidden="true" data-bind="click: sendFile.bind($data), visible: connected"></span>
+                </div>
             </div>
         </div>
     </div>
