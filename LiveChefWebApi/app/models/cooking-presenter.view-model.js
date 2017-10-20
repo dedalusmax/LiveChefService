@@ -290,39 +290,70 @@ CookingPresenterViewModel.prototype.uploadVideo = function () {
 
     var blob = new Blob(self.recordedBlobs, { type: 'video/webm' });
 
-    root.hub.server.startMediaStreamTransfer(self.id, blob.size).done(function () {
+    self.offset = ko.observable(0);
+    self.fileSize = ko.observable(blob.size);
+    self.isUpload = ko.observable(true);
+    self.percentage = ko.observable(0);
+    self.chunkSize = 65536;
+
+    ajax.postData(self.id, 0, blob.size, null, function () {
         console.log('Media stream transfer started: ' + self.id);
-    }).fail(function (error) {
-        console.log(error);
-        });
-
-    parseFile(blob, {
-        binary: true,
-        chunk_read_callback: (block) => {
-
-            var bufView = new Uint16Array(block);
-            var bufstring = JSON.stringify(bufView, function (k, v) {
-                if (v instanceof ArrayBuffer) {
-                    return Array.apply([], v);
-                }
-                return v;
-            });
-
-            root.hub.server.sendMediaStreamTransfer(self.id, JSON.parse(bufstring)).done(function () {
-                console.log('Media stream transfer sent: ' + self.id);
-            }).fail(function (error) {
-                console.log(error);
-            });
-        },
-        error_callback: (error) => {
-            console.log(error);
-        },
-        success: () => {
-            root.hub.server.endMediaStreamTransfer(self.id).done(function () {
-                console.log('Media stream transfer ended: ' + self.id);
-            }).fail(function (error) {
-                console.log(error);
-            });
-        }
+        uploadChunks();
     });
+
+    function uploadChunks() {
+        readFileChunk().then(function (data) {
+            if (data != null) {
+                // POST chunk of data to server
+                ajax.postData(self.id, 1, data.length, data, function () {
+                    console.log('Media stream transfer sent: ' + self.id);
+                    // Read next chunk
+                    var percentage = Math.floor((self.offset() / self.fileSize()) * 100);
+                    self.percentage(percentage);
+                    uploadChunks();
+                });
+            } else {
+                // Mark end of data
+                ajax.postData(self.id, 2, 0, null);
+                console.log('Media stream transfer ended: ' + self.id);
+                // Reset data for the next upload
+                self.offset(0);
+                self.isUpload(false);
+                self.fileSize(0);
+            }
+        }, function (err) {
+            console.log(err);
+        });
+    }
+
+    function readFileChunk() {
+        return new Promise((resolve, reject) => {
+            if (self.offset() >= self.fileSize()) {
+                self.percentage(100);
+                resolve(null);
+                return
+            }
+
+            function onLoadEndHandler(evt) {
+                if (evt.target.error == null) {
+                    var arrayFormatted = new Uint8Array(evt.target.result);
+                    resolve(arrayFormatted);
+                } else {
+                    reject(evt.target.error);
+                }
+            }
+
+            var r = new FileReader();
+            //console.log('Reading chunk ' + self.offset() + ' to ' + Number(self.offset() + self.chunkSize) + ' of ' + self.file().size);
+            var chunk = blob.slice(self.offset(), self.offset() + self.chunkSize);
+
+            self.offset(self.offset() + self.chunkSize);
+            if (self.offset() > self.fileSize()) {
+                self.offset(self.fileSize());
+            }
+
+            r.onloadend = onLoadEndHandler;
+            r.readAsArrayBuffer(chunk);
+        });
+    }
 };

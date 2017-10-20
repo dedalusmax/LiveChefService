@@ -17,7 +17,7 @@ namespace LiveChefService.Models
         public int CookingId { get; set; }
         public MediaStreamTransfer Status { get; set; }
 
-        public Byte[] Data;
+        public List<byte[]> Data;
 
         public CookingMedia()
         {

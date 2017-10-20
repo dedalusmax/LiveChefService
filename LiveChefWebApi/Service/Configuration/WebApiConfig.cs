@@ -1,4 +1,6 @@
-﻿using System.Web.Http;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using System.Web.Http;
 
 namespace LiveChefService
 {
@@ -9,12 +11,27 @@ namespace LiveChefService
         {
             // Web API configuration and services
 
+            // Formatter settings
+            var formatter = GlobalConfiguration.Configuration.Formatters.JsonFormatter;
+            formatter.SerializerSettings = new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented,
+                TypeNameHandling = TypeNameHandling.Objects,
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
+
             // Web API routes
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
-                name: "DefaultApi",
+                name: "DefaultApi_Route",
                 routeTemplate: "api/{controller}/{action}/{id}",
+                defaults: new { id = RouteParameter.Optional }
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "DefaultApi",
+                routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
         }

@@ -187,6 +187,7 @@
   <ItemGroup>
     <Compile Include="Service\Configuration\SignalRContractResolver.cs" />
     <Compile Include="Service\Configuration\WebApiConfig.cs" />
+    <Compile Include="Service\Controllers\DataController.cs" />
     <Compile Include="Service\Hubs\ChefHub.cs" />
     <Compile Include="Service\Controllers\CookingController.cs" />
     <Compile Include="Service\Controllers\RecipeController.cs" />
@@ -194,7 +195,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Service\Models\DataMessage.cs" />
     <Compile Include="Service\Models\CookingMedia.cs" />
+    <Compile Include="Service\Models\EnumMessageType.cs" />
     <Compile Include="Service\Models\IModel.cs" />
     <Compile Include="Service\Models\Ingredient.cs" />
     <Compile Include="Service\Repositories\BaseRepository.cs" />
