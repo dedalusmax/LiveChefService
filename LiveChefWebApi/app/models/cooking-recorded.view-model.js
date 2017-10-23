@@ -1,6 +1,5 @@
 ﻿var CookingRecordedViewModel = function (data) {
     var self = data;
-
     self.storedSnapshots = ko.observableArray();
     self.storedChatHistory = ko.observableArray();
 
@@ -8,7 +7,7 @@
 
     $(document).ready(function () {
 
-        var video = document.querySelector('#archivedVideo');
+        self.video = document.querySelector('#archivedVideo');
 
         var snapshots = self.snapshots;
 
@@ -19,8 +18,8 @@
                 snapshotId: 'snapshot' + snapshot.id,
                 timeTaken: snapshot.timeTaken,
                 timeTakenText: moment(snapshot.timeTaken).format('HH:mm:ss'),
-                width: video.clientWidth / 2, // 50% video width
-                height: video.clientHeight / 2, // 50% video height,
+                width: self.video.clientWidth / 2, // 50% video width
+                height: self.video.clientHeight / 2, // 50% video height,
                 description: snapshot.description,
                 editMode: false
             };
@@ -45,13 +44,8 @@
           
         });
 
-        root.hub.server.getCookingMedia(self.id).done(function () {
-            console.log('Media stream transfer requested: ' + self.id);
-        }).fail(function (error) {
-            console.log(error);
-        });
+        self.getVideo();
     });
-
 }
 
 CookingRecordedViewModel.prototype.cookingMediaTransferStarted = function (cookingId) {
@@ -74,3 +68,29 @@ CookingRecordedViewModel.prototype.cookingMediaTransferEnded = function (cooking
     archivedVideo.src = window.URL.createObjectURL(superBuffer);
 }
 
+CookingRecordedViewModel.prototype.getVideo = function () {
+    var self = this;
+    console.log('Media stream transfer requested: ' + self.id);
+    self.index = 0;
+
+    var superBuffer = new Blob([], { type: 'video/webm' });
+    // Play video from begining
+    playVideo();
+    
+    function playVideo() {
+        ajax.getData(self.id, self.index, function (response) {
+            if (response.Type == 1) {
+                var arrayFormatted = new Uint8Array(response.Data);
+                superBuffer = new Blob([superBuffer, arrayFormatted], { type: 'video/webm' });
+                self.index++;
+                // Continue stream
+                playVideo();
+            }
+            else {
+                console.log('Playing video');
+                self.video.src = window.URL.createObjectURL(superBuffer);
+                self.video.play();
+            }
+        });
+    }
+}

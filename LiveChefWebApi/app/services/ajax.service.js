@@ -56,10 +56,16 @@ var ajax = function () {
         sendRequest(baseUri + 'data', 'POST', dataBuffer, successCallback, errorCallback, true);
     };
 
+    self.getData = function (id, index, successCallback, errorCallback) {
+        var uri = baseUri + 'data' + '?id=' + id + '&index=' + index;
+        sendRequest(uri, 'GET', null, successCallback, errorCallback, true);
+    }
+
     return {
         login: login,
         loginAsGuest: loginAsGuest,
         logout: logout,
-        postData: postData
+        postData: postData,
+        getData: getData
     };
 }();

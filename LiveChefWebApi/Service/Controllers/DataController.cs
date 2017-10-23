@@ -1,4 +1,5 @@
 ﻿using LiveChefService.Models;
+using LiveChefService.Service.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
@@ -72,5 +73,47 @@ namespace LiveChefService.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex);
             }
         }
+
+        public HttpResponseMessage Get(int id, int index)
+        {
+            var cookingMedia = WebApiApplication.CookingMediaRepository.GetByCookingId(id);
+            string responseJson = String.Empty;
+
+            if (cookingMedia == null)
+            {
+                // Return 404 - not found on invalid id
+                responseJson = JsonConvert.SerializeObject("");
+                return Request.CreateResponse(HttpStatusCode.NotFound, responseJson);
+            }
+
+            CustomData data = new CustomData();
+            data.Id = id;
+
+            if (index < cookingMedia.Data.Count)
+            {
+                // Send data
+                data.Type = EnumMessageType.DATA;
+                data.Data = cookingMedia.Data[index];
+            }
+            else
+            {
+                // Send end of the message
+                data.Type = EnumMessageType.END;
+            }
+
+            // Return data
+            responseJson = JsonConvert.SerializeObject(data);
+            return Request.CreateResponse(HttpStatusCode.OK, responseJson);
+        }
+    }
+
+    class CustomData
+    {
+        public int Id { get; set; }
+        public EnumMessageType Type { get; set; }
+        public int Size { get; set; }
+
+        [JsonConverter(typeof(ByteArrayConverter))]
+        public byte[] Data { get; set; }
     }
 }

@@ -185,6 +185,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Service\Configuration\ByteArrayConverter.cs" />
     <Compile Include="Service\Configuration\SignalRContractResolver.cs" />
     <Compile Include="Service\Configuration\WebApiConfig.cs" />
     <Compile Include="Service\Controllers\DataController.cs" />
